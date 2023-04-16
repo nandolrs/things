@@ -20,6 +20,7 @@ void setup()
   }
   Serial.println(" connected");
 
+
   server.begin();
   Serial.printf("Web server started, open %s in a web browser\n", WiFi.localIP().toString().c_str());
 }
@@ -60,6 +61,7 @@ void loop()
         String line = client.readStringUntil('\r');
         Serial.println("**********************************************************************************************");
         Serial.println(line);
+        Serial.println(BuscarComando(line));
         Serial.println("**********************************************************************************************");
 
         // wait for end of client's request, that is marked with an empty line
@@ -84,3 +86,21 @@ void loop()
     Serial.println("[Client disconnected]");
   }
 }
+
+String BuscarComando(String qs) // qs= query string
+{
+  String qsl = qs; qsl.toLowerCase();
+  String retorno="";
+  if (qsl.indexOf("comando=ligar") > 0)
+  {
+    retorno = "LIGAR";
+  } 
+  else if (qsl.indexOf("comando=desligar") > 0)
+  {
+    retorno = "DESLIGAR";
+  }
+
+  return retorno;
+
+}
+
