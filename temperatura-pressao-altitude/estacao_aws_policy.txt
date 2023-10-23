@@ -1,0 +1,81 @@
+AWSLambdaBasicExecutionRole-789a89fc-f5b9-4760-9c51-c229ae899b6f
+
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "arn:aws:logs:sa-east-1:105254198021:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:sa-east-1:105254198021:log-group:/aws/lambda/estacao_set:*"
+            ]
+        }
+    ]
+}
+
+
+rds:DescribeDBClusters
+
+rds:DescribeDBClusterParameters
+
+rds:DescribeDBSubnetGroups
+
+ec2:CreateNetworkInterface
+
+ec2:DescribeNetworkInterfaces
+
+ec2:DescribeVpcs
+
+ec2:DeleteNetworkInterface
+
+ec2:DescribeSubnets
+
+ec2:DescribeSecurityGroups
+
+kms:Decrypt
+
+secretsmanager:GetSecretValue
+
+
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"logs:CreateLogGroup",
+				"rds:DescribeDBClusters",
+				"rds:DescribeDBClusterParameters",
+				"rds:DescribeDBSubnetGroups",
+				"ec2:CreateNetworkInterface",
+				"ec2:DescribeNetworkInterfaces",
+				"ec2:DescribeVpcs",
+				"ec2:DeleteNetworkInterface",
+				"ec2:DescribeSubnets",
+				"ec2:DescribeSecurityGroups",
+				"kms:Decrypt",
+				"secretsmanager:GetSecretValue"
+			],
+			"Resource": "arn:aws:logs:sa-east-1:105254198021:*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"logs:CreateLogStream",
+				"logs:PutLogEvents"
+			],
+			"Resource": [
+				"arn:aws:logs:sa-east-1:105254198021:log-group:/aws/lambda/estacao_set:*"
+			]
+		}
+	]
+}
