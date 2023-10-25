@@ -1,5 +1,11 @@
 AWSLambdaBasicExecutionRole-789a89fc-f5b9-4760-9c51-c229ae899b6f
 
+AWSLambdaBasicExecutionRole-789a89fc-f5b9-4760-9c51-c229ae899b6f
+
+AWSLambdaBasicExecutionRole-cea871a5-e24b-42c5-ae05-7432d123e89f
+
+estacao_set-role-uf3t0k07
+
 
 {
     "Version": "2012-10-17",
@@ -16,7 +22,7 @@ AWSLambdaBasicExecutionRole-789a89fc-f5b9-4760-9c51-c229ae899b6f
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:logs:sa-east-1:105254198021:log-group:/aws/lambda/estacao_set:*"
+                "arn:aws:logs:sa-east-1:105254198021:log-group:/aws/lambda/estacao_aws_get:*"
             ]
         }
     ]
@@ -74,8 +80,12 @@ secretsmanager:GetSecretValue
 				"logs:PutLogEvents"
 			],
 			"Resource": [
-				"arn:aws:logs:sa-east-1:105254198021:log-group:/aws/lambda/estacao_set:*"
+				"arn:aws:logs:sa-east-1:105254198021:log-group:/aws/lambda/estacao_aws_get:*"
 			]
 		}
 	]
 }
+
+sg-047b9007eee6126b0
+
+sg-047b9007eee6126b0
