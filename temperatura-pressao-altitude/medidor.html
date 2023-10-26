@@ -12,16 +12,54 @@
 
 
       function JSonBuscar()
-      {
+      {        
         var _url = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
+        _url = 'http://localhost:35145/api/meteorologia/listar/esp8266';
+        _url = 'http://localhost:8000/api/meteorologia/listar/esp8266';
+
+        const _request = new Request(_url, {method:"GET"});
+/*
+        _request.json()
+          .then((data) => {
+            // do something with the data sent in the request
+            debugger;
+          });
+*/
 
       fetch(_url)
           .then( response => response.text())
           .then(data => {
 
-            debugger;
-
             var json_ = JSON.parse(data);
+            var json__ = [['Label','Value']];
+
+            for(var k in json_) {
+
+              for(var kk in json_[k])
+              {
+                debugger;
+
+                var temperatura = json_[k].temperatura;
+                var pressao = json_[k].pressao;
+                var altitude = json_[k].altitude;
+
+                var linha = ['temperatura', temperatura]
+                json__.push(linha);
+
+                var linha = ['pressao', pressao]
+                json__.push(linha);
+                
+                var linha = ['altitude', altitude]
+                json__.push(linha);                
+
+                break;
+              }
+
+
+              break;
+
+            }
+
 
             /*
               const parser = new DOMParser();
@@ -36,7 +74,7 @@
 
             //
 
-            GraficoDesenhar(json_);
+            GraficoDesenhar(json__);
 
 
           });
