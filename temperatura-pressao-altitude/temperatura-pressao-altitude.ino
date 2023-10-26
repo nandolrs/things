@@ -1,4 +1,10 @@
 #include <Adafruit_BMP085.h>
+#include <Arduino_JSON.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+
+
 
 /*************************************************** 
   This is an example for the BMP085 Barometric Pressure & Temp Sensor
@@ -24,16 +30,74 @@
 // XCLR is a reset pin, also not used here
 
 Adafruit_BMP085 bmp;
-  
-void setup() {
+
+char ssid[] = "nandonet";          //  your network SSID (name)
+char pass[] = "08111969";   // your network password
+String serverNamePost = "http://localhost:5041/api/meteorologia/";
+//String serverNameGet = "http://localhost:35145/api/meteorologia/<dispositivoNome>";
+String serverNameGet = "https://www.negritando.com/temperatura-pressao-altitude/medidor.json";
+
+
+
+int status = WL_IDLE_STATUS;
+
+WiFiServer server(80);
+
+String msg = "";
+
+
+
+
+String JsonGerar(float temperatura, float pressao, float altitude)
+{
+
+    Serial.println("*********");
+
+    Serial.print("temperatura = " );
+    Serial.println(temperatura);
+
+    Serial.print("pressao = " );
+    Serial.println(pressao);
+
+    Serial.print("altitude = " );
+    Serial.println(altitude);
+
+
+    JSONVar jsonClima;
+
+    jsonClima["temperatura"] = (float) temperatura;
+    jsonClima["pressao"] = pressao;
+    jsonClima["altitude"] = altitude;
+
+    String jsonString = JSON.stringify(jsonClima);
+
+    Serial.print("json = ");
+    Serial.println(jsonString);
+
+
+    return jsonString;
+}
+
+void setup_clima() {
   Serial.begin(9600);
   if (!bmp.begin()) {
 	Serial.println("Could not find a valid BMP085 sensor, check wiring!");
 	while (1) {}
   }
 }
+
+void loop_clima()
+{
+  msg = JsonGerar(
+    bmp.readTemperature()
+    ,bmp.readPressure()
+    ,bmp.readAltitude()
+  );
+}
+
+
   
-void loop() {
+void loop1() {
     Serial.print("Temperature = ");
     Serial.print(bmp.readTemperature());
     Serial.println(" *C");
@@ -62,4 +126,73 @@ void loop() {
     
     Serial.println();
     delay(500);
+}
+
+
+
+
+void setup_wifi()
+{
+  Serial.begin(9600);
+  Serial.println();
+
+  Serial.printf("Connecting to %s ", ssid);
+  WiFi.begin(ssid, pass);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println(" connected");
+  Serial.printf("Web server started, open %s in a web browser\n", WiFi.localIP().toString().c_str());
+  server.begin();
+
+
+}
+
+void loop_wifi()
+{
+    Serial.println("connected");
+    Serial.print("msg = ");
+    Serial.println(msg);
+
+    WiFiClient client = server.accept();
+
+    HTTPClient http;
+    http.begin(client, serverNameGet);
+    //http.begin(client, serverNamePost);
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST(msg);
+    //int httpResponseCode = http.GET();
+    Serial.println(httpResponseCode);
+
+    if(httpResponseCode > 0)
+    {
+      String payload = http.getString();
+      Serial.println(payload);
+    }
+
+
+
+
+    http.end();
+
+    delay(3000);
+
+}
+
+
+void setup()
+{
+  setup_wifi();
+
+  setup_clima();
+}
+
+void loop()
+{
+  loop_clima();
+
+  loop_wifi();
+
 }
