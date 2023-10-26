@@ -31,11 +31,14 @@
 
 Adafruit_BMP085 bmp;
 
-char ssid[] = "nandonet";          //  your network SSID (name)
-char pass[] = "08111969";   // your network password
-String serverNamePost = "http://localhost:5041/api/meteorologia/";
-//String serverNameGet = "http://localhost:35145/api/meteorologia/<dispositivoNome>";
-String serverNameGet = "https://www.negritando.com/temperatura-pressao-altitude/medidor.json";
+char ssid[] = "Silva_2G";          //  your network SSID (name)
+char pass[] = "16011999";   // your network password
+
+String serverNamePost = "http://192.168.0.91:8000/api/meteorologia";
+String serverNameGet = "http://192.168.0.91:8000/api";
+
+//String serverNamePost = "http://192.168.0.91:35145/api/meteorologia";
+//String serverNameGet = "http://192.168.0.91:35145/api";
 
 
 
@@ -159,8 +162,8 @@ void loop_wifi()
     WiFiClient client = server.accept();
 
     HTTPClient http;
-    http.begin(client, serverNameGet);
-    //http.begin(client, serverNamePost);
+    //http.begin(client, serverNameGet);
+    http.begin(client, serverNamePost);
     http.addHeader("Content-Type", "application/json");
     int httpResponseCode = http.POST(msg);
     //int httpResponseCode = http.GET();
@@ -171,9 +174,6 @@ void loop_wifi()
       String payload = http.getString();
       Serial.println(payload);
     }
-
-
-
 
     http.end();
 
