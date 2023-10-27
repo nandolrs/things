@@ -15,7 +15,7 @@
       {        
         var _url = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
         _url = 'http://localhost:35145/api/meteorologia/listar/esp8266';
-        _url = 'http://localhost:8000/api/meteorologia/listar/esp8266';
+        _url = 'http://localhost:8000/api/meteorologia/esp8266';
 
         const _request = new Request(_url, {method:"GET"});
 /*
@@ -30,14 +30,30 @@
           .then( response => response.text())
           .then(data => {
 
-            var json_ = JSON.parse(data);
-            var json__ = [['Label','Value']];
+            debugger;
 
+            var json_ = JSON.parse(data);
+            var json_temperatura_ = [['Label','Value']];
+            var json_pressao__ = [['Label','Value']];
+            var json_altitude__ = [['Label','Value']];
+
+            var temperatura = json_.temperatura;
+            var pressao = json_.pressao;
+            var altitude = json_.altitude;    
+
+            var linha = ['temperatura', temperatura]
+            json_temperatura_.push(linha);
+
+            linha = ['pressao', pressao]
+            json_pressao__.push(linha);
+
+            linha = ['altitude', altitude]
+            json_altitude__.push(linha);       
+/*
             for(var k in json_) {
 
               for(var kk in json_[k])
               {
-                debugger;
 
                 var temperatura = json_[k].temperatura;
                 var pressao = json_[k].pressao;
@@ -60,100 +76,41 @@
 
             }
 
-
-            /*
-              const parser = new DOMParser();
-             // const xml = parser.parseFromString(data, "application/xml");
-
-              console.log('log');
-              console.log(xml);
-
-              let el = xml.getElementsByTagName('icon_url');
-              console.log(el.namedItem);
-            */
-
-            //
-
-            GraficoDesenhar(json__);
-
-
+*/
+            GraficoDesenhar(json_temperatura_, 'id_temperatura' , {width: 400, height: 120,redFrom: 27, redTo: 50,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:50});
+            GraficoDesenhar(json_pressao__, 'id_pressao'        , {width: 400, height: 120,redFrom: 101325, redTo: 105000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:105000});
+            GraficoDesenhar(json_altitude__, 'id_altitude'      , {width: 400, height: 120,redFrom: 2500, redTo: 3000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:3000});
           });
 
       }
 
-      function GraficoDesenhar(data_)
+      function GraficoDesenhar(data_, chart_id_, options__)
       {
+        var data_ = google.visualization.arrayToDataTable(data_);
 
-        var data = google.visualization.arrayToDataTable(data_);
+        var chart = new google.visualization.Gauge(document.getElementById(chart_id_));
 
-        var options = {
-          width: 400, height: 120,
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
-          minorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-        chart.draw(data, options);
-
-        /*
-        setInterval(function() {
-          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 13000);
-        setInterval(function() {
-          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 5000);
-        setInterval(function() {
-          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
-          chart.draw(data, options);
-        }, 26000);
-        */
-
+        chart.draw(data_, options__);
       }
 
-      function drawChart() {
-
-        debugger;
-
-        var data_ = [
-          ['Label', 'Value'],
-          ['Temperatura', 80],
-          ['Pressão', 55],
-          ['Altitude', 68]
-        ];
-
-        var data = google.visualization.arrayToDataTable(data_);
-
-        var options = {
-          width: 400, height: 120,
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
-          minorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-        chart.draw(data, options);
-
-        setInterval(function() {
-          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 13000);
-        setInterval(function() {
-          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 5000);
-        setInterval(function() {
-          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
-          chart.draw(data, options);
-        }, 26000);
-      }
     </script>
   </head>
   <body>
-    <div id="chart_div" style="width: 400px; height: 120px;"></div>
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_temperatura" style="width: 400px; height: 120px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_pressao" style="width: 400px; height: 120px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.bbc.com/portuguese/vert-fut-44829117#:~:text=Viver%20a%20uma%20altitude%20moderada,ser%20uma%20escolha%20mais%20saud%C3%A1vel.&text=Enquanto%20isto%2C%20h%C3%A1%20argumentos%20em,algum%20lugar%20pr%C3%B3ximo%20%C3%A0%20%C3%A1gua.">
+      <div id="id_altitude" style="width: 400px; height: 120px;"></div>
+    </a>
+
+    <div>
+      Para saber mais clique nos relógios.
+    </div>
+
   </body>
 </html>
