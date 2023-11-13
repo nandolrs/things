@@ -3,113 +3,158 @@
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
    <script type="text/javascript">
 
-      //JSonBuscar();
+      var opcao=2;
 
-      google.charts.load('current', {'packages':['gauge']});
-      //google.charts.setOnLoadCallback(drawChart);
-      google.charts.setOnLoadCallback(JSonBuscar);
+      if(opcao==1)
+      {
+        google.charts.load('current', {'packages':['gauge']});
+        google.charts.setOnLoadCallback(GaugeJSonBuscar);
+      }
+      if(opcao==2)
+      {
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(LineChartJSonBuscar);
+      }
 
+      // Gauge
 
+      function GaugeJSonBuscar()
+      {       
 
-      function JSonBuscar()
-      {        
-        var _url = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
-        _url = 'http://localhost:35145/api/meteorologia/listar/esp8266';
-        _url = 'http://localhost:8000/api/meteorologia/esp8266';
-
-        const _request = new Request(_url, {method:"GET"});
-/*
-        _request.json()
-          .then((data) => {
-            // do something with the data sent in the request
-            debugger;
-          });
-*/
-
-      fetch(_url)
+        var _url1 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
+        var _url2 = 'http://localhost:35145/api/meteorologia/listar/esp8266';
+        var _url3 = 'http://localhost:8000/api/meteorologia/esp8266';
+        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor-1.json';        
+        
+        fetch(_url4)
           .then( response => response.text())
           .then(data => {
 
-            debugger;
-
             var json_ = JSON.parse(data);
             var json_temperatura_ = [['Label','Value']];
-            var json_pressao__ = [['Label','Value']];
-            var json_altitude__ = [['Label','Value']];
+            var json_pressao_ = [['Label','Value']];
+            var json_altitude_ = [['Label','Value']];
 
-            var temperatura = json_.temperatura;
-            var pressao = json_.pressao;
-            var altitude = json_.altitude;    
+            var json_dataHora_ =  json_[0].dataHora;
+
+            var temperatura = json_[0].temperatura;
+            var pressao = json_[0].pressao;
+            var altitude = json_[0].altitude;    
 
             var linha = ['temperatura', temperatura]
             json_temperatura_.push(linha);
 
             linha = ['pressao', pressao]
-            json_pressao__.push(linha);
+            json_pressao_.push(linha);
 
             linha = ['altitude', altitude]
-            json_altitude__.push(linha);       
-/*
-            for(var k in json_) {
-
-              for(var kk in json_[k])
-              {
-
-                var temperatura = json_[k].temperatura;
-                var pressao = json_[k].pressao;
-                var altitude = json_[k].altitude;
-
-                var linha = ['temperatura', temperatura]
-                json__.push(linha);
-
-                var linha = ['pressao', pressao]
-                json__.push(linha);
-                
-                var linha = ['altitude', altitude]
-                json__.push(linha);                
-
-                break;
-              }
-
-
-              break;
-
-            }
-
-*/
-            GraficoDesenhar(json_temperatura_, 'id_temperatura' , {width: 400, height: 120,redFrom: 27, redTo: 50,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:50});
-            GraficoDesenhar(json_pressao__, 'id_pressao'        , {width: 400, height: 120,redFrom: 101325, redTo: 105000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:105000});
-            GraficoDesenhar(json_altitude__, 'id_altitude'      , {width: 400, height: 120,redFrom: 2500, redTo: 3000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:3000});
+            json_altitude_.push(linha); 
+            
+            GaugeGraficoDesenhar(json_temperatura_, 'id_temperatura' , {width: 400, height: 120,redFrom: 27, redTo: 50,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:50},json_dataHora_);
+            GaugeGraficoDesenhar(json_pressao_, 'id_pressao'        , {width: 400, height: 120,redFrom: 101325, redTo: 105000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:105000},json_dataHora_);
+            GaugeGraficoDesenhar(json_altitude_, 'id_altitude'      , {width: 400, height: 120,redFrom: 2500, redTo: 3000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:3000},json_dataHora_);
           });
 
       }
 
-      function GraficoDesenhar(data_, chart_id_, options__)
+      function GaugeGraficoDesenhar(data_, chart_id_, options_, dateTime_)
       {
         var data_ = google.visualization.arrayToDataTable(data_);
 
         var chart = new google.visualization.Gauge(document.getElementById(chart_id_));
 
-        chart.draw(data_, options__);
+        var elDataHora = document.getElementById('id_dataHora');
+        
+        elDataHora.innerText = dateTime_;
+
+        chart.draw(data_, options_);
+      }
+
+      // LineChart
+
+
+      function LineChartJSonBuscar()
+      {       
+
+        var _url1 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
+        var _url2 = 'http://localhost:35145/api/meteorologia/listar/esp8266';
+        var _url3 = 'http://localhost:8000/api/meteorologia/esp8266';
+        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor-1.json';        
+        
+        fetch(_url4)
+          .then( response => response.text())
+          .then(data => {
+
+            var json_ = JSON.parse(data);
+            var json_temperatura_ = [['Ano','Temperatura']];
+            var json_pressao_ = [['Ano','Pressão']];
+            var json_altitude_ = [['Ano','Altitude']];
+
+            var json_dataHora_ =  json_[0].dataHora;
+
+            for(var i=0;i<10;i++)
+            {
+
+//              var dataHora =  Date.parse(json_[i].dataHora);   // json_[i].dataHora;
+              var dataHora_ =  new Date(json_[i].dataHora);   // json_[i].dataHora;
+              debugger;
+
+              var hora = ( dataHora_.getHours()); 
+              var minuto = ( dataHora_.getMinutes()); 
+              var dataHora = hora.toString() +':'+ minuto.toString();
+
+              var temperatura = json_[i].temperatura;
+              var pressao = json_[i].pressao;
+              var altitude = json_[i].altitude;    
+
+              var linha = [dataHora, temperatura]
+              json_temperatura_.push(linha);
+
+              linha = [dataHora, pressao]
+              json_pressao_.push(linha);
+
+              linha = [dataHora, altitude]
+              json_altitude_.push(linha); 
+            }
+
+            LineChartGraficoDesenhar(json_temperatura_, 'id_temperatura' , {title: 'Temperatura', curveType: 'function',legend: { position: 'bottom' }},json_dataHora_);
+            LineChartGraficoDesenhar(json_pressao_, 'id_pressao'        , {title: 'Pressão', curveType: 'function',legend: { position: 'bottom' }},json_dataHora_);
+            LineChartGraficoDesenhar(json_altitude_, 'id_altitude'      , {title: 'Altitude', curveType: 'function',redlegend: { position: 'bottom' }},json_dataHora_);
+          });
+
+      }
+
+      function LineChartGraficoDesenhar(data_, chart_id_, options_, dateTime_)
+      {
+        var data_ = google.visualization.arrayToDataTable(data_);
+
+        var chart = new google.visualization.LineChart(document.getElementById(chart_id_));
+
+        var elDataHora = document.getElementById('id_dataHora');
+        
+        elDataHora.innerText = dateTime_;
+
+        chart.draw(data_, options_);
       }
 
     </script>
   </head>
   <body>
     <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
-      <div id="id_temperatura" style="width: 400px; height: 120px;"></div>
+      <div id="id_temperatura" style="width: 800px; height: 240px;"></div>
     </a>
 
     <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
-      <div id="id_pressao" style="width: 400px; height: 120px;"></div>
+      <div id="id_pressao" style="width: 800px; height: 240px;"></div>
     </a>
 
     <a target="_blank" href="https://www.bbc.com/portuguese/vert-fut-44829117#:~:text=Viver%20a%20uma%20altitude%20moderada,ser%20uma%20escolha%20mais%20saud%C3%A1vel.&text=Enquanto%20isto%2C%20h%C3%A1%20argumentos%20em,algum%20lugar%20pr%C3%B3ximo%20%C3%A0%20%C3%A1gua.">
-      <div id="id_altitude" style="width: 400px; height: 120px;"></div>
+      <div id="id_altitude" style="width: 800px; height: 240px;"></div>
     </a>
 
+
     <div>
-      Para saber mais clique nos relógios.
+      Para saber mais clique nos relógios. <span id="id_dataHora"></span>
     </div>
 
   </body>
