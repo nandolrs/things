@@ -3,14 +3,14 @@
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
    <script type="text/javascript">
 
-      var opcao=2;
+      var opcao=3;
 
-      if(opcao==1)
+      if(opcao==1 || opcao > 2)
       {
         google.charts.load('current', {'packages':['gauge']});
         google.charts.setOnLoadCallback(GaugeJSonBuscar);
       }
-      if(opcao==2)
+      if(opcao==2 || opcao > 2)
       {
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(LineChartJSonBuscar);
@@ -50,9 +50,9 @@
             linha = ['altitude', altitude]
             json_altitude_.push(linha); 
             
-            GaugeGraficoDesenhar(json_temperatura_, 'id_temperatura' , {width: 400, height: 120,redFrom: 27, redTo: 50,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:50},json_dataHora_);
-            GaugeGraficoDesenhar(json_pressao_, 'id_pressao'        , {width: 400, height: 120,redFrom: 101325, redTo: 105000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:105000},json_dataHora_);
-            GaugeGraficoDesenhar(json_altitude_, 'id_altitude'      , {width: 400, height: 120,redFrom: 2500, redTo: 3000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:3000},json_dataHora_);
+            GaugeGraficoDesenhar(json_temperatura_, 'id_temperatura1' , {width: 400, height: 120,redFrom: 27, redTo: 50,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:50},json_dataHora_);
+            GaugeGraficoDesenhar(json_pressao_, 'id_pressao1'        , {width: 400, height: 120,redFrom: 101325, redTo: 105000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:105000},json_dataHora_);
+            GaugeGraficoDesenhar(json_altitude_, 'id_altitude1'      , {width: 400, height: 120,redFrom: 2500, redTo: 3000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:3000},json_dataHora_);
           });
 
       }
@@ -156,6 +156,21 @@
     <div>
       Para saber mais clique nos relógios. <span id="id_dataHora"></span>
     </div>
+
+
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_temperatura1" style="width: 800px; height: 240px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_pressao1" style="width: 800px; height: 240px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.bbc.com/portuguese/vert-fut-44829117#:~:text=Viver%20a%20uma%20altitude%20moderada,ser%20uma%20escolha%20mais%20saud%C3%A1vel.&text=Enquanto%20isto%2C%20h%C3%A1%20argumentos%20em,algum%20lugar%20pr%C3%B3ximo%20%C3%A0%20%C3%A1gua.">
+      <div id="id_altitude1" style="width: 800px; height: 240px;"></div>
+    </a>
+
+
 
   </body>
 </html>
