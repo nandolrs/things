@@ -13,8 +13,28 @@
 #define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
 
+// The server which will require a client cert signed by the trusted CA
+BearSSL::WiFiServerSecure server(443);
+
+
 WiFiClientSecure net = WiFiClientSecure();
 MQTTClient client = MQTTClient(256);
+
+void ServerSetup()
+{
+  // Attach the server private cert/key combo
+  BearSSL::X509List *serverCertList = new BearSSL::X509List(AWS_CERT_CRT ); // server_cert
+  BearSSL::PrivateKey *serverPrivKey = new BearSSL::PrivateKey( AWS_CERT_PRIVATE ); // server_private_key
+
+  // Require a certificate validated by the trusted CA
+  BearSSL::X509List *serverTrustedCA = new BearSSL::X509List(AWS_CERT_CA); //  ca_cert
+  server.setClientTrustAnchor(serverTrustedCA);
+
+  // Actually start accepting connections
+  server.begin();
+
+ net = server.accept();
+}
 
 void connectAWS()
 {
@@ -29,9 +49,9 @@ void connectAWS()
   }
 
   // Configure WiFiClientSecure to use the AWS IoT device credentials
-  net.setCACert(AWS_CERT_CA);
-  net.setCertificate(AWS_CERT_CRT);
-  net.setPrivateKey(AWS_CERT_PRIVATE);
+  //net.setCACert(AWS_CERT_CA);
+  //net.setCertificate(AWS_CERT_CRT);
+  //net.setPrivateKey(AWS_CERT_PRIVATE);
 
   // Connect to the MQTT broker on the AWS endpoint we defined earlier
   client.begin(AWS_IOT_ENDPOINT, 8883, net);
