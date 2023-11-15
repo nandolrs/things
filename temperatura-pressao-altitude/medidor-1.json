@@ -1,0 +1,162 @@
+[
+    {
+        "dataHora": "2023-11-11T01:33:08.5371525Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 32
+    },
+    {
+        "dataHora": "2023-11-11T01:33:07.8636711Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 31
+    },
+    {
+        "dataHora": "2023-11-11T01:32:59.3528142Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 21
+    },
+    {
+        "dataHora": "2023-11-11T01:32:48.7301824Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 18
+    },
+    {
+        "dataHora": "2023-11-11T01:33:03.1125485Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 25
+    },
+    {
+        "dataHora": "2023-11-11T01:33:04.789083Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 27
+    },
+    {
+        "dataHora": "2023-11-11T01:33:03.940669Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 26
+    },
+    {
+        "dataHora": "2023-11-11T01:32:43.6186182Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 17
+    },
+    {
+        "dataHora": "2023-11-11T01:33:11.6934413Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 36
+    },
+    {
+        "dataHora": "2023-11-11T01:32:58.309539Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 20
+    },
+    {
+        "dataHora": "2023-11-11T01:32:57.2368318Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 19
+    },
+    {
+        "dataHora": "2023-11-11T01:33:09.3414109Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 33
+    },
+    {
+        "dataHora": "2023-11-11T01:33:10.1700168Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 34
+    },
+    {
+        "dataHora": "2023-11-11T01:33:10.9523103Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 35
+    },
+    {
+        "dataHora": "2023-11-11T01:33:00.3850716Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 22
+    },
+    {
+        "dataHora": "2023-11-11T01:33:06.36266Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 29
+    },
+    {
+        "dataHora": "2023-11-11T01:33:02.2642369Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 24
+    },
+    {
+        "dataHora": "2023-11-11T01:33:01.3458447Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 23
+    },
+    {
+        "dataHora": "2023-11-11T01:33:07.1167566Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 30
+    },
+    {
+        "dataHora": "2023-11-11T01:33:05.6234459Z",
+        "temperatura": 12.34,
+        "altitude": 34.56,
+        "pressao": 23.45,
+        "dispositivoNome": "esp8266",
+        "id": 28
+    }
+]

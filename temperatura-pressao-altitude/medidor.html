@@ -3,119 +3,174 @@
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
    <script type="text/javascript">
 
-      //JSonBuscar();
+      var opcao=3;
 
-      google.charts.load('current', {'packages':['gauge']});
-      //google.charts.setOnLoadCallback(drawChart);
-      google.charts.setOnLoadCallback(JSonBuscar);
-
-
-
-      function JSonBuscar()
+      if(opcao==1 || opcao > 2)
       {
-        var _url = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
+        google.charts.load('current', {'packages':['gauge']});
+        google.charts.setOnLoadCallback(GaugeJSonBuscar);
+      }
+      if(opcao==2 || opcao > 2)
+      {
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(LineChartJSonBuscar);
+      }
 
-      fetch(_url)
+      // Gauge
+
+      function GaugeJSonBuscar()
+      {       
+
+        var _url1 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
+        var _url2 = 'http://localhost:35145/api/meteorologia/listar/esp8266';
+        var _url3 = 'http://localhost:8000/api/meteorologia/esp8266';
+        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor-1.json';        
+        
+        fetch(_url4)
           .then( response => response.text())
           .then(data => {
 
-            debugger;
-
             var json_ = JSON.parse(data);
+            var json_temperatura_ = [['Label','Value']];
+            var json_pressao_ = [['Label','Value']];
+            var json_altitude_ = [['Label','Value']];
 
-            /*
-              const parser = new DOMParser();
-             // const xml = parser.parseFromString(data, "application/xml");
+            var json_dataHora_ =  json_[0].dataHora;
 
-              console.log('log');
-              console.log(xml);
+            var temperatura = json_[0].temperatura;
+            var pressao = json_[0].pressao;
+            var altitude = json_[0].altitude;    
 
-              let el = xml.getElementsByTagName('icon_url');
-              console.log(el.namedItem);
-            */
+            var linha = ['temperatura', temperatura]
+            json_temperatura_.push(linha);
 
-            //
+            linha = ['pressao', pressao]
+            json_pressao_.push(linha);
 
-            GraficoDesenhar(json_);
-
-
+            linha = ['altitude', altitude]
+            json_altitude_.push(linha); 
+            
+            GaugeGraficoDesenhar(json_temperatura_, 'id_temperatura1' , {width: 400, height: 120,redFrom: 27, redTo: 50,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:50},json_dataHora_);
+            GaugeGraficoDesenhar(json_pressao_, 'id_pressao1'        , {width: 400, height: 120,redFrom: 101325, redTo: 105000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:105000},json_dataHora_);
+            GaugeGraficoDesenhar(json_altitude_, 'id_altitude1'      , {width: 400, height: 120,redFrom: 2500, redTo: 3000,yellowFrom:0, yellowTo: 10,minorTicks: 5,max:3000},json_dataHora_);
           });
 
       }
 
-      function GraficoDesenhar(data_)
+      function GaugeGraficoDesenhar(data_, chart_id_, options_, dateTime_)
       {
+        var data_ = google.visualization.arrayToDataTable(data_);
 
-        var data = google.visualization.arrayToDataTable(data_);
+        var chart = new google.visualization.Gauge(document.getElementById(chart_id_));
 
-        var options = {
-          width: 400, height: 120,
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
-          minorTicks: 5
-        };
+        var elDataHora = document.getElementById('id_dataHora');
+        
+        elDataHora.innerText = dateTime_;
 
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+        chart.draw(data_, options_);
+      }
 
-        chart.draw(data, options);
+      // LineChart
 
-        /*
-        setInterval(function() {
-          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 13000);
-        setInterval(function() {
-          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 5000);
-        setInterval(function() {
-          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
-          chart.draw(data, options);
-        }, 26000);
-        */
+
+      function LineChartJSonBuscar()
+      {       
+
+        var _url1 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
+        var _url2 = 'http://localhost:35145/api/meteorologia/listar/esp8266';
+        var _url3 = 'http://localhost:8000/api/meteorologia/esp8266';
+        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor-1.json';        
+        
+        fetch(_url4)
+          .then( response => response.text())
+          .then(data => {
+
+            var json_ = JSON.parse(data);
+            var json_temperatura_ = [['Ano','Temperatura']];
+            var json_pressao_ = [['Ano','Pressão']];
+            var json_altitude_ = [['Ano','Altitude']];
+
+            var json_dataHora_ =  json_[0].dataHora;
+
+            for(var i=0;i<10;i++)
+            {
+
+//              var dataHora =  Date.parse(json_[i].dataHora);   // json_[i].dataHora;
+              var dataHora_ =  new Date(json_[i].dataHora);   // json_[i].dataHora;
+              debugger;
+
+              var hora = ( dataHora_.getHours()); 
+              var minuto = ( dataHora_.getMinutes()); 
+              var dataHora = hora.toString() +':'+ minuto.toString();
+
+              var temperatura = json_[i].temperatura;
+              var pressao = json_[i].pressao;
+              var altitude = json_[i].altitude;    
+
+              var linha = [dataHora, temperatura]
+              json_temperatura_.push(linha);
+
+              linha = [dataHora, pressao]
+              json_pressao_.push(linha);
+
+              linha = [dataHora, altitude]
+              json_altitude_.push(linha); 
+            }
+
+            LineChartGraficoDesenhar(json_temperatura_, 'id_temperatura' , {title: 'Temperatura', curveType: 'function',legend: { position: 'bottom' }},json_dataHora_);
+            LineChartGraficoDesenhar(json_pressao_, 'id_pressao'        , {title: 'Pressão', curveType: 'function',legend: { position: 'bottom' }},json_dataHora_);
+            LineChartGraficoDesenhar(json_altitude_, 'id_altitude'      , {title: 'Altitude', curveType: 'function',redlegend: { position: 'bottom' }},json_dataHora_);
+          });
 
       }
 
-      function drawChart() {
+      function LineChartGraficoDesenhar(data_, chart_id_, options_, dateTime_)
+      {
+        var data_ = google.visualization.arrayToDataTable(data_);
 
-        debugger;
+        var chart = new google.visualization.LineChart(document.getElementById(chart_id_));
 
-        var data_ = [
-          ['Label', 'Value'],
-          ['Temperatura', 80],
-          ['Pressão', 55],
-          ['Altitude', 68]
-        ];
+        var elDataHora = document.getElementById('id_dataHora');
+        
+        elDataHora.innerText = dateTime_;
 
-        var data = google.visualization.arrayToDataTable(data_);
-
-        var options = {
-          width: 400, height: 120,
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
-          minorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-        chart.draw(data, options);
-
-        setInterval(function() {
-          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 13000);
-        setInterval(function() {
-          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
-          chart.draw(data, options);
-        }, 5000);
-        setInterval(function() {
-          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
-          chart.draw(data, options);
-        }, 26000);
+        chart.draw(data_, options_);
       }
+
     </script>
   </head>
   <body>
-    <div id="chart_div" style="width: 400px; height: 120px;"></div>
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_temperatura" style="width: 800px; height: 240px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_pressao" style="width: 800px; height: 240px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.bbc.com/portuguese/vert-fut-44829117#:~:text=Viver%20a%20uma%20altitude%20moderada,ser%20uma%20escolha%20mais%20saud%C3%A1vel.&text=Enquanto%20isto%2C%20h%C3%A1%20argumentos%20em,algum%20lugar%20pr%C3%B3ximo%20%C3%A0%20%C3%A1gua.">
+      <div id="id_altitude" style="width: 800px; height: 240px;"></div>
+    </a>
+
+
+    <div>
+      Para saber mais clique nos relógios. <span id="id_dataHora"></span>
+    </div>
+
+
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_temperatura1" style="width: 800px; height: 240px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.todamateria.com.br/pressao-atmosferica/#:~:text=Esse%20valor%20corresponde%20a%20101325,da%20press%C3%A3o%20atmosf%C3%A9rica%20tamb%C3%A9m%20reduz.">
+      <div id="id_pressao1" style="width: 800px; height: 240px;"></div>
+    </a>
+
+    <a target="_blank" href="https://www.bbc.com/portuguese/vert-fut-44829117#:~:text=Viver%20a%20uma%20altitude%20moderada,ser%20uma%20escolha%20mais%20saud%C3%A1vel.&text=Enquanto%20isto%2C%20h%C3%A1%20argumentos%20em,algum%20lugar%20pr%C3%B3ximo%20%C3%A0%20%C3%A1gua.">
+      <div id="id_altitude1" style="width: 800px; height: 240px;"></div>
+    </a>
+
+
+
   </body>
 </html>

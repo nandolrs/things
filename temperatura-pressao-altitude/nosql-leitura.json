@@ -1,0 +1,6 @@
+{
+    "temperatura":10
+    ,"pressao": 20
+    ,"umidade" : 30
+    ,"dispositivo": "esp8266"
+}
