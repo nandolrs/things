@@ -87,7 +87,7 @@ void connectAWS()
   //net.setCertificate(AWS_CERT_CRT);
   //net.setPrivateKey(AWS_CERT_PRIVATE);
 
-  ServerSetup();  messageHandler
+  ServerSetup();  //messageHandler
 
   Serial.print("AWS_IOT_ENDPOINT");
   Serial.println(AWS_IOT_ENDPOINT);
