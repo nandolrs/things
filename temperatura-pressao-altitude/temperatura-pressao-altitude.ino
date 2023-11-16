@@ -6,16 +6,22 @@
 char publishTopic[] = "esp32/pub";
 char subscribeTopic[] = "esp32/sub";
 
-void publishMessage()
+void publishMessage(String msgJson)
 {
+  /*
   StaticJsonDocument<200> doc;
   doc["time"] = millis();
   doc["sensor_a0"] = analogRead(0);
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client
+*/
 
-  CFIotWifiMQTTPublicar(publishTopic, jsonBuffer);
+  int i =  msgJson.length()+1;
 
+  char msgJson_[i];
+  msgJson.toCharArray(msgJson_, i);  
+
+  CFIotWifiMQTTPublicar(publishTopic, msgJson_); // jsonBuffer
 }
 
 void MqttMessageHandler(String &topic, String &payload) {
@@ -35,11 +41,14 @@ void setup() {
 
     CFIotWifiX509Configurar();
 
+    CFIotEstacaoMeteorologicaConectar();
+
     CFIotWifiMQTTConectar(subscribeTopic);
 }
 
 void loop() {
-  publishMessage();
+  String dadosJson  = CFIotEstacaoMeteorologicaDadosObter();
+  publishMessage(dadosJson);
   CFIotWifiMQTTLoop();
   delay(1000);
 }
