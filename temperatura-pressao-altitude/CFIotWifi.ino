@@ -50,7 +50,7 @@ void CFIotWifiX509Configurar()
     net.setClientRSACert(&client_crt, &key);
 }
 
-void CFIotWifiMQTTConectar()
+void CFIotWifiMQTTConectar(char topic[])
 {
     // Connect to the MQTT broker on the AWS endpoint we defined earlier
     mqttClient.begin(AWS_IOT_ENDPOINT, 8883, net);
@@ -70,7 +70,7 @@ void CFIotWifiMQTTConectar()
     }
 
     // Subscribe to a topic
-    mqttClient.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
+    mqttClient.subscribe(topic); // topic
 
     Serial.println("AWS IoT Connected!");  
 }

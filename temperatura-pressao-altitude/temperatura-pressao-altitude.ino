@@ -35,7 +35,7 @@ void setup() {
 
     CFIotWifiX509Configurar();
 
-    CFIotWifiMQTTConectar();
+    CFIotWifiMQTTConectar(subscribeTopic);
 }
 
 void loop() {
