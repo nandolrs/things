@@ -18,22 +18,56 @@ BearSSL::WiFiServerSecure server(443);
 
 
 WiFiClientSecure net = WiFiClientSecure();
+
+BearSSL::X509List cert(AWS_CERT_CA);
+BearSSL::X509List client_crt(AWS_CERT_CRT);
+BearSSL::PrivateKey key(AWS_CERT_PRIVATE);
+
 MQTTClient client = MQTTClient(256);
+
+void setClock() {
+  configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+
+  Serial.print("Waiting for NTP time sync: ");
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2) {
+    delay(500);
+    Serial.print(".");
+    now = time(nullptr);
+  }
+  Serial.println("");
+  struct tm timeinfo;
+  gmtime_r(&now, &timeinfo);
+  Serial.print("Current time: ");
+  Serial.print(asctime(&timeinfo));
+}
 
 void ServerSetup()
 {
+    Serial.println("ServerSetup ENTROU");
+
+      setClock();  // Required for X.509 validation
+
+
   // Attach the server private cert/key combo
-  BearSSL::X509List *serverCertList = new BearSSL::X509List(AWS_CERT_CRT ); // server_cert
-  BearSSL::PrivateKey *serverPrivKey = new BearSSL::PrivateKey( AWS_CERT_PRIVATE ); // server_private_key
+  //BearSSL::X509List *serverCertList = new BearSSL::X509List(AWS_CERT_CRT ); // server_cert
+  //BearSSL::PrivateKey *serverPrivKey = new BearSSL::PrivateKey( AWS_CERT_PRIVATE ); // server_private_key
+  //server.setRSACert(serverCertList, serverPrivKey);
 
   // Require a certificate validated by the trusted CA
-  BearSSL::X509List *serverTrustedCA = new BearSSL::X509List(AWS_CERT_CA); //  ca_cert
-  server.setClientTrustAnchor(serverTrustedCA);
+  //BearSSL::X509List *serverTrustedCA = new BearSSL::X509List(AWS_CERT_CA); //  ca_cert
+  //server.setClientTrustAnchor(serverTrustedCA);
 
   // Actually start accepting connections
-  server.begin();
+  //server.begin();
 
- net = server.accept();
+ //net = server.accept();
+
+ 
+  net.setTrustAnchors(&cert);
+  net.setClientRSACert(&client_crt, &key);
+
+ Serial.println("ServerSetup SAIU");
 }
 
 void connectAWS()
@@ -53,6 +87,11 @@ void connectAWS()
   //net.setCertificate(AWS_CERT_CRT);
   //net.setPrivateKey(AWS_CERT_PRIVATE);
 
+  ServerSetup();  messageHandler
+
+  Serial.print("AWS_IOT_ENDPOINT");
+  Serial.println(AWS_IOT_ENDPOINT);
+
   // Connect to the MQTT broker on the AWS endpoint we defined earlier
   client.begin(AWS_IOT_ENDPOINT, 8883, net);
 
@@ -70,6 +109,9 @@ void connectAWS()
     Serial.println("AWS IoT Timeout!");
     return;
   }
+
+  Serial.println("conectou!!!");
+
 
   // Subscribe to a topic
   client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
