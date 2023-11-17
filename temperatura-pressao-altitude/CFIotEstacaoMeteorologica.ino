@@ -56,7 +56,6 @@ String JsonGerar(float temperatura, float pressao, float altitude)
 }
 
 void CFIotEstacaoMeteorologicaConectar() {
-  Serial.begin(9600);
   if (!bmp.begin()) {
 	Serial.println("Could not find a valid BMP085 sensor, check wiring!");
 	while (1) {}
