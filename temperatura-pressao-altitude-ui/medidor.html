@@ -21,14 +21,17 @@
       function GaugeJSonBuscar()
       {       
 
-        var _url1 = 'https://www.negritando.com/temperatura-pressao-altitude-ui/medidor.json';
+        var _url1 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
         var _url2 = 'http://localhost:35145/api/meteorologia/listar/esp8266';
         var _url3 = 'http://localhost:8000/api/meteorologia/esp8266';
-        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude-ui/medidor-1.json';        
+        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor-1.json';    
+        var _url5 = 'http://localhost:5094/api/meteorologia/listar/esp8266';
+    
         
-        fetch(_url4)
+        fetch(_url5)
           .then( response => response.text())
           .then(data => {
+debugger;
 
             var json_ = JSON.parse(data);
             var json_temperatura_ = [['Label','Value']];
@@ -79,9 +82,11 @@
         var _url1 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor.json';
         var _url2 = 'http://localhost:35145/api/meteorologia/listar/esp8266';
         var _url3 = 'http://localhost:8000/api/meteorologia/esp8266';
-        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude-ui/medidor-1.json';        
+        var _url4 = 'https://www.negritando.com/temperatura-pressao-altitude/medidor-1.json';    
+        var _url5 = 'http://localhost:5094/api/meteorologia/listar/esp8266';
+    
         
-        fetch(_url4)
+        fetch(_url5)
           .then( response => response.text())
           .then(data => {
 
