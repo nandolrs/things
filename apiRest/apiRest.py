@@ -1,31 +1,17 @@
 from typing import Union
-
 from fastapi import FastAPI
-
-#import compara_hash
-
 import uvicorn
 
 
 import boto3
 import boto3.dynamodb.types
+from boto3.dynamodb.conditions import Key, Attr
 
 from pydantic import BaseModel
 from typing import Union
 
 import json
 from  decimal import Decimal
-
-from boto3.dynamodb.conditions import Key, Attr
-
-
-
-class Clima1(BaseModel) :
-    id: int
-    nome: Union[str, None] = None
-    temperatura: Union[Decimal, None] = None
-    pressao: Union[float, None] = None
-    umidade: Union[float, None] = None
 
 class Clima(BaseModel) :
     id: int
@@ -34,40 +20,30 @@ class Clima(BaseModel) :
     pressao: Union[Decimal, None] = None
     umidade: Union[Decimal, None] = None    
 
-
-
 app = FastAPI()
-
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-@app.get("/ergon2eso/{emp_codigo}/{mes}/{ano}")
-def read_item(emp_codigo: int, mes: int, ano:int):
-    #return {"emp_codigo": emp_codigo, "mes": mes, "ano": ano}
-    #compara_hash.Iniciar(1)
-    #compara_hash.ESocialComparar(emp_codigo, mes, ano)
-    return {"situacao": "GERADO"}
+    return {"mensagem": "to aqui, pronto e saudável"}
 
 @app.post("/api/clima")
 async def create_item(entidade: Clima) :
-    Incluir(entidade)
+    Incluir('Clima',entidade, 1)
     return entidade
 
-@app.post("/api/clima1")
-async def create_item(entidade) :
-    Incluir(entidade.model_dump())
+@app.put("/api/clima")
+async def create_item(entidade: Clima) :
+    Alterar('Clima',entidade, 1)
     return entidade
 
 def parse_float(value) :
 
     return Decimal(str(value))
+
+def DynamoTabela(nomeTabela) :
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table(nomeTabela)    
     
 def IncluirID(tabelaNome) :
 
@@ -80,7 +56,6 @@ def IncluirID(tabelaNome) :
     table.put_item(Item=documento)
 
     return  1
-
 
 def ConsultarID(tabelaNome) :
 
@@ -95,35 +70,47 @@ def ConsultarID(tabelaNome) :
     if len(scan['Items']) == 0 : # adicionar
         retorno = IncluirID(tabelaNome)
     else :
-        retorno = scan['Items'][0]['ultimoIndice']
+        documento = scan['Items'][0]
+        documento['ultimoIndice'] = documento['ultimoIndice'] + 1
+        Alterar('TabelasIndices', documento,0)
+        retorno = documento['ultimoIndice']
 
     return retorno
 
-def Incluir(entidade) :
+def Incluir(nomeTabela, entidade, api) :
 
-    entidade.id = ConsultarID('Clima')
+    entidade.id = ConsultarID(nomeTabela)
 
     dynamodb = boto3.resource('dynamodb')
 
-    table = dynamodb.Table('Clima')
+    table = dynamodb.Table(nomeTabela)
 
-    entidadeDicionario = entidade.dict()
+    if (api == 1) :
+        entidadeDicionario = entidade.dict()
+    else :
+        entidadeDicionario = entidade
 
     #entidadeDicionario : dict = json.loads(json.dumps(entidade), parse_float=parse_float)
 
     table.put_item(Item=entidadeDicionario)
 
+    return entidade
 
-    # documento = {
-    # }
+def Alterar(nomeTabela, entidade, api) :
 
-    # # inclui 1
+    dynamodb = boto3.resource('dynamodb')
 
-    # documento['id'] = 12345
-    # documento['nome'] = "nome " +  documento['id']
-    # table.put_item(Item=documento)
-    # print('-------------------inclui 1 =', documento)
+    table = dynamodb.Table(nomeTabela)
 
+    if (api == 1) :
+        entidadeDicionario = entidade.dict()
+    else :
+        entidadeDicionario = entidade
+
+    #entidadeDicionario : dict = json.loads(json.dumps(entidade), parse_float=parse_float)
+
+    table.put_item(Item=entidadeDicionario)
+    
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
