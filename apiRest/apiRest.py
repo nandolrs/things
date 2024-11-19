@@ -37,19 +37,24 @@ async def create_item(entidade: Clima) :
     return entidade
 
 def parse_float(value) :
-
     return Decimal(str(value))
 
 def DynamoTabela(nomeTabela) :
+
     dynamodb = boto3.resource('dynamodb')
 
-    table = dynamodb.Table(nomeTabela)    
+    return dynamodb.Table(nomeTabela)    
+
+def DynamoBuscaS(nomeTabela, filtro) :
+    
+    tabela = DynamoTabela(nomeTabela)   
+
+    return tabela.scan(FilterExpression=filtro)
+ 
     
 def IncluirID(tabelaNome) :
 
-    dynamodb = boto3.resource('dynamodb')
-
-    table = dynamodb.Table('TabelasIndices')
+    table = DynamoTabela('TabelasIndices')
 
     documento = {"tabelaNome" : tabelaNome, "ultimoIndice" : 1}
 
@@ -59,11 +64,9 @@ def IncluirID(tabelaNome) :
 
 def ConsultarID(tabelaNome) :
 
-    dynamodb = boto3.resource('dynamodb')
+    #table = DynamoTabela('TabelasIndices')
 
-    table = dynamodb.Table('TabelasIndices')
-
-    scan = table.scan(FilterExpression=Attr('tabelaNome').eq(tabelaNome))
+    scan = DynamoBuscaS('TabelasIndices', Attr('tabelaNome').eq(tabelaNome) ) #table.scan(FilterExpression=Attr('tabelaNome').eq(tabelaNome))
 
     retorno = 0
 
@@ -81,9 +84,7 @@ def Incluir(nomeTabela, entidade, api) :
 
     entidade.id = ConsultarID(nomeTabela)
 
-    dynamodb = boto3.resource('dynamodb')
-
-    table = dynamodb.Table(nomeTabela)
+    table = DynamoTabela(nomeTabela)
 
     if (api == 1) :
         entidadeDicionario = entidade.dict()
@@ -98,9 +99,7 @@ def Incluir(nomeTabela, entidade, api) :
 
 def Alterar(nomeTabela, entidade, api) :
 
-    dynamodb = boto3.resource('dynamodb')
-
-    table = dynamodb.Table(nomeTabela)
+    table = DynamoTabela(nomeTabela)
 
     if (api == 1) :
         entidadeDicionario = entidade.dict()
