@@ -10,7 +10,7 @@ from boto3.dynamodb.conditions import Key, Attr
 from pydantic import BaseModel
 from typing import Union
 
-import json
+#import json
 from  decimal import Decimal
 
 class Clima(BaseModel) :
