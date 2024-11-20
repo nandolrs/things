@@ -115,12 +115,12 @@ void setup() {
 
   String output = JsonGerar();
 
-  // client.println("POST " + String(url) +" HTTP/1.1");
+  // client.println(String("POST ") + url +" HTTP/1.1");
   // client.println("Host: " + String(github_host));
   // client.println("Content-Type: application/json" );
   // client.println("Content-Length: " + output.length() );
   // client.println();
-  // client.println(output);
+  // client.println(output + "\n");
 
   client.print(String("POST ") + url + " HTTP/1.1\r\n" +
                  "Host: " + String(github_host) + "\r\n" +
