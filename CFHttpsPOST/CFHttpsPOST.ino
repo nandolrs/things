@@ -24,6 +24,9 @@
 
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
+#include <ArduinoJson.h>
+
+
 
 // https://www.negritando.com
 // CN: Amazon Root CA 1
@@ -106,18 +109,55 @@ void setup() {
     return;
   }
 
-  String url = "/api/clima/12358";
+  String url = "/api/clima";
   Serial.print("Requesting URL: ");
   Serial.println(url);
 
-  client.println("GET " + String(url) +" HTTP/1.1");
-  client.println("Host: " + String(github_host));
-  client.println("Connection: close");
-  client.println();
+  String output = JsonGerar();
+
+  // client.println("POST " + String(url) +" HTTP/1.1");
+  // client.println("Host: " + String(github_host));
+  // client.println("Content-Type: application/json" );
+  // client.println("Content-Length: " + output.length() );
+  // client.println();
+  // client.println(output);
+
+  client.print(String("POST ") + url + " HTTP/1.1\r\n" +
+                 "Host: " + String(github_host) + "\r\n" +
+                 //"Connection: close\r\n" +
+                 "Content-Type: application/json\r\n" +
+                 "Content-Length: " + output.length() + "\r\n" +
+                 "\r\n" + // This is the extra CR+LF pair to signify the start of a body
+                 output + "\n");  
+
+
+  Serial.println("----- lendo inicio -------");
+  Serial.println(output);
+  Serial.println("----- lendo final -------");
 
   Serial.println("----- lendo inicio -------");
   Serial.println(JsonObter(client));
   Serial.println("----- lendo final -------");
+
+}
+
+String JsonGerar()
+{
+  // Allocate the JSON document
+  JsonDocument doc;
+
+  // Add values in the document
+  doc["id"] = 0;
+  doc["nome"] = "ESP32";
+  doc["pressao"] = 56.78D;
+  doc["temperatura"] = 67.89D;
+  doc["unidade"] = 78.90D;
+
+  String out;
+  serializeJson(doc, out);
+
+  return out;
+
 }
 
 String JsonObter(BearSSL::WiFiClientSecure cliente)
