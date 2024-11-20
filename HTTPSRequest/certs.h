@@ -55,10 +55,10 @@ xRqhqjn1VtvChMQ1H3Dau0bwhr9kAMQ+959GG50jBbl9s08PqUU643QwmA==
 -----END CERTIFICATE-----
 )CERT";
 
-// http://cacerts.digicert.com/DigiCertGlobalRootCA.crt
-// CN: DigiCert Global Root CA => name: DigiCert_Global_Root_CA
-// not valid before: 2006-11-10 00:00:00
-// not valid after:  2031-11-10 00:00:00
+// https://www.negritando.com
+// CN: Amazon Root CA 1
+// not valid before: 25/05/2015, 21:00:00 GMT-30
+// not valid after:  16/01/2038, 21:00:00 GMT-3
 const char cert_DigiCert_Global_Root_CA [] PROGMEM = R"CERT(
 -----BEGIN CERTIFICATE-----
 MIIDQTCCAimgAwIBAgITBmyfz5m/jAo54vB4ikPmljZbyjANBgkqhkiG9w0BAQsF
