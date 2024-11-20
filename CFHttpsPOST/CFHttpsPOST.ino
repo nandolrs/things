@@ -151,7 +151,7 @@ String JsonGerar()
   doc["nome"] = "ESP32";
   doc["pressao"] = 56.78D;
   doc["temperatura"] = 67.89D;
-  doc["unidade"] = 78.90D;
+  doc["umidade"] = 78.90D;
 
   String out;
   serializeJson(doc, out);
