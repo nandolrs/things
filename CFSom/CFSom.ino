@@ -30,7 +30,6 @@ int duracao[] =
 void setup() 
 {
   Serial.begin(9600); 
-  Serial.println("--- Iniciou a tocar ---");
   
   Serial.print("sizeof(melodia) = ");
   Serial.println(sizeof(melodia));
@@ -42,6 +41,8 @@ void setup()
  
 void loop() 
 {
+  Serial.println("--- Iniciou a tocar ---");
+
   for (int nota = 0; nota < 7; nota++) 
   {
         int duracaoNota = 1000 / duracao[nota];
