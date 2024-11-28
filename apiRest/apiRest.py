@@ -41,6 +41,10 @@ async def consultar_item(id: int) :
     entidade = Consultar('Clima',id, 0)
     return entidade
 
+@app.get("/api/clima/nome/{nome}")
+async def consultar_nome_item(nome: str) :
+    entidade = ConsultarNome('Clima',nome, 0)
+    return entidade
 
 
 
@@ -132,6 +136,33 @@ def Consultar(nomeTabela, ID, api) :
     retorno = table.get_item(Key=entidadeDicionario)    
 
     return retorno['Item']
+
+def ConsultarNome(nomeTabela, nome, api) :
+
+    table = DynamoTabela(nomeTabela)
+
+    entidadeFilter = {'nome': nome}
+    entidadeFilter = {'FilterExpression': Attr('nome').eq(nome)
+                      , 'ProjectionExpression' : "id, nome"
+                      }
+
+    
+    # aws dynamodb scan ^
+    # --table-name Produto ^
+    # --filter-expression 'contains(nome,:nome)' ^
+    # --expression-attribute-values '{":nome":{"S":"chocolate"}}'
+    #
+
+    if (api == 1) :
+        entidadeDicionario = entidadeFilter.dict()
+    else :
+        entidadeDicionario = entidadeFilter
+
+    #entidadeDicionario : dict = json.loads(json.dumps(entidade), parse_float=parse_float)
+
+    retorno = table.scan(**entidadeFilter)    
+
+    return retorno['Items']
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
