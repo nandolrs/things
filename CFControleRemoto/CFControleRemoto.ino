@@ -1,7 +1,16 @@
+/*
+
+1. conectar na mesma rede da COISA
+1. abrir o navegador: chrome, mozila, ...
+2. para LIGAR deve informar no navegador a url: http://<IP da COISA>/comando=ligar
+3. para DESLIGAR deve informar no navegador a url: http://<IP da COISA>/comando=ligar
+
+*/
+
 #include <ESP8266WiFi.h>
 
-const char* ssid = "Silva_2G";
-const char* password = "16011999";
+const char* ssid = "nandonet"; 
+const char* password = "08111969";
 
 const int chaveTactilPin = D0 ; 
 
