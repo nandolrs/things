@@ -8,6 +8,9 @@
 */
 
 #include <ESP8266WiFi.h>
+#include <WiFiClientSecure.h>
+#include <ArduinoJson.h>
+
 
 const char* ssid = "nandonet"; 
 const char* password = "08111969";
@@ -43,11 +46,13 @@ rqXRfboQnoZsG4q5WTP468SQvvG5
 )CERT";
 
 
-const char* github_host = "www.negritando.com"; // meteorologia.negritando.com
+const char* github_host = "meteorologia.negritando.com"; // meteorologia.negritando.com
                            
 const uint16_t github_port = 443;
 
 X509List cert(cert_DigiCert_Global_Root_CA);
+
+WiFiClientSecure client;
 
 // seguro fim
 
@@ -94,7 +99,7 @@ void setup()
   Serial.print(asctime(&timeinfo));
 
   // Use WiFiClientSecure class to create TLS connection
-  WiFiClientSecure client;
+  //WiFiClientSecure client;
   Serial.print("Connecting to ");
   Serial.println(github_host);
 
@@ -199,23 +204,24 @@ String BuscarComando(String qs) // qs= query string
 void Ligar()
 {
     digitalWrite(chaveTactilPin, HIGH);
+    MensagemEnviar("motor ligado");
 }
 
 void Desligar()
 {
     digitalWrite(chaveTactilPin, LOW);
-
+    MensagemEnviar("motor desligado");
 }
 
 
-void MensagemEnviar()
+void MensagemEnviar(String frase)
 {
 
   String url = "/api/clima";
   Serial.print("Requesting URL: ");
   Serial.println(url);
 
-  String output = JsonGerar();
+  String output = JsonGerar(frase);
 
   // client.println(String("POST ") + url +" HTTP/1.1");
   // client.println("Host: " + String(github_host));
@@ -241,4 +247,32 @@ void MensagemEnviar()
   Serial.println(JsonObter(client));
   Serial.println("----- lendo final -------");
 
+}
+
+
+String JsonGerar(String frase)
+{
+  // Allocate the JSON document
+  JsonDocument doc;
+
+  // Add values in the document
+  doc["id"] = 0;
+  doc["nome"] = "ESP32a";
+  doc["pressao"] = 56.78D;
+  doc["temperatura"] = 67.89D;
+  doc["umidade"] = 78.90D;
+  doc["situacao"] = frase;
+
+  String out;
+  serializeJson(doc, out);
+
+  return out;
+
+}
+
+String JsonObter(BearSSL::WiFiClientSecure cliente)
+{
+  String desprezado = cliente.readStringUntil('{'); 
+  String json = '{' +  cliente.readString(); 
+  return json;
 }
