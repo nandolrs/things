@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "fastapi","run", "./apirest.py","--port","80" ]
+CMD [ "fastapi","run", "./apiRest.py","--port","80" ]
