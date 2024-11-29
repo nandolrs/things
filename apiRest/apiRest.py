@@ -20,6 +20,7 @@ class Clima(BaseModel) :
     pressao: Union[Decimal, None] = None
     umidade: Union[Decimal, None] = None    
     situacao: Union[str, None] = None
+    IP: Union[str, None] = None
 
 app = FastAPI()
 
@@ -154,7 +155,7 @@ def ConsultarNOME(nomeTabela, nome, api) :
 
     entidadeFilter = {'nome': nome}
     entidadeFilter = {'FilterExpression': Attr('nome').eq(nome)
-                      , 'ProjectionExpression' : "id, nome, temperatura, pressao, umidade, situacao"
+                      , 'ProjectionExpression' : "id, nome, temperatura, pressao, umidade, situacao, IP"
                       }
 
     

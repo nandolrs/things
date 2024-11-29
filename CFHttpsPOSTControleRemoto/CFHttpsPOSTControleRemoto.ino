@@ -17,9 +17,11 @@ const char* password = "08111969";
 
 const int chaveTactilPin = D0 ; 
 
-String nomeCoisa = "ESP8266";
 int idCoisa = -1;
-String situacaoCoisa = "";
+String nomeCoisa = "ESP8266";
+String situacaoCoisa="";
+String situacaoCoisaLocal="";
+
 
 
 WiFiServer server(80);
@@ -300,11 +302,24 @@ void MensagemReceber()
 
   // verifica se situacao mudou
 
-  JsonDocument doc;
-  deserializeJson(doc, json);
+  // Deserialize the JSON document
+
+  //JsonDocument doc;
+  //DeserializationError error = deserializeJson(doc, json);
+
+  DynamicJsonDocument doc(2048);
+  DeserializationError error = deserializeJson(doc, json);
+
+  // Test if parsing succeeds.
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
+  }  
 
   idCoisa = doc["id"];
-  String situacaoCoisaLocal = doc["situacao"];
+  const char* SITUACAO = doc["situacao"];
+  situacaoCoisaLocal = SITUACAO;
 
   if(situacaoCoisa != situacaoCoisaLocal)
   {
@@ -312,7 +327,7 @@ void MensagemReceber()
     Serial.print("situacaoCoisa = ");
     Serial.println(situacaoCoisa);
     Serial.println("situacaoCoisaLocal = ");
-    Serial.println(situacaoCoisaLocal);
+    Serial.println(SITUACAO);
     Serial.println("----- SITUACAO mudou final -------");  
 
   }
@@ -354,7 +369,12 @@ String JsonObter(BearSSL::WiFiClientSecure cliente)
 {
   String desprezado = cliente.readStringUntil('['); 
   String json =  cliente.readString(); 
-  json = json.substring(        0,json.lastIndexOf(']')    );
+
+  int posicao = json.lastIndexOf(']');
+
+  json = json.substring(0,posicao);
 
   return json;
 }
+
+
