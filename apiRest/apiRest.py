@@ -19,6 +19,7 @@ class Clima(BaseModel) :
     temperatura: Union[Decimal, None] = None
     pressao: Union[Decimal, None] = None
     umidade: Union[Decimal, None] = None    
+    situacao: Union[str, None] = None
 
 app = FastAPI()
 
