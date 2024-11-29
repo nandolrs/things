@@ -22,6 +22,19 @@
       https://github.com/256dpi/arduino-mqtt
 */
 
+
+/*
+
+1.cenários
+1.1 acidente doméstico (buzzer de som)
+1.1.1. condidcao = se sensor de inclinação indicar INCLINACAO, alguém caiu
+1.1.2. ligar o buzzer para alertar
+1.2 desliga luzes (sensor de luminosidade)
+1.2.1. condicao = se sensor de luminosidade cair a abaixo de X, tá escuro
+1.2.2. ligar motor para abastecer a casa
+
+
+*/
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>

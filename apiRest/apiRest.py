@@ -22,7 +22,7 @@ class Clima(BaseModel) :
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/api")
 def read_root():
     return {"mensagem": "to aqui, pronto e saudável"}
 
@@ -43,7 +43,7 @@ async def consultar_item(id: int) :
 
 @app.get("/api/clima/nome/{nome}")
 async def consultar_nome_item(nome: str) :
-    entidade = ConsultarNome('Clima',nome, 0)
+    entidade = ConsultarNOME('Clima',nome, 0)
     return entidade
 
 
@@ -92,7 +92,17 @@ def ConsultarID(tabelaNome) :
 
 def Incluir(nomeTabela, entidade, api) :
 
-    entidade.id = ConsultarID(nomeTabela)
+    ## verifica se ja não existe pelo NOME
+
+    retornoConsulta = ConsultarNOME(nomeTabela, entidade.nome, 0) # api 0
+
+    if len( retornoConsulta) > 0 : ## achou
+        entidade.id = retornoConsulta[0]['id']
+    else :
+        entidade.id = ConsultarID(nomeTabela)
+
+    ##
+    # entidade.id = ConsultarID(nomeTabela)
 
     table = DynamoTabela(nomeTabela)
 
@@ -137,7 +147,7 @@ def Consultar(nomeTabela, ID, api) :
 
     return retorno['Item']
 
-def ConsultarNome(nomeTabela, nome, api) :
+def ConsultarNOME(nomeTabela, nome, api) :
 
     table = DynamoTabela(nomeTabela)
 
