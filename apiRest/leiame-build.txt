@@ -47,7 +47,7 @@ http://localhost:8000/
 -- publica no docker hub
 ------------------------------
 
-docker tag apirest nandolrs/apirest-image
+docker tag apirest-image nandolrs/apirest-image
 
 docker push nandolrs/apirest-image
 

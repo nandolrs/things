@@ -17,6 +17,10 @@ const char* password = "08111969";
 
 const int chaveTactilPin = D0 ; 
 
+String nomeCoisa = "ESP8266";
+int idCoisa = -1;
+String situacaoCoisa = "";
+
 
 WiFiServer server(80);
 
@@ -180,6 +184,9 @@ void loop()
     client.stop();
     Serial.println("[Client disconnected]");
   }
+
+  MensagemReceber();
+
 }
 
 String BuscarComando(String qs) // qs= query string
@@ -196,6 +203,21 @@ String BuscarComando(String qs) // qs= query string
     retorno = "DESLIGAR";
     Desligar();
   }
+  else if (qsl.indexOf("comando=meunome[") > 0 and qsl.indexOf("]") > 0)
+  {
+    retorno = "TROCOU O NOME";
+
+    int marcaInicio =  qsl.indexOf("[")+1;
+    int marcaFinal =  qsl.indexOf("]");
+
+    String novoNome = qsl.substring(marcaInicio , marcaFinal);
+
+    Serial.print("novoNome = ");
+    Serial.println(novoNome);
+
+
+    TrocarNome(novoNome);
+  }  
 
   return retorno;
 
@@ -212,6 +234,18 @@ void Desligar()
     digitalWrite(chaveTactilPin, LOW);
     MensagemEnviar("motor desligado");
 }
+
+void TrocarNome(String novoNome)
+{
+    nomeCoisa = novoNome;
+
+    digitalWrite(chaveTactilPin, LOW);
+    digitalWrite(chaveTactilPin, HIGH);
+    delay(5000);
+    digitalWrite(chaveTactilPin, LOW);
+    MensagemEnviar("novo nome " + nomeCoisa);
+}
+
 
 
 void MensagemEnviar(String frase)
@@ -249,6 +283,52 @@ void MensagemEnviar(String frase)
 
 }
 
+void MensagemReceber()
+{
+  String url = "/api/clima/nome/" + nomeCoisa;
+  Serial.print("Requesting URL: ");
+  Serial.println(url);
+
+  client.println("GET " + String(url) +" HTTP/1.1");
+  client.println("Host: " + String(github_host));
+  client.println("Connection: close");
+  client.println();
+
+  Serial.print("Requesting json: ");
+  String json = JsonObter(client);
+  Serial.println(json);
+
+  // verifica se situacao mudou
+
+  JsonDocument doc;
+  deserializeJson(doc, json);
+
+  idCoisa = doc["id"];
+  String situacaoCoisaLocal = doc["situacao"];
+
+  if(situacaoCoisa != situacaoCoisaLocal)
+  {
+    Serial.println("----- SITUACAO mudou inicio -------");
+    Serial.print("situacaoCoisa = ");
+    Serial.println(situacaoCoisa);
+    Serial.println("situacaoCoisaLocal = ");
+    Serial.println(situacaoCoisaLocal);
+    Serial.println("----- SITUACAO mudou final -------");  
+
+  }
+  else
+  {
+    Serial.println("----- SITUACAO NAO mudou inicio -------");
+
+    Serial.print("situacaoCoisa = ");
+    Serial.println(situacaoCoisa);
+    Serial.println("situacaoCoisaLocal = ");
+    Serial.println(situacaoCoisaLocal);
+
+    Serial.println("----- SITUACAO NAO mudou final -------");  
+  }
+
+}
 
 String JsonGerar(String frase)
 {
@@ -257,7 +337,7 @@ String JsonGerar(String frase)
 
   // Add values in the document
   doc["id"] = 0;
-  doc["nome"] = "ESP32a";
+  doc["nome"] = nomeCoisa;
   doc["pressao"] = 56.78D;
   doc["temperatura"] = 67.89D;
   doc["umidade"] = 78.90D;
@@ -272,7 +352,9 @@ String JsonGerar(String frase)
 
 String JsonObter(BearSSL::WiFiClientSecure cliente)
 {
-  String desprezado = cliente.readStringUntil('{'); 
-  String json = '{' +  cliente.readString(); 
+  String desprezado = cliente.readStringUntil('['); 
+  String json =  cliente.readString(); 
+  json = json.substring(        0,json.lastIndexOf(']')    );
+
   return json;
 }

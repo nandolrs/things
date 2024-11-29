@@ -154,7 +154,7 @@ def ConsultarNOME(nomeTabela, nome, api) :
 
     entidadeFilter = {'nome': nome}
     entidadeFilter = {'FilterExpression': Attr('nome').eq(nome)
-                      , 'ProjectionExpression' : "id, nome"
+                      , 'ProjectionExpression' : "id, nome, temperatura, pressao, umidade, situacao"
                       }
 
     
