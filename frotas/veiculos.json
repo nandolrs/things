@@ -1,0 +1,82 @@
+[
+    {
+        "id": 0,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.127503"
+    },
+    {
+        "id": 1,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.127780"
+    },
+    {
+        "id": 2,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.127916"
+    },
+    {
+        "id": 3,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.127981"
+    },
+    {
+        "id": 4,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.128032"
+    },
+    {
+        "id": 5,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.128121"
+    },
+    {
+        "id": 6,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.128177"
+    },
+    {
+        "id": 7,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.128235"
+    },
+    {
+        "id": 8,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.128307"
+    },
+    {
+        "id": 9,
+        "placa": "ABC",
+        "modelo": "MODELO-1",
+        "velocidademotor": 1.234,
+        "unidade": "RPM",
+        "time": "2025-09-12T19:19:30.128383"
+    }
+]

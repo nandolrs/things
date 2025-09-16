@@ -1,0 +1,31 @@
+--
+
+aws iottwinmaker get-property-value-history \
+    --workspace-id "MyWorkspace" \
+    --entity-id "MySensorEntity" \
+    --component-name "DHTComponent" \
+    --selected-properties "temperature" \
+    --start-time "2023-01-01T00:00:00Z" \
+    --end-time "2023-01-02T00:00:00Z"
+
+--
+
+aws iottwinmaker get-property-value-history \
+    --workspace-id "VehicleFleetWorkspace1" \
+    --entity-id "MotorDC-entidade-v1r1" \
+    --component-name "MotorDC-componente-v1r1" \
+    --selected-properties "telemetryAssetId" \
+    --start-time "2023-01-01T00:00:00Z" \
+    --end-time "2023-01-02T00:00:00Z"    
+
+
+# lista entidades
+
+aws iottwinmaker list-entities --region us-east-1 --workspace-id VehicleFleetWorkspace1 > saida.txt
+
+# entidade = "MotorDC-entidade-v1r1"
+
+aws iottwinmaker get-property-value --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "6693377b-d527-4973-b045-95a12a64d4d7"      --component-name "MotorDC-componente-v1r1"     --selected-properties "telemetryAssetId"      > saida-get-property-value.txt
+
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "6693377b-d527-4973-b045-95a12a64d4d7"      --component-name "MotorDC-componente-v1r1"     --selected-properties "PLACA"     --start-time "2023-01-01T00:00:00Z"     --end-time "2023-01-02T00:00:00Z"
+

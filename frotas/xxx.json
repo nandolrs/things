@@ -1,0 +1,12 @@
+{
+    "MotorDC-componente-v1r1": {
+        "componentTypeId": "com.cmj.timeseries-connector",
+        "properties": {
+            "telemetryAssetId": {
+                "value": {
+                    "stringValue": "ABDC"
+                }
+            }
+        }
+    }
+}
