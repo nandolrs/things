@@ -64,10 +64,7 @@ class CAThena:
             raise     
 
     def Pesquisar(self,DatabaseName, QUERY): # , CatalogName,DatabaseName,TableName,WorkGroup
-        try:
-            print('passou 5.1.0')
-            print('QUERY=',QUERY)
-        
+        try:        
             response = self.cliente.start_query_execution(
                 QueryString=QUERY,
                 QueryExecutionContext={
@@ -79,19 +76,9 @@ class CAThena:
                 # }
             )   
 
-            print('passou 5.1.1')
-
-            # print(response)
-
             query_execution_id = response['QueryExecutionId']     
 
-            print('passou 5.1.2')
-            print('query_execution_id=', query_execution_id)
-
-
-
             while True:
-                print('passou 5.1.3')
 
                 response = self.cliente.get_query_execution(QueryExecutionId=query_execution_id)
                 state = response['QueryExecution']['Status']['State']
@@ -102,21 +89,18 @@ class CAThena:
                 time.sleep(5)  # Poll every 5 seconds 
 
             # trata sucesso ou falha da consulta
-            print('passou 5.1.4')
 
             if state == 'SUCCEEDED':
-                print('passou 5.1.5')
 
                 # Fetch the results if necessary
                 result_data = self.cliente.get_query_results(QueryExecutionId=query_execution_id)
-                print(result_data)
+
                 retorno = {
                     'statusCode': 200,
                     'body': result_data
                 }
                 return retorno
             else:
-                print('passou 5.1.6')
 
                 retorno = {
                     'statusCode': 400,

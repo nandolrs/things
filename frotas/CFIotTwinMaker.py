@@ -45,9 +45,8 @@ class CEntity:
             retorno = []         
 
             for entidade in entidades:
-                print(entidade['entityName'])
 
-                print(entidade['entityId'])
+                # print(entidade['entityId'])
 
                 retorno.append({'nome':entidade['entityName']})
 
@@ -102,9 +101,6 @@ class CComponentResponse:
 
             componentName = request['componentName']
 
-            print('passou 3')
-            print('componentName=', componentName)
-
             properties =  request['properties']
 
             telemetryAssetId = properties['telemetryAssetId']
@@ -114,9 +110,6 @@ class CComponentResponse:
             stringValue = value['stringValue']
 
             retorno = stringValue
-
-            print('passou 4')
-            print('componentName=', componentName)
 
             return retorno
         except Exception as e:
@@ -155,12 +148,6 @@ class CComponentType:
                 propriedade['propertyName'] 
 
             ] =  propertyDefinition
-
-            # print(json.dumps(propertyDefinition))
-
-            # print('=============================')
-            # print(json.dumps(propertyDefinitions))
-
 
         retorno = {
             'componentTypeId':componentTypeId

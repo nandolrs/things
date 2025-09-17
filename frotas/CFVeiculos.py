@@ -76,7 +76,6 @@ class CVeiculos:
         for i in range(qtdeLinhas):
             veiculo = self.VeiculosGerar(i)
             veiculos.append(veiculo)
-            print(i)
 
         retorno =  json.dumps(veiculos)
 
@@ -98,7 +97,6 @@ class CVeiculos:
             veiculo_ = veiculo_ + str(veiculo['id'])            + ',' + str(veiculo['placa'])            + ',' + str(veiculo['modelo'])            + ',' + str(veiculo['velocidademotor'])            + ',' + str(veiculo['unidade'])            + ',' + str(veiculo['time'])
 
             veiculos.append(veiculo_)
-            print(i)
 
         # retorno =  json.dumps(veiculos)
 
@@ -113,8 +111,6 @@ class CVeiculos:
 
     def PesquisarPorPlaca(self, placa):
 
-        print('passou 5.1')
-
         cAthena = CFAthena.CAThena()
 
         s1 = "'"
@@ -122,7 +118,5 @@ class CVeiculos:
         QUERY = "select a.* from tfrotas a where a.placa = '" +  placa  + "'";
         
         retorno = cAthena.Pesquisar(DatabaseName='cmj-database', QUERY=QUERY)
-
-        print('passou 5.2')
 
         return retorno    

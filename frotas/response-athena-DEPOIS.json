@@ -1,0 +1,142 @@
+{
+    "statusCode": 200,
+    "body": {
+        "UpdateCount": 0,
+        "ResultSet": {
+            "Rows": [
+                {
+                    "Data": [
+                        {
+                            "VarCharValue": "id"
+                        },
+                        {
+                            "VarCharValue": "placa"
+                        },
+                        {
+                            "VarCharValue": "modelo"
+                        },
+                        {
+                            "VarCharValue": "velocidademotor"
+                        },
+                        {
+                            "VarCharValue": "unidade"
+                        },
+                        {
+                            "VarCharValue": "time"
+                        }
+                    ]
+                },
+                {
+                    "Data": [
+                        {
+                            "VarCharValue": "1"
+                        },
+                        {
+                            "VarCharValue": "\"ABC1969A\""
+                        },
+                        {
+                            "VarCharValue": "\"MERCEDEZ\""
+                        },
+                        {
+                            "VarCharValue": "12000"
+                        },
+                        {
+                            "VarCharValue": "\"RPM\""
+                        },
+                        {
+                            "VarCharValue": "\"2025-09-11\""
+                        }
+                    ]
+                }
+            ],
+            "ResultSetMetadata": {
+                "ColumnInfo": [
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "id",
+                        "Label": "id",
+                        "Type": "bigint",
+                        "Precision": 19,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": false
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "placa",
+                        "Label": "placa",
+                        "Type": "varchar",
+                        "Precision": 2147483647,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": true
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "modelo",
+                        "Label": "modelo",
+                        "Type": "varchar",
+                        "Precision": 2147483647,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": true
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "velocidademotor",
+                        "Label": "velocidademotor",
+                        "Type": "bigint",
+                        "Precision": 19,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": false
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "unidade",
+                        "Label": "unidade",
+                        "Type": "varchar",
+                        "Precision": 2147483647,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": true
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "time",
+                        "Label": "time",
+                        "Type": "varchar",
+                        "Precision": 2147483647,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": true
+                    }
+                ]
+            }
+        },
+        "ResponseMetadata": {
+            "RequestId": "e5bb6ee3-6aad-4139-9423-8b382c463215",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "date": "Wed, 17 Sep 2025 01:23:17 GMT",
+                "content-type": "application/x-amz-json-1.1",
+                "content-length": "1526",
+                "connection": "keep-alive",
+                "x-amzn-requestid": "e5bb6ee3-6aad-4139-9423-8b382c463215"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

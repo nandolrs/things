@@ -17,11 +17,12 @@ def lambda_handler(event, context):
 
         # retorno = {'retorno': 'sucesso'}
 
-        print('passou 1')
-
         retorno = VeiculoPesquisar(eventDic ) # event
 
-        print('passou fim')
+        print('===retorno===')
+        print(retorno)
+
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=str(retorno))
 
 
         return retorno
@@ -56,32 +57,17 @@ def VeiculoPesquisar(request):
         
         # obter placa
 
-        # request = json.loads(filedata)
-        # request_ = json.loads(request)
         request_ = request
-
-        print('passou 2')
 
         cComponentResponse = CFIotTwinMaker.CComponentResponse()
 
         placa = cComponentResponse.GetPropertyValueHistory(request = request_)   
 
-        # placa='ABC1969A'
-
         ### pesquisar por placa
-
-        print('passou 5')
-        print('placa=', placa)
 
         cVeiculos = CFVeiculos.CVeiculos()
 
-        retorno = cVeiculos.PesquisarPorPlaca(placa)
-
-        print('passou 6')
-        # print('PesquisarPorPlaca=5', retorno)        
-
-        print('===')
-        print(json.dumps(retorno))    
+        retorno = cVeiculos.PesquisarPorPlaca(placa) 
 
         return retorno
 
