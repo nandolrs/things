@@ -7,11 +7,11 @@ def lambda_handler(event, context):
     try:
 
         cfS3 = CFS3.CS3()
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/TFrotas/event-v1r1.json', contentBody=str(event))
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/TFrotas/context-v1r1.json', contentBody=str(context))
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1.json', contentBody=str(event))
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1.json', contentBody=str(context))
 
         eventDic = Dic2Json2Dic(str(event)) 
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/TFrotas/event-v1r1-JSON.json', contentBody=str(eventDic))
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-JSON.json', contentBody=str(eventDic))
 
         # pesquisa veiculo por placa
 
@@ -70,9 +70,15 @@ def VeiculoPesquisar(request):
 
         ### pesquisar por placa
 
+        print('passou 5')
+        print('placa=', placa)
+
         cVeiculos = CFVeiculos.CVeiculos()
 
         retorno = cVeiculos.PesquisarPorPlaca(placa)
+
+        print('passou 6')
+        # print('PesquisarPorPlaca=5', retorno)        
 
         print('===')
         print(json.dumps(retorno))    

@@ -49,7 +49,7 @@ class CVeiculos:
     def VeiculosGerar(self,i):    
 
         id_ = i
-        placa_ = 'ABC' + str(i)
+        placa_ = 'ABC' + str(i) + 'A'
         modelo_ = 'MODELO-' + str(i)
         velocidademotor_ = 12000 + (10*i) + 0.1234
         unidade_ = 'RPM'
@@ -92,7 +92,7 @@ class CVeiculos:
         veiculos = []
 
         for i in range(qtdeLinhas):
-            veiculo = self.VeiculosGerar(i+100)
+            veiculo = self.VeiculosGerar(i+1969)
 
             veiculo_ = ''
             veiculo_ = veiculo_ + str(veiculo['id'])            + ',' + str(veiculo['placa'])            + ',' + str(veiculo['modelo'])            + ',' + str(veiculo['velocidademotor'])            + ',' + str(veiculo['unidade'])            + ',' + str(veiculo['time'])
@@ -113,12 +113,16 @@ class CVeiculos:
 
     def PesquisarPorPlaca(self, placa):
 
+        print('passou 5.1')
+
         cAthena = CFAthena.CAThena()
 
         s1 = "'"
         s2 = '"'
-        QUERY = 'select a.* from tfrotas a where a.placa = ' + s1 + s2 + placa + s2 + s1;
+        QUERY = "select a.* from tfrotas a where a.placa = '" +  placa  + "'";
         
         retorno = cAthena.Pesquisar(DatabaseName='cmj-database', QUERY=QUERY)
+
+        print('passou 5.2')
 
         return retorno    

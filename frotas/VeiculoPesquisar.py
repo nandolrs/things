@@ -26,7 +26,7 @@ def Testar():
 
     cfS3 = CFS3.CS3()
     cfS3.Incluir( bucketName='cmj-dados-lambda', key='input/veiculos-v1r2.json', contentBody=veiculos)
-    cfS3.Incluir( bucketName='cmj-motores', key='dados/TFrotas/veiculos-v1r2.json', contentBody=veiculos)
+    cfS3.Incluir( bucketName='cmj-motores', key='dados/TFrotas/veiculos-v1r2.csv', contentBody=veiculos)
 
 Testar()  
 print('gerou')  

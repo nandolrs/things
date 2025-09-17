@@ -115,6 +115,9 @@ class CComponentResponse:
 
             retorno = stringValue
 
+            print('passou 4')
+            print('componentName=', componentName)
+
             return retorno
         except Exception as e:
             print('== erro ==')
