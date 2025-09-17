@@ -103,7 +103,7 @@ class CComponentResponse:
             componentName = request['componentName']
 
             print('passou 3')
-
+            print('componentName=', componentName)
 
             properties =  request['properties']
 
@@ -117,6 +117,8 @@ class CComponentResponse:
 
             return retorno
         except Exception as e:
+            print('== erro ==')
+            print (e)            
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             raise       
 
