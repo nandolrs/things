@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
         retorno = {'retorno': 'falha'}
 
-def Dic2Json2Dic(self, event):
+def Dic2Json2Dic(event):
      
     s1from = 'False'
     s1to = '"False"'
@@ -117,9 +117,9 @@ def Testar():
 
     filedata = f.read()
 
-    eventDic = Dic2Json2Dic(None,filedata)
+    eventDic = Dic2Json2Dic(filedata)
 
     context = {'context':'context'}
     lambda_handler(eventDic,context)
 
-Testar()
+# Testar()
