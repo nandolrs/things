@@ -13,20 +13,20 @@
                 "dataType": {
                     "type": "STRING"
                 },
-                "isTimeSeries": True,
-                "isRequiredInEntity": False,
-                "isExternalId": False,
-                "isStoredExternally": True,
-                "isImported": False,
-                "isFinal": False,
-                "isInherited": False,
-                "timeSeries": True,
-                "imported": False,
-                "requiredInEntity": False,
-                "storedExternally": True,
-                "externalId": False,
-                "inherited": False,
-                "final": False
+                "isTimeSeries": true,
+                "isRequiredInEntity": false,
+                "isExternalId": false,
+                "isStoredExternally": true,
+                "isImported": false,
+                "isFinal": false,
+                "isInherited": false,
+                "timeSeries": true,
+                "imported": false,
+                "requiredInEntity": false,
+                "storedExternally": true,
+                "externalId": false,
+                "inherited": false,
+                "final": false
             }
         },
         "telemetryAssetId": {
@@ -34,23 +34,23 @@
                 "dataType": {
                     "type": "STRING"
                 },
-                "isTimeSeries": False,
-                "isRequiredInEntity": True,
-                "isExternalId": True,
-                "isStoredExternally": False,
-                "isImported": False,
-                "isFinal": False,
-                "isInherited": False,
-                "timeSeries": False,
-                "imported": False,
-                "requiredInEntity": True,
-                "storedExternally": False,
-                "externalId": True,
-                "inherited": False,
-                "final": False
+                "isTimeSeries": false,
+                "isRequiredInEntity": true,
+                "isExternalId": true,
+                "isStoredExternally": false,
+                "isImported": false,
+                "isFinal": false,
+                "isInherited": false,
+                "timeSeries": false,
+                "imported": false,
+                "requiredInEntity": true,
+                "storedExternally": false,
+                "externalId": true,
+                "inherited": false,
+                "final": false
             },
             "value": {
-                "stringValue": "ABDC"
+                "stringValue": "ABC1969A"
             }
         },
         "telemetryAssetType": {
@@ -58,20 +58,20 @@
                 "dataType": {
                     "type": "STRING"
                 },
-                "isTimeSeries": False,
-                "isRequiredInEntity": False,
-                "isExternalId": False,
-                "isStoredExternally": False,
-                "isImported": False,
-                "isFinal": False,
-                "isInherited": False,
-                "timeSeries": False,
-                "imported": False,
-                "requiredInEntity": False,
-                "storedExternally": False,
-                "externalId": False,
-                "inherited": False,
-                "final": False
+                "isTimeSeries": false,
+                "isRequiredInEntity": false,
+                "isExternalId": false,
+                "isStoredExternally": false,
+                "isImported": false,
+                "isFinal": false,
+                "isInherited": false,
+                "timeSeries": false,
+                "imported": false,
+                "requiredInEntity": false,
+                "storedExternally": false,
+                "externalId": false,
+                "inherited": false,
+                "final": false
             }
         }
     },

@@ -91,6 +91,33 @@ class CComponent:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             raise   
 
+
+class CComponentResponse:
+    def __init__(self):
+        self.cliente = boto3.client('iottwinmaker',region_name='us-east-1')
+
+
+    def GetPropertyValueHistory(self, request): # entityId, componentName, selectedProperties
+        try:
+
+            componentName = request['componentName']
+
+            properties =  request['properties']
+
+            telemetryAssetId = properties['telemetryAssetId']
+
+            value = telemetryAssetId['value']
+
+            stringValue = value['stringValue']
+
+            retorno = {
+            }
+
+            return retorno
+        except Exception as e:
+        #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
+            raise       
+
 class CComponentType:
 
     def __init__(self):
