@@ -1,6 +1,7 @@
 import time
 from  datetime import datetime
 import json
+import CFAthena
 
 class CVeiculos:
 
@@ -84,7 +85,6 @@ class CVeiculos:
         # with open('veiculos.json', 'w') as file:
         #     json.dump(veiculos, file, indent=4)        
 
-
     def FlatGerar(self):
 
         qtdeLinhas = 10
@@ -110,3 +110,15 @@ class CVeiculos:
 
         # with open('veiculos.json', 'w') as file:
         #     json.dump(veiculos, file, indent=4)               
+
+    def PesquisarPorPlaca(self, placa):
+
+        cAthena = CFAthena.CAThena()
+
+        s1 = "'"
+        s2 = '"'
+        QUERY = 'select a.* from tfrotas a where a.placa = ' + s1 + s2 + placa + s2 + s1;
+        
+        retorno = cAthena.Pesquisar(DatabaseName='cmj-database', QUERY=QUERY)
+
+        return retorno    

@@ -63,12 +63,10 @@ class CAThena:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             raise     
 
-    def Pesquisar(self,DatabaseName, placa): # , CatalogName,DatabaseName,TableName,WorkGroup
+    def Pesquisar(self,DatabaseName, QUERY): # , CatalogName,DatabaseName,TableName,WorkGroup
         try:
 
-            s1 = "'"
-            s2 = '"'
-            QUERY = 'select a.* from tfrotas a where a.placa = ' + s1 + s2 + placa + s2 + s1;
+
         
             response = self.cliente.start_query_execution(
                 QueryString=QUERY,

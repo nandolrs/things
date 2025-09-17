@@ -102,6 +102,9 @@ class CComponentResponse:
 
             componentName = request['componentName']
 
+            print('passou 3')
+
+
             properties =  request['properties']
 
             telemetryAssetId = properties['telemetryAssetId']
@@ -110,8 +113,7 @@ class CComponentResponse:
 
             stringValue = value['stringValue']
 
-            retorno = {
-            }
+            retorno = stringValue
 
             return retorno
         except Exception as e:
