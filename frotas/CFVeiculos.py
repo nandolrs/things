@@ -2,6 +2,7 @@ import time
 from  datetime import datetime
 import json
 import CFAthena
+import CFIotTwinMaker
 
 class CVeiculos:
 
@@ -120,3 +121,93 @@ class CVeiculos:
         retorno = cAthena.Pesquisar(DatabaseName='cmj-database', QUERY=QUERY)
 
         return retorno    
+
+    def BuscarValor(self, nomePropridadade, linhas):
+
+        i = -1
+        for linha_ in linhas['Data']:
+            i = i +1
+            nomePropridadade_ = linha_['VarCharValue']
+            if nomePropridadade_.lower() == nomePropridadade.lower():
+                return i
+
+        return -1
+
+    def PesquisarPorRequestLambda(self,request):
+          
+            # dados da requisicao
+
+            componentName = request['componentName']
+
+            entityId = request['entityId']
+                        
+            selectedProperties = request['selectedProperties']
+
+            # obter placa
+
+            request_ = request
+
+            cComponentResponse = CFIotTwinMaker.CComponentResponse()
+
+            placa = cComponentResponse.GetPropertyValueHistory(request = request_)   
+
+            # pesquisar por placa
+
+            retornoPesquisa = self.PesquisarPorPlaca(placa) 
+
+            # montar response
+
+            status = retornoPesquisa['statusCode']
+
+            linhas =  retornoPesquisa['body']['ResultSet']['Rows']
+
+            propertyValues = []
+
+            timestamp = 1646426606
+
+            for selectedProperty in selectedProperties:  
+
+                propertyName = selectedProperty  
+
+                #busca os valores
+                values = []
+
+                i = -1
+                for linha in linhas: 
+                    i = i + 1
+                    if i > 0:
+                        
+                        indice = self.BuscarValor(nomePropridadade=propertyName,linhas=linhas[0])
+                        
+                        valor = linha['Data'][indice]['VarCharValue']
+
+                        value = {
+                            'timestamp' : timestamp
+                            ,'value' : {
+                                'stringValue' : valor
+                            }
+                        }
+
+                        values.append(value)
+                            
+                propertyValue = {
+                        'entityPropertyReference' :{
+                            'entityId': entityId
+                            ,'componentName': componentName
+                            ,'propertyName': propertyName
+                        }
+                        ,
+                        'values': values
+                    }      
+                propertyValues.append(propertyValue)                            
+
+            # monta retorno        
+
+            retorno = {
+                'propertyValues' :propertyValues
+                ,'nextToken': None
+            }
+
+            # retorno = json.dumps(retorno)
+
+            return retorno

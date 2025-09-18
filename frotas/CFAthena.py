@@ -4,7 +4,7 @@ import time
 class CAThena:
 
     def __init__(self):
-        self.cliente = boto3.client('athena')
+        self.cliente = boto3.client('athena',region_name='us-east-1')
 
     # def Incluir(self, bucketName, key, contentBody):
     #     try:
