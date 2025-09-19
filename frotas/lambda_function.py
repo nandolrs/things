@@ -12,7 +12,9 @@ def lambda_handler(event, context):
 
         try:
             eventDic = Dic2Json2Dic(str(event)) 
+            print('passou 1')
         except Exception as e:
+            print('passou 2')
             eventDic = event
 
         # eventDic = Dic2Json2Dic(str(event)) 
@@ -21,12 +23,28 @@ def lambda_handler(event, context):
         # pesquisa veiculo por placa
 
         cVeiculos = CFVeiculos.CVeiculos()
-        retorno = cVeiculos.PesquisarPorRequestLambda(eventDic) # event
+        retorno_ = cVeiculos.PesquisarPorRequestLambda(eventDic) # event
+
+        retorno =  json.dumps(retorno_) 
+
+        #
+
+        # retorno = {
+        #     'statusCode': 200,
+        #     'headers': {
+        #         'Content-Type': 'application/json',
+        #         'Access-Control-Allow-Origin': '*'  # Important for CORS if using API Gateway
+        #     },
+        #     'body': retorno
+        # }
+
+        #
 
         print('===retorno===')
+        # print(json.dumps(retorno))
         print(retorno)
-
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=str(retorno))
+        
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
 
         return retorno
     except Exception as e:

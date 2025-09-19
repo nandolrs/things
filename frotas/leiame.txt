@@ -27,5 +27,63 @@ aws iottwinmaker list-entities --region us-east-1 --workspace-id VehicleFleetWor
 
 aws iottwinmaker get-property-value --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "6693377b-d527-4973-b045-95a12a64d4d7"      --component-name "MotorDC-componente-v1r1"     --selected-properties "telemetryAssetId"      > saida-get-property-value.txt
 
-aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "6693377b-d527-4973-b045-95a12a64d4d7"      --component-name "MotorDC-componente-v1r1"     --selected-properties "PLACA"     --start-time "2023-01-01T00:00:00Z"     --end-time "2023-01-02T00:00:00Z"
+===>
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "3bcd0889-8df6-4a91-a263-37aee0a31ad1"      --component-name "ABC1969A"     --selected-properties  "placa"     --start-time "2023-01-01T00:00:00Z"     --end-time "2023-01-02T00:00:00Z"
 
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "3bcd0889-8df6-4a91-a263-37aee0a31ad1"      --component-name "ABC1969A"     --selected-properties  "placa"     --start-time "2023-01-01T00:00:00Z"     --end-time "2023-01-02T00:00:00Z" --debug 
+
+===>
+
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "3bcd0889-8df6-4a91-a263-37aee0a31ad1"      --component-name "ABC1969A"     --selected-properties "id" "placa"     --start-time "2023-01-01T00:00:00Z"     --end-time "2023-01-02T00:00:00Z" --cli-read-timeout 180 --cli-connect-timeout 180
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "a2bbbef4-6180-4e8f-ada4-9fb235ed73aa"      --component-name "MotorDC-componente-v1r1"     --selected-properties "placa"     --start-time "2023-01-01T00:00:00Z"     --end-time "2023-01-02T00:00:00Z" --property-filters "[{'propertyName':'placa','operator':'EQ','value':{'stringValue':'ABC1969A'}}]"
+
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "a2bbbef4-6180-4e8f-ada4-9fb235ed73aa"      --component-name "MotorDC-componente-v1r1"     --selected-properties "placa"     --start-time "2023-01-01T00:00:00Z"     --end-time "2023-01-02T00:00:00Z" --property-filters '[{"propertyName":"placa","operator":"EQ","value":{"stringValue":"ABC1969A"}}]'
+
+
+aws iottwinmaker get-property-value-history --generate-cli-skeleton > saida.json
+
+ --property-filters '[{"propertyName":"placa", "operator":"GT", "value":{"doubleValue":25.0}}]'
+
+ --property-filters '[{"propertyName":"placa", "operator":"EQ", "value":{"stringValue":"ABC1969A"}}]'
+
+aws iottwinmaker get-property-value-history --region us-east-1  --cli-input-json file://D:\nandolrs\projetos\things\frotas\aws-cli-get-property-value-history.json
+
+aws iottwinmaker get-property-value-history --region us-east-1  --cli-input-json '{
+    "workspaceId": "VehicleFleetWorkspace1",
+    "entityId": "a2bbbef4-6180-4e8f-ada4-9fb235ed73aa",
+    "componentName": "MotorDC-componente-v1r1",
+    "selectedProperties": [
+        "id","placa"
+    ]
+    ,
+    "propertyFilters": [
+        {
+            "propertyName": "placa",
+            "operator": "EQ",
+            "value": {
+                "stringValue": "ABC1969A"
+            }
+        }
+    ]
+    ,
+    "startDateTime": "2023-01-01T00:00:00Z",
+    "endDateTime": "2023-01-02T00:00:00Z"
+}
+'

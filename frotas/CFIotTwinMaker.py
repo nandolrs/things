@@ -76,14 +76,26 @@ class CComponent:
     def __init__(self):
         self.cliente = boto3.client('iottwinmaker',region_name='us-east-1')
 
-    def Gerar(self, nome, componentTypeId, properties):
+    def Gerar(self, componentes, properties): #, nome, componentTypeId
         try:
+            retorno = {}
+            for componente in componentes:
+                componente_ = {
+                        'componentTypeId' : componente['componentTypeId']
+                        ,'properties' : properties
 
-            retorno = {nome:{
-                'componentTypeId' : componentTypeId
-                ,'properties' : properties
                 }
-            }
+
+                retorno[
+                    componente['nome'] 
+
+                ] =  componente_
+
+                # retorno = {nome:{
+                #     'componentTypeId' : componentTypeId
+                #     ,'properties' : properties
+                #     }
+                # }
 
             return retorno
         except Exception as e:
@@ -95,23 +107,24 @@ class CComponentResponse:
     def __init__(self):
         self.cliente = boto3.client('iottwinmaker',region_name='us-east-1')
 
-
-    def GetPropertyValueHistory(self, request): # entityId, componentName, selectedProperties
+    def RequestExtrairNome(self, request): # entityId, componentName, selectedProperties
         try:
 
             componentName = request['componentName']
 
-            properties =  request['properties']
+            return componentName
 
-            telemetryAssetId = properties['telemetryAssetId']
+            # properties =  request['properties']
 
-            value = telemetryAssetId['value']
+            # telemetryAssetId = properties['telemetryAssetId']
 
-            stringValue = value['stringValue']
+            # value = telemetryAssetId['value']
 
-            retorno = stringValue
+            # stringValue = value['stringValue']
 
-            return retorno
+            # retorno = stringValue
+
+            # return retorno
         except Exception as e:
             print('== erro ==')
             print (e)            
@@ -143,7 +156,6 @@ class CComponentType:
 
             }
             
-
             propertyDefinitions[
                 propriedade['propertyName'] 
 

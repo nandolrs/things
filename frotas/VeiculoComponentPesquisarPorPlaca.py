@@ -9,6 +9,9 @@ def Testar():
 
         retorno = cVeiculos.PesquisarPorPlaca(placa)
 
+        print('===tipo===')
+        print (type(retorno))
+
         print('===')
         print(json.dumps(retorno))    
 

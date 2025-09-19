@@ -8,7 +8,9 @@ def Testar():
 
     cVeiculos = CFVeiculos.CVeiculos()
 
-    propriedades = cVeiculos.PropriedadesBuscar()    
+    propriedades_ = cVeiculos.PropriedadesBuscar()    
+
+    propriedades =  cVeiculos.PropriedadesExternalSetar(propriedades=propriedades_, nomes=['id','placa','modelo'])
 
     #
 

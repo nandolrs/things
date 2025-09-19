@@ -1,84 +1,142 @@
 {
-    "workspaceId": "VehicleFleetWorkspace1",
-    "selectedProperties": [
-        "PLACA"
-    ],
-    "startDateTime": 1672531200,
-    "startTime": "2023-01-01T00:00:00Z",
-    "endDateTime": 1672617600,
-    "endTime": "2023-01-02T00:00:00Z",
-    "properties": {
-        "PLACA": {
-            "definition": {
-                "dataType": {
-                    "type": "STRING"
+    "statusCode": 200,
+    "body": {
+        "UpdateCount": 0,
+        "ResultSet": {
+            "Rows": [
+                {
+                    "Data": [
+                        {
+                            "VarCharValue": "id"
+                        },
+                        {
+                            "VarCharValue": "placa"
+                        },
+                        {
+                            "VarCharValue": "modelo"
+                        },
+                        {
+                            "VarCharValue": "velocidademotor"
+                        },
+                        {
+                            "VarCharValue": "unidade"
+                        },
+                        {
+                            "VarCharValue": "time"
+                        }
+                    ]
                 },
-                "isTimeSeries": ""True"",
-                "isRequiredInEntity": ""False"",
-                "isExternalId": ""False"",
-                "isStoredExternally": ""True"",
-                "isImported": ""False"",
-                "isFinal": ""False"",
-                "isInherited": ""False"",
-                "timeSeries": ""True"",
-                "imported": ""False"",
-                "requiredInEntity": ""False"",
-                "storedExternally": ""True"",
-                "externalId": ""False"",
-                "inherited": ""False"",
-                "final": ""False""
+                {
+                    "Data": [
+                        {
+                            "VarCharValue": "1969"
+                        },
+                        {
+                            "VarCharValue": "ABC1969A"
+                        },
+                        {
+                            "VarCharValue": "MODELO-1969"
+                        },
+                        {
+                            "VarCharValue": "31690.1234"
+                        },
+                        {
+                            "VarCharValue": "RPM"
+                        },
+                        {
+                            "VarCharValue": "2025-09-17 13:18:34.091"
+                        }
+                    ]
+                }
+            ],
+            "ResultSetMetadata": {
+                "ColumnInfo": [
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "id",
+                        "Label": "id",
+                        "Type": "bigint",
+                        "Precision": 19,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": false
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "placa",
+                        "Label": "placa",
+                        "Type": "varchar",
+                        "Precision": 2147483647,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": true
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "modelo",
+                        "Label": "modelo",
+                        "Type": "varchar",
+                        "Precision": 2147483647,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": true
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "velocidademotor",
+                        "Label": "velocidademotor",
+                        "Type": "double",
+                        "Precision": 17,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": false
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "unidade",
+                        "Label": "unidade",
+                        "Type": "varchar",
+                        "Precision": 2147483647,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": true
+                    },
+                    {
+                        "CatalogName": "hive",
+                        "SchemaName": "",
+                        "TableName": "",
+                        "Name": "time",
+                        "Label": "time",
+                        "Type": "timestamp",
+                        "Precision": 3,
+                        "Scale": 0,
+                        "Nullable": "UNKNOWN",
+                        "CaseSensitive": false
+                    }
+                ]
             }
         },
-        "telemetryAssetId": {
-            "definition": {
-                "dataType": {
-                    "type": "STRING"
-                },
-                "isTimeSeries": ""False"",
-                "isRequiredInEntity": ""True"",
-                "isExternalId": ""True"",
-                "isStoredExternally": ""False"",
-                "isImported": ""False"",
-                "isFinal": ""False"",
-                "isInherited": ""False"",
-                "timeSeries": ""False"",
-                "imported": ""False"",
-                "requiredInEntity": ""True"",
-                "storedExternally": ""False"",
-                "externalId": ""True"",
-                "inherited": ""False"",
-                "final": ""False""
+        "ResponseMetadata": {
+            "RequestId": "652d232d-4dce-4967-bb6a-a03ff354ee61",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "date": "Fri, 19 Sep 2025 12:34:38 GMT",
+                "content-type": "application/x-amz-json-1.1",
+                "content-length": "2740",
+                "connection": "keep-alive",
+                "x-amzn-requestid": "652d232d-4dce-4967-bb6a-a03ff354ee61"
             },
-            "value": {
-                "stringValue": "ABC1969A"
-            }
-        },
-        "telemetryAssetType": {
-            "definition": {
-                "dataType": {
-                    "type": "STRING"
-                },
-                "isTimeSeries": ""False"",
-                "isRequiredInEntity": ""False"",
-                "isExternalId": ""False"",
-                "isStoredExternally": ""False"",
-                "isImported": ""False"",
-                "isFinal": ""False"",
-                "isInherited": ""False"",
-                "timeSeries": ""False"",
-                "imported": ""False"",
-                "requiredInEntity": ""False"",
-                "storedExternally": ""False"",
-                "externalId": ""False"",
-                "inherited": ""False"",
-                "final": ""False""
-            }
+            "RetryAttempts": 0
         }
-    },
-    "entityId": "6693377b-d527-4973-b045-95a12a64d4d7",
-    "componentName": "MotorDC-componente-v1r1",
-    "maxResults": 100,
-    "orderByTime": "ASCENDING",
-    "workspaceArn": "arn:aws:iottwinmaker:us-east-1:105254198021:workspace/VehicleFleetWorkspace1",
-    "accountId": "105254198021"
+    }
 }

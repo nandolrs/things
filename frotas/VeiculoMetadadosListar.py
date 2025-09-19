@@ -1,10 +1,19 @@
-import CFIotTwinMaker
+import CFAthena
 
 def Testar():
 
-    cEntity = CFIotTwinMaker.CEntity()
+    cAthena = CFAthena.CAThena()
 
-    workSpace = cEntity.Listar(workspaceId='VehicleFleetWorkspace1')
+    CatalogName = "AwsDataCatalog"
+    DatabaseName = 'cmj-database'
+    TableName = 'tfrotas'
+    WorkGroup = 'primary'
+    retorno  = cAthena.ConsultarMetadadosTabela(CatalogName,DatabaseName,TableName,WorkGroup)
+
+    print('===')
+    print(retorno)
+
+
 
 
 Testar()  

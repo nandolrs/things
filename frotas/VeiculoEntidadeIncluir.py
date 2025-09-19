@@ -37,6 +37,9 @@ def Testar():
 
     propriedades = cVeiculos.PropriedadesBuscar()
 
+    propriedades =  cVeiculos.PropriedadesExternalSetar(propriedades=propriedades, nomes=['placa'])
+
+
     # propriedades do componente
 
     cComponentType = CFIotTwinMaker.CComponentType()
@@ -68,10 +71,31 @@ def Testar():
 
     cComponent = CFIotTwinMaker.CComponent()
 
+    componentTypeId = 'com.cmj.timeseries-connector'
+
+    componentes = [
+        {
+            'nome':'ABC1969A'
+            ,'componentTypeId':componentTypeId
+        }
+        ,
+        {
+            'nome':'ABC1970A'
+            ,'componentTypeId':componentTypeId
+        }
+        ,
+        {
+            'nome':'ABC1971A'
+            ,'componentTypeId':componentTypeId
+        }
+
+    ]
+
     components = cComponent.Gerar(
-        nome             = 'MotorDC-componente-v1r1'
-        ,componentTypeId = 'com.cmj.timeseries-connector'
-        ,properties      = properties
+        # nome             = 'MotorDC-componente-v1r1'
+        # ,componentTypeId = 'com.cmj.timeseries-connector'
+        componentes = componentes
+        ,properties = properties
     )    
 
     print('---')

@@ -4,49 +4,134 @@ import json
 import CFAthena
 import CFIotTwinMaker
 
+
 class CVeiculos:
 
+
+
     def PropriedadesBuscar(self):
+
+        cAthena = CFAthena.CAThena()
+
+        CatalogName = "AwsDataCatalog"
+        DatabaseName = 'cmj-database'
+        TableName = 'tfrotas'
+        WorkGroup = 'primary'
+        metaDados  = cAthena.ConsultarMetadadosTabela(CatalogName,DatabaseName,TableName,WorkGroup)
+
+        retorno = []
+
+        for propriedade in metaDados:  
+
+            # de-para tipos de dados do aws twin 
+            # 'RELATIONSHIP'|'STRING'|'LONG'|'BOOLEAN'|'INTEGER'|'DOUBLE'|'LIST'|'MAP'
+
+            tipo_ = propriedade['tipo']
+            tipo__ = 'STRING'
+            match tipo_:
+                case 'boolean':
+                    tipo__ = 'BOOLEAN'
+                case 'tinyint':
+                    tipo__ = 'LONG'
+                case 'smallint':
+                    tipo__ = 'LONG'
+                case 'int':
+                    tipo__ = 'LONG'
+                case 'bigint':
+                    tipo__ = 'LONG'
+                case 'double':
+                    tipo__ = 'DOUBLE'
+                case 'float':
+                    tipo__ = 'DOUBLE'
+                case 'decimal ':
+                    tipo__ = 'DOUBLE'
+                case 'char ':
+                    tipo__ = 'STRING'
+                # case 'varchar ':
+                # case 'string ':
+                # case 'binary'
+                # case 'date'
+                # case 'timestamp'
+                case 'array' :
+                    tipo__ = 'LIST'
+                # case 'map' 
+                # case 'struct' 
+
+
+            propriedade_ =  {
+                'propertyName' : propriedade['nome'] # 'telemetryAssetType'
+                ,'type_' : tipo__ # propriedade['tipo'] # 'STRING'
+                ,'isExternalId_' : False # true, se isRequiredInEntity_
+                ,'isStoredExternally_' : False
+                ,'isTimeSeries_' : False
+                ,'isRequiredInEntity_' : False # true, se isExternalId_
+                ,'value_' : 'ABC1969A'
+            }      
+
+            retorno.append(propriedade_)            
             
-        retorno = [
-            {
-            'propertyName' : 'telemetryAssetType'
-            ,'type_' : 'STRING'
-            ,'isExternalId_' : False # true, se isRequiredInEntity_
-            ,'isStoredExternally_' : False
-            ,'isTimeSeries_' : False
-            ,'isRequiredInEntity_' : False # true, se isExternalId_
-            ,'value_' : 'ABDC'
+        # retorno = [
+        #     {
+        #     'propertyName' : 'telemetryAssetType'
+        #     ,'type_' : 'STRING'
+        #     ,'isExternalId_' : False # true, se isRequiredInEntity_
+        #     ,'isStoredExternally_' : False
+        #     ,'isTimeSeries_' : False
+        #     ,'isRequiredInEntity_' : False # true, se isExternalId_
+        #     ,'value_' : 'ABC1969A'
 
 
-            }
-            ,
-            {
-            'propertyName' : 'telemetryAssetId'
-            ,'type_' : 'STRING'
-            ,'isExternalId_' : True # true, se isRequiredInEntity_
-            ,'isStoredExternally_' : False
-            ,'isTimeSeries_' : False
-            ,'isRequiredInEntity_' : True # true, se isExternalId_
-            ,'value_' : 'ABDC'
-            }            
+        #     }
+        #     ,
+        #     {
+        #     'propertyName' : 'telemetryAssetId'
+        #     ,'type_' : 'STRING'
+        #     ,'isExternalId_' : True # true, se isRequiredInEntity_
+        #     ,'isStoredExternally_' : False
+        #     ,'isTimeSeries_' : False
+        #     ,'isRequiredInEntity_' : True # true, se isExternalId_
+        #     ,'value_' : 'ABC1969A' #  ABDC
+        #     }            
 
-            ,
-            {
-            'propertyName' : 'PLACA'
-            ,'type_' : 'STRING'
-            ,'isExternalId_' : False # true, se isRequiredInEntity_
-            ,'isStoredExternally_' : True
-            ,'isTimeSeries_' : True
-            ,'isRequiredInEntity_' : False # true, se isExternalId_
-            ,'value_' : 'ABDC'
-            }            
+        #     ,
+        #     {
+        #     'propertyName' : 'placa'
+        #     ,'type_' : 'STRING'
+        #     ,'isExternalId_' : False # true, se isRequiredInEntity_
+        #     ,'isStoredExternally_' : True
+        #     ,'isTimeSeries_' : True
+        #     ,'isRequiredInEntity_' : False # true, se isExternalId_
+        #     ,'value_' : 'ABDC'
+        #     }            
 
 
-        ]    
+        # ]    
 
         return retorno
-        
+
+    def PropriedadesExternalSetar(self, propriedades, nomes):
+
+        # print('antes= ',json.dumps(propriedades))
+
+        for nome in nomes:
+            i = -1
+            for propriedade in propriedades:
+                i = i+1
+                if propriedade['propertyName'] == nome:
+                    propriedades[i]['isTimeSeries_'] = True
+                    propriedades[i]['isStoredExternally_'] = True
+                    # propriedades[i]['isExternalId_'] = True
+                    # propriedades[i]['isRequiredInEntity_'] = True
+
+                    
+
+        # print('depois= ',json.dumps(propriedades))
+
+
+        return propriedades
+            
+
+
     def VeiculosGerar(self,i):    
 
         id_ = i
@@ -110,7 +195,156 @@ class CVeiculos:
         # with open('veiculos.json', 'w') as file:
         #     json.dump(veiculos, file, indent=4)               
 
+    def PesquisarPorPlacaFake(self, placa):
+        retorno = {
+            "statusCode": 200,
+            "body": {
+                "UpdateCount": 0,
+                "ResultSet": {
+                    "Rows": [
+                        {
+                            "Data": [
+                                {
+                                    "VarCharValue": "id"
+                                },
+                                {
+                                    "VarCharValue": "placa"
+                                },
+                                {
+                                    "VarCharValue": "modelo"
+                                },
+                                {
+                                    "VarCharValue": "velocidademotor"
+                                },
+                                {
+                                    "VarCharValue": "unidade"
+                                },
+                                {
+                                    "VarCharValue": "time"
+                                }
+                            ]
+                        },
+                        {
+                            "Data": [
+                                {
+                                    "VarCharValue": "1969"
+                                },
+                                {
+                                    "VarCharValue": "ABC1969A"
+                                },
+                                {
+                                    "VarCharValue": "MODELO-1969"
+                                },
+                                {
+                                    "VarCharValue": "31690.1234"
+                                },
+                                {
+                                    "VarCharValue": "RPM"
+                                },
+                                {
+                                    "VarCharValue": "2025-09-17 13:18:34.091"
+                                }
+                            ]
+                        }
+                    ],
+                    "ResultSetMetadata": {
+                        "ColumnInfo": [
+                            {
+                                "CatalogName": "hive",
+                                "SchemaName": "",
+                                "TableName": "",
+                                "Name": "id",
+                                "Label": "id",
+                                "Type": "bigint",
+                                "Precision": 19,
+                                "Scale": 0,
+                                "Nullable": "UNKNOWN",
+                                "CaseSensitive": "false"
+                            },
+                            {
+                                "CatalogName": "hive",
+                                "SchemaName": "",
+                                "TableName": "",
+                                "Name": "placa",
+                                "Label": "placa",
+                                "Type": "varchar",
+                                "Precision": 2147483647,
+                                "Scale": 0,
+                                "Nullable": "UNKNOWN",
+                                "CaseSensitive": "true"
+                            },
+                            {
+                                "CatalogName": "hive",
+                                "SchemaName": "",
+                                "TableName": "",
+                                "Name": "modelo",
+                                "Label": "modelo",
+                                "Type": "varchar",
+                                "Precision": 2147483647,
+                                "Scale": 0,
+                                "Nullable": "UNKNOWN",
+                                "CaseSensitive": "true"
+                            },
+                            {
+                                "CatalogName": "hive",
+                                "SchemaName": "",
+                                "TableName": "",
+                                "Name": "velocidademotor",
+                                "Label": "velocidademotor",
+                                "Type": "double",
+                                "Precision": 17,
+                                "Scale": 0,
+                                "Nullable": "UNKNOWN",
+                                "CaseSensitive": "false"
+                            },
+                            {
+                                "CatalogName": "hive",
+                                "SchemaName": "",
+                                "TableName": "",
+                                "Name": "unidade",
+                                "Label": "unidade",
+                                "Type": "varchar",
+                                "Precision": 2147483647,
+                                "Scale": 0,
+                                "Nullable": "UNKNOWN",
+                                "CaseSensitive": "true"
+                            },
+                            {
+                                "CatalogName": "hive",
+                                "SchemaName": "",
+                                "TableName": "",
+                                "Name": "time",
+                                "Label": "time",
+                                "Type": "timestamp",
+                                "Precision": 3,
+                                "Scale": 0,
+                                "Nullable": "UNKNOWN",
+                                "CaseSensitive": "false"
+                            }
+                        ]
+                    }
+                },
+                "ResponseMetadata": {
+                    "RequestId": "652d232d-4dce-4967-bb6a-a03ff354ee61",
+                    "HTTPStatusCode": 200,
+                    "HTTPHeaders": {
+                        "date": "Fri, 19 Sep 2025 12:34:38 GMT",
+                        "content-type": "application/x-amz-json-1.1",
+                        "content-length": "2740",
+                        "connection": "keep-alive",
+                        "x-amzn-requestid": "652d232d-4dce-4967-bb6a-a03ff354ee61"
+                    },
+                    "RetryAttempts": 0
+                }
+            }
+        }
+
+        return retorno
+        
     def PesquisarPorPlaca(self, placa):
+
+        retorno_ =  self.PesquisarPorPlacaFake(placa)
+        return retorno_
 
         cAthena = CFAthena.CAThena()
 
@@ -138,6 +372,7 @@ class CVeiculos:
             # dados da requisicao
 
             componentName = request['componentName']
+            placa = componentName
 
             entityId = request['entityId']
                         
@@ -149,7 +384,7 @@ class CVeiculos:
 
             cComponentResponse = CFIotTwinMaker.CComponentResponse()
 
-            placa = cComponentResponse.GetPropertyValueHistory(request = request_)   
+            # placa = cComponentResponse.RequestExtrairNome(request = request_)   
 
             # pesquisar por placa
 
@@ -163,43 +398,45 @@ class CVeiculos:
 
             propertyValues = []
 
-            timestamp = 1646426606
+            if len(linhas) >= 2:
 
-            for selectedProperty in selectedProperties:  
+                timestamp = time.time() #1646426606
 
-                propertyName = selectedProperty  
+                for selectedProperty in selectedProperties:  
 
-                #busca os valores
-                values = []
+                    propertyName = selectedProperty  
 
-                i = -1
-                for linha in linhas: 
-                    i = i + 1
-                    if i > 0:
-                        
-                        indice = self.BuscarValor(nomePropridadade=propertyName,linhas=linhas[0])
-                        
-                        valor = linha['Data'][indice]['VarCharValue']
+                    #busca os valores
+                    values = []
 
-                        value = {
-                            'timestamp' : timestamp
-                            ,'value' : {
-                                'stringValue' : valor
+                    i = -1
+                    for linha in linhas: 
+                        i = i + 1
+
+                        if i >= 1:
+                            indice = self.BuscarValor(nomePropridadade=propertyName,linhas=linhas[0])
+                                                        
+                            valor = linha['Data'][indice]['VarCharValue']
+
+                            value = {
+                                'timestamp' : timestamp
+                                ,'value' : {
+                                    'stringValue' : valor
+                                }
                             }
-                        }
 
-                        values.append(value)
-                            
-                propertyValue = {
-                        'entityPropertyReference' :{
-                            'entityId': entityId
-                            ,'componentName': componentName
-                            ,'propertyName': propertyName
-                        }
-                        ,
-                        'values': values
-                    }      
-                propertyValues.append(propertyValue)                            
+                            values.append(value)
+                                
+                    propertyValue = {
+                            'entityPropertyReference' :{
+                                'entityId': entityId
+                                ,'componentName': componentName
+                                ,'propertyName': propertyName
+                            }
+                            ,
+                            'values': values
+                        }      
+                    propertyValues.append(propertyValue)                            
 
             # monta retorno        
 
@@ -207,7 +444,5 @@ class CVeiculos:
                 'propertyValues' :propertyValues
                 ,'nextToken': None
             }
-
-            # retorno = json.dumps(retorno)
 
             return retorno
