@@ -10,7 +10,7 @@ def Testar():
 
     propriedades_ = cVeiculos.PropriedadesBuscar()    
 
-    propriedades =  cVeiculos.PropriedadesExternalSetar(propriedades=propriedades_, nomes=['id','placa','modelo'])
+    propriedades =  cVeiculos.PropriedadesExternalSetar(propriedades=propriedades_, nomes=['id','placa','modelo','velocidademotor'])
 
     #
 

@@ -1,4 +1,62 @@
 {
+  "propertyValues": [
+    {
+      "entityPropertyReference": {
+        "entityId": "Mixer_2_06ac63c4-d68d-4723-891a-8e758f8456ef",
+        "componentName": "AlarmComponent",
+        "propertyName": "alarm_status"
+      },
+      "values": [
+        {
+          "timestamp": 1646426606,
+          "value": {
+            "stringValue": "NORMAL"
+          }
+        }
+      ]
+    }
+  ],
+  "nextToken": null
+}
+
+
+== https://docs.aws.amazon.com/iot-twinmaker/latest/guide/time-series-data-connectors.html#time-series-data-connectors-background
+
+{
+  "propertyValues": [
+    {
+      "entityPropertyReference": {
+        "entityId": "MyEntity",
+        "componentName": "TelemetryData",
+        "propertyName": "Temperature"
+      },
+      "values": [
+        {
+          "time": "2022-08-25T00:00:00Z",
+          "value": {
+            "doubleValue": 588.168
+          }
+        },
+        {
+          "time": "2022-08-25T00:00:01Z",
+          "value": {
+            "doubleValue": 592.4224
+          }
+        },
+        {
+          "time": "2022-08-25T00:00:02Z",
+          "value": {
+            "doubleValue": 594.9383
+          }
+        }
+      ]
+    }
+  ],
+  "nextToken": "..."
+}
+
+== 
+{
     "propertyValues": [
         {
             "entityPropertyReference": {

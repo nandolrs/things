@@ -26,6 +26,7 @@ def lambda_handler(event, context):
         retorno_ = cVeiculos.PesquisarPorRequestLambda(eventDic) # event
 
         retorno =  json.dumps(retorno_) 
+        # retorno =  retorno_
 
         #
 

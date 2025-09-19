@@ -1,5 +1,5 @@
 import time
-from  datetime import datetime
+from  datetime import datetime, timezone
 import json
 import CFAthena
 import CFIotTwinMaker
@@ -366,6 +366,27 @@ class CVeiculos:
                 return i
 
         return -1
+    
+    def BuscarTipo(self, tipo): 
+            # de ==> tipo = RELATIONSHIP | STRING | LONG | BOOLEAN | INTEGER | DOUBLE | LIST | MAP
+            # para ==> booleanValue  doubleValue expression integerValue  listValue  longValue mapValue relationshipValue stringValue
+            tipo__ = 'stringValue'
+            match tipo:
+                # case 'RELATIONSHIP':
+                # case 'STRING':
+                case 'LONG':
+                    tipo__ = 'longValue'
+                case 'BOOLEAN':
+                    tipo__ = 'booleanValue'
+                case 'INTEGER':
+                    tipo__ = 'integerValue'
+                case 'DOUBLE':
+                    tipo__ = 'doubleValue'
+                case 'LIST':
+                    tipo__ = 'listValue'
+                case 'MAP ':
+                    tipo__ = 'mapValue'               
+            return tipo__
 
     def PesquisarPorRequestLambda(self,request):
           
@@ -377,6 +398,8 @@ class CVeiculos:
             entityId = request['entityId']
                         
             selectedProperties = request['selectedProperties']
+
+            properties =  request['properties']
 
             # obter placa
 
@@ -400,7 +423,9 @@ class CVeiculos:
 
             if len(linhas) >= 2:
 
-                timestamp = time.time() #1646426606
+                timestamp =  1646426606 #   time.time()
+                time_ = datetime.now(timezone.utc) #   "2022-08-25T00:00:00Z"
+                time = time_.isoformat(timespec='milliseconds') + 'Z'                
 
                 for selectedProperty in selectedProperties:  
 
@@ -418,10 +443,17 @@ class CVeiculos:
                                                         
                             valor = linha['Data'][indice]['VarCharValue']
 
+                            #
+                            print('passou 3')
+                            type_ = properties[propertyName]['definition']['dataType']['type'] 
+                            type = self.BuscarTipo(type_)
+                            print('passou 4')
+                            #
                             value = {
                                 'timestamp' : timestamp
+                                # 'time' : time                                
                                 ,'value' : {
-                                    'stringValue' : valor
+                                     type : valor # 'stringValue' : valor
                                 }
                             }
 
@@ -442,7 +474,7 @@ class CVeiculos:
 
             retorno = {
                 'propertyValues' :propertyValues
-                ,'nextToken': None
+                # ,'nextToken': None
             }
 
             return retorno
