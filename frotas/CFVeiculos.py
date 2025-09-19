@@ -388,7 +388,18 @@ class CVeiculos:
                     tipo__ = 'mapValue'               
             return tipo__
 
+    def PesquisarPorRequestLambdaFake(self,request):
+           propertyValues = []
+           retorno = {
+                "propertyValues" :propertyValues
+                # ,'nextToken': None
+            }
+           
+           return retorno
+    
     def PesquisarPorRequestLambda(self,request):
+            
+            # return self.PesquisarPorRequestLambdaFake(request)
           
             # dados da requisicao
 
@@ -443,11 +454,10 @@ class CVeiculos:
                                                         
                             valor = linha['Data'][indice]['VarCharValue']
 
-                            #
-                            print('passou 3')
+                            #  busca e ajusta o tipo
+
                             type_ = properties[propertyName]['definition']['dataType']['type'] 
                             type = self.BuscarTipo(type_)
-                            print('passou 4')
                             #
                             value = {
                                 'timestamp' : timestamp
@@ -474,7 +484,7 @@ class CVeiculos:
 
             retorno = {
                 'propertyValues' :propertyValues
-                # ,'nextToken': None
+                ,'nextToken': None
             }
 
             return retorno

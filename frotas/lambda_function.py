@@ -7,43 +7,32 @@ def lambda_handler(event, context):
     try:
 
         cfS3 = CFS3.CS3()
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1.json', contentBody=str(event))
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1.json', contentBody=str(context))
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
 
         try:
             eventDic = Dic2Json2Dic(str(event)) 
-            print('passou 1')
+            # print('passou 1')
         except Exception as e:
-            print('passou 2')
+            # print('passou 2')
             eventDic = event
 
         # eventDic = Dic2Json2Dic(str(event)) 
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-JSON.json', contentBody=str(eventDic))
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=str(eventDic))
 
         # pesquisa veiculo por placa
 
         cVeiculos = CFVeiculos.CVeiculos()
         retorno_ = cVeiculos.PesquisarPorRequestLambda(eventDic) # event
 
-        retorno =  json.dumps(retorno_) 
-        # retorno =  retorno_
+        retorno =  json.dumps(retorno_, indent=2) 
+        retorno = retorno.encode('utf-8')        
 
         #
 
-        # retorno = {
-        #     'statusCode': 200,
-        #     'headers': {
-        #         'Content-Type': 'application/json',
-        #         'Access-Control-Allow-Origin': '*'  # Important for CORS if using API Gateway
-        #     },
-        #     'body': retorno
-        # }
-
-        #
-
-        print('===retorno===')
-        # print(json.dumps(retorno))
-        print(retorno)
+        # print('===retorno===')
+        # print(type(retorno))
+        # print(retorno)
         
         cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
 
@@ -73,35 +62,6 @@ def Dic2Json2Dic(event):
     eventDic = json.loads(eventJson)    
 
     return eventDic
-
-
-
-def Testar1() :
-    event = {'event':'teste'}
-    context = {'context':'teste'}
-    retorno = lambda_handler(event,context)
-
-    print ('===')
-    print (retorno)
-
-
-def Testar2():
-
-    # carregar
-
-    fileName = 'request-aws-iot-twinmaker2lambda-event.json'
-
-    f = open(fileName)
-
-    filedata = f.read()
-
-    request = json.loads(filedata)
-
-
-    event = {'event':'teste'}
-    # lambda_handler(event,filedata)
-    lambda_handler(event,request)
-
 
 def Testar():
 
