@@ -46,8 +46,6 @@ class CEntity:
 
             for entidade in entidades:
 
-                # print(entidade['entityId'])
-
                 retorno.append({'nome':entidade['entityName']})
 
             return retorno

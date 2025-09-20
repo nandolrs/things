@@ -3,7 +3,8 @@ from  datetime import datetime, timezone
 import json
 import CFAthena
 import CFIotTwinMaker
-
+import CFDynamodb
+from decimal import *
 
 class CVeiculos:
 
@@ -111,8 +112,6 @@ class CVeiculos:
 
     def PropriedadesExternalSetar(self, propriedades, nomes):
 
-        # print('antes= ',json.dumps(propriedades))
-
         for nome in nomes:
             i = -1
             for propriedade in propriedades:
@@ -125,19 +124,17 @@ class CVeiculos:
 
                     
 
-        # print('depois= ',json.dumps(propriedades))
-
 
         return propriedades
             
+    def VeiculosGerar(self,i):  
 
-
-    def VeiculosGerar(self,i):    
+        getcontext().prec = 6          
 
         id_ = i
         placa_ = 'ABC' + str(i) + 'A'
         modelo_ = 'MODELO-' + str(i)
-        velocidademotor_ = 12000 + (10*i) + 0.1234
+        velocidademotor_ = Decimal(str(12000 + (10*i) + 0.1234))
         unidade_ = 'RPM'
         time_ = time.time()
         time_ = datetime.now().isoformat()
@@ -194,6 +191,19 @@ class CVeiculos:
 
         # with open('veiculos.json', 'w') as file:
         #     json.dump(veiculos, file, indent=4)               
+
+    def JsonDynamoGerar(self):
+
+        cDynamodb = CFDynamodb.CDynamodb()
+
+        qtdeLinhas = 10
+
+        veiculos = []
+
+        for i in range(qtdeLinhas):
+            veiculo = self.VeiculosGerar(i+1969)
+
+            cDynamodb.Incluir(nomeTabela='Frotas', entidade=veiculo)
 
     def PesquisarPorPlacaFake(self, placa):
         retorno = {
@@ -343,9 +353,6 @@ class CVeiculos:
         
     def PesquisarPorPlaca(self, placa):
 
-        retorno_ =  self.PesquisarPorPlacaFake(placa)
-        return retorno_
-
         cAthena = CFAthena.CAThena()
 
         s1 = "'"
@@ -354,7 +361,24 @@ class CVeiculos:
         
         retorno = cAthena.Pesquisar(DatabaseName='cmj-database', QUERY=QUERY)
 
-        return retorno    
+        return retorno  
+
+    def PesquisarPorPlacaDynamo(self, placa):
+
+        # retorno_ =  self.PesquisarPorPlacaFake(placa)
+        # return retorno_
+
+        cDynamodb = CFDynamodb.CDynamodb()
+
+        retorno = cDynamodb.Pesquisar(
+             nomeTabela="Frotas"
+            ,condicao={
+                 'chave': 'placa'
+                ,'valor' : placa 
+            }
+        )
+
+        return retorno         
 
     def BuscarValor(self, nomePropridadade, linhas):
 
@@ -397,7 +421,7 @@ class CVeiculos:
            
            return retorno
     
-    def PesquisarPorRequestLambda(self,request):
+    def PesquisarPorRequestLambdaAthena(self,request):
             
             # return self.PesquisarPorRequestLambdaFake(request)
           
@@ -422,7 +446,7 @@ class CVeiculos:
 
             # pesquisar por placa
 
-            retornoPesquisa = self.PesquisarPorPlaca(placa) 
+            retornoPesquisa = self.PesquisarPorPlaca(placa)  
 
             # montar response
 
@@ -488,3 +512,89 @@ class CVeiculos:
             }
 
             return retorno
+    
+    def PesquisarPorRequestLambdaDynamodb(self,request):
+        
+            # dados da requisicao
+
+            componentName = request['componentName']
+            placa = componentName
+
+            entityId = request['entityId']
+                        
+            selectedProperties = request['selectedProperties']
+
+            properties =  request['properties']
+
+            # obter placa
+
+            request_ = request
+
+            cComponentResponse = CFIotTwinMaker.CComponentResponse()
+
+            # placa = cComponentResponse.RequestExtrairNome(request = request_)   
+
+            # pesquisar por placa
+
+            retornoPesquisa = self.PesquisarPorPlacaDynamo(placa)  
+
+            # montar response
+
+            status = retornoPesquisa['ResponseMetadata']['HTTPStatusCode']
+
+            linhas =  retornoPesquisa['Items']
+
+            propertyValues = []
+
+            if len(linhas) >= 1:
+
+                timestamp =  1646426606 #   time.time()
+                time_ = datetime.now(timezone.utc) #   "2022-08-25T00:00:00Z"
+                time = time_.isoformat(timespec='milliseconds') + 'Z'                
+
+                for selectedProperty in selectedProperties:  
+
+                    propertyName = selectedProperty  
+
+                    #busca os valores
+                    values = []
+
+                    for linha in linhas: 
+
+                        if True : 
+                                                        
+                            valor = linha[propertyName]
+
+                            #  busca e ajusta o tipo
+
+                            type_ = properties[propertyName]['definition']['dataType']['type'] 
+                            type = self.BuscarTipo(type_)
+                            #
+                            value = {
+                                'timestamp' : timestamp
+                                ,'value' : {
+                                     type : valor # 'stringValue' : valor
+                                }
+                            }
+
+                            values.append(value)
+                                
+                    propertyValue = {
+                            'entityPropertyReference' :{
+                                'entityId': entityId
+                                ,'componentName': componentName
+                                ,'propertyName': propertyName
+                            }
+                            ,
+                            'values': values
+                        }      
+                    propertyValues.append(propertyValue)                            
+
+            # monta retorno        
+
+            retorno = {
+                'propertyValues' :propertyValues
+                ,'nextToken': None
+            }      
+
+            return retorno    

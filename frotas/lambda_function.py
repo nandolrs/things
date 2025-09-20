@@ -1,7 +1,7 @@
 import CFS3
 import CFVeiculos
 import json
-
+from decimal import Decimal
 
 def lambda_handler(event, context):
     try:
@@ -23,9 +23,11 @@ def lambda_handler(event, context):
         # pesquisa veiculo por placa
 
         cVeiculos = CFVeiculos.CVeiculos()
-        retorno_ = cVeiculos.PesquisarPorRequestLambda(eventDic) # event
+        # retorno_ = cVeiculos.PesquisarPorRequestLambdaAthena(eventDic) 
+        retorno_ = cVeiculos.PesquisarPorRequestLambdaDynamodb(eventDic) 
 
-        retorno =  json.dumps(retorno_, indent=2) 
+        # retorno =  json.dumps(retorno_, indent=2) 
+        retorno =  json.dumps(retorno_, default=decimal_serializer) 
         retorno = retorno.encode('utf-8')        
 
         #
@@ -42,6 +44,13 @@ def lambda_handler(event, context):
         print (e)
     #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
         retorno = {'retorno': 'falha'}
+
+def decimal_serializer(obj):
+    if isinstance(obj, Decimal):
+        # Convert Decimal to string to preserve precision
+        return str(obj)
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
 
 def Dic2Json2Dic(event):
      
@@ -73,7 +82,13 @@ def Testar():
 
     filedata = f.read()
 
-    eventDic = Dic2Json2Dic(filedata)
+    # filedata = filedata.encode('utf-8')     
+
+    print('===')
+    print(filedata)   
+
+    # eventDic = Dic2Json2Dic(filedata)
+    eventDic = json.dumps(filedata)
 
     context = {'context':'context'}
     lambda_handler(eventDic,context)
