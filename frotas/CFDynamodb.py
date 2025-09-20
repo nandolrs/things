@@ -147,20 +147,12 @@ class CDynamodb:
 
         return retorno    
 
-    def PesquisarScan(self,tabela,condicao) :
-
-        # ,'startTime':startTime
-        # ,'endTime':endTime      
-
-        print('passou 3')     
+    def PesquisarScan(self,tabela,condicao) :   
 
         retorno = tabela.scan(
-            # FilterExpression=Attr('placa').eq('ABC1969A')
             FilterExpression=Attr(condicao['chave']).eq(condicao['valor']) 
             & Attr('time').between(condicao['startTime'],condicao['endTime'])
         )
-
-        print('passou 4')
 
         return retorno
 

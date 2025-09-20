@@ -26,19 +26,14 @@ def lambda_handler(event, context):
         # retorno_ = cVeiculos.PesquisarPorRequestLambdaAthena(eventDic) 
         retorno_ = cVeiculos.PesquisarPorRequestLambdaDynamodb(eventDic) 
 
-        print('===retorno_===')
-        print(retorno_)
-
-
         # retorno =  json.dumps(retorno_, indent=2) 
         retorno =  json.dumps(retorno_, default=decimal_serializer) 
         retorno = retorno.encode('utf-8')        
 
         #
 
-        # print('===retorno===')
-        # print(type(retorno))
-        # print(retorno)
+        print('===retorno===')
+        print(retorno)
         
         cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
 

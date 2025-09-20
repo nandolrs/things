@@ -603,13 +603,11 @@ class CVeiculos:
             propertyValues = []
 
             if len(linhas) >= 1:
-                print('passou 3')
 
                 timestamp = time.time()
                 # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
                 # time = time_.isoformat(timespec='milliseconds') + 'Z'                
 
-                print('passou 4')
                 for selectedProperty in selectedProperties:  
 
                     propertyName = selectedProperty  
