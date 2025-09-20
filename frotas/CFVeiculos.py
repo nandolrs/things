@@ -414,10 +414,7 @@ class CVeiculos:
 
         return retorno  
 
-    def PesquisarPorPlacaDynamo(self, placa):
-
-        # retorno_ =  self.PesquisarPorPlacaFake(placa)
-        # return retorno_
+    def PesquisarPorPlacaDynamo(self, placa, startTime, endTime):
 
         cDynamodb = CFDynamodb.CDynamodb()
 
@@ -426,6 +423,8 @@ class CVeiculos:
             ,condicao={
                  'chave': 'placa'
                 ,'valor' : placa 
+                ,'startTime':startTime
+                ,'endTime':endTime
             }
         )
 
@@ -587,7 +586,10 @@ class CVeiculos:
 
             # pesquisar por placa
 
-            retornoPesquisa = self.PesquisarPorPlacaDynamo(placa)  
+            startTime =  request['startTime']
+            endTime =  request['endTime']
+
+            retornoPesquisa = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
 
             # montar response
 
@@ -598,11 +600,13 @@ class CVeiculos:
             propertyValues = []
 
             if len(linhas) >= 1:
+                print('passou 3')
 
-                timestamp =  1646426606 #   time.time()
-                time_ = datetime.now(timezone.utc) #   "2022-08-25T00:00:00Z"
-                time = time_.isoformat(timespec='milliseconds') + 'Z'                
+                timestamp = time.time()
+                # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
+                # time = time_.isoformat(timespec='milliseconds') + 'Z'                
 
+                print('passou 4')
                 for selectedProperty in selectedProperties:  
 
                     propertyName = selectedProperty  
