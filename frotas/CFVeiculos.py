@@ -184,6 +184,7 @@ class CVeiculos:
 
                                 time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto)
                                 time_ = time_.isoformat(timespec='milliseconds') + 'Z'                
+                                # time_ = int(time_.timestamp())
 
 
                                 id_ = id_ +1
@@ -573,6 +574,8 @@ class CVeiculos:
             entityId = request['entityId']
                         
             selectedProperties = request['selectedProperties']
+            # if selectedProperties['time'] == None:
+            #     selectedProperties.append('time')
 
             properties =  request['properties']
 
@@ -617,8 +620,16 @@ class CVeiculos:
                     for linha in linhas: 
 
                         if True : 
-                                                        
+
+                            print('==linha["time"]===')                   
+                            print(linha['time'])
+
                             valor = linha[propertyName]
+                            timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
+                            # timestamp = linha['time'] 
+
+                            print('==linha[timestamp]===')                   
+                            print(timestamp)
 
                             #  busca e ajusta o tipo
 
@@ -631,6 +642,9 @@ class CVeiculos:
                                      type : valor # 'stringValue' : valor
                                 }
                             }
+
+                            print('===value===')
+                            print(value)
 
                             values.append(value)
                                 

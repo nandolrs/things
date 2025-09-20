@@ -1,142 +1,95 @@
 {
-    "statusCode": 200,
-    "body": {
-        "UpdateCount": 0,
-        "ResultSet": {
-            "Rows": [
+    "propertyValues": [
+        {
+            "entityPropertyReference": {
+                "entityId": "bbe0abfd-ee88-4034-b47b-cc2dfb300b63",
+                "componentName": "ABC1969A",
+                "propertyName": "time"
+            },
+            "values": [
                 {
-                    "Data": [
-                        {
-                            "VarCharValue": "id"
-                        },
-                        {
-                            "VarCharValue": "placa"
-                        },
-                        {
-                            "VarCharValue": "modelo"
-                        },
-                        {
-                            "VarCharValue": "velocidademotor"
-                        },
-                        {
-                            "VarCharValue": "unidade"
-                        },
-                        {
-                            "VarCharValue": "time"
-                        }
-                    ]
+                    "timestamp": 1758330000.0,
+                    "value": {
+                        "stringValue": "2025-09-20T01:00:00.000Z"
+                    }
                 },
                 {
-                    "Data": [
-                        {
-                            "VarCharValue": "1969"
-                        },
-                        {
-                            "VarCharValue": "ABC1969A"
-                        },
-                        {
-                            "VarCharValue": "MODELO-1969"
-                        },
-                        {
-                            "VarCharValue": "31690.1234"
-                        },
-                        {
-                            "VarCharValue": "RPM"
-                        },
-                        {
-                            "VarCharValue": "2025-09-17 13:18:34.091"
-                        }
-                    ]
-                }
-            ],
-            "ResultSetMetadata": {
-                "ColumnInfo": [
-                    {
-                        "CatalogName": "hive",
-                        "SchemaName": "",
-                        "TableName": "",
-                        "Name": "id",
-                        "Label": "id",
-                        "Type": "bigint",
-                        "Precision": 19,
-                        "Scale": 0,
-                        "Nullable": "UNKNOWN",
-                        "CaseSensitive": false
-                    },
-                    {
-                        "CatalogName": "hive",
-                        "SchemaName": "",
-                        "TableName": "",
-                        "Name": "placa",
-                        "Label": "placa",
-                        "Type": "varchar",
-                        "Precision": 2147483647,
-                        "Scale": 0,
-                        "Nullable": "UNKNOWN",
-                        "CaseSensitive": true
-                    },
-                    {
-                        "CatalogName": "hive",
-                        "SchemaName": "",
-                        "TableName": "",
-                        "Name": "modelo",
-                        "Label": "modelo",
-                        "Type": "varchar",
-                        "Precision": 2147483647,
-                        "Scale": 0,
-                        "Nullable": "UNKNOWN",
-                        "CaseSensitive": true
-                    },
-                    {
-                        "CatalogName": "hive",
-                        "SchemaName": "",
-                        "TableName": "",
-                        "Name": "velocidademotor",
-                        "Label": "velocidademotor",
-                        "Type": "double",
-                        "Precision": 17,
-                        "Scale": 0,
-                        "Nullable": "UNKNOWN",
-                        "CaseSensitive": false
-                    },
-                    {
-                        "CatalogName": "hive",
-                        "SchemaName": "",
-                        "TableName": "",
-                        "Name": "unidade",
-                        "Label": "unidade",
-                        "Type": "varchar",
-                        "Precision": 2147483647,
-                        "Scale": 0,
-                        "Nullable": "UNKNOWN",
-                        "CaseSensitive": true
-                    },
-                    {
-                        "CatalogName": "hive",
-                        "SchemaName": "",
-                        "TableName": "",
-                        "Name": "time",
-                        "Label": "time",
-                        "Type": "timestamp",
-                        "Precision": 3,
-                        "Scale": 0,
-                        "Nullable": "UNKNOWN",
-                        "CaseSensitive": false
+                    "timestamp": 1758328800.0,
+                    "value": {
+                        "stringValue": "2025-09-20T00:40:00.000Z"
                     }
-                ]
-            }
+                },
+                {
+                    "timestamp": 1758331200.0,
+                    "value": {
+                        "stringValue": "2025-09-20T01:20:00.000Z"
+                    }
+                },
+                {
+                    "timestamp": 1758333600.0,
+                    "value": {
+                        "stringValue": "2025-09-20T02:00:00.000Z"
+                    }
+                },
+                {
+                    "timestamp": 1758327600.0,
+                    "value": {
+                        "stringValue": "2025-09-20T00:20:00.000Z"
+                    }
+                },
+                {
+                    "timestamp": 1758332400.0,
+                    "value": {
+                        "stringValue": "2025-09-20T01:40:00.000Z"
+                    }
+                }
+            ]
         },
-        "ResponseMetadata": {
-            "RequestId": "652d232d-4dce-4967-bb6a-a03ff354ee61",
-            "HTTPStatusCode": 200,
-            "HTTPHeaders": {
-                "date": "Fri, 19 Sep 2025 12:34:38 GMT",
-                "content-type": "application/x-amz-json-1.1",
-                "content-length": "2740",
-                "connection": "keep-alive",
-                "x-amzn-requestid": "652d232d-4dce-4967-bb6a-a03ff354ee61"
+        {
+            "entityPropertyReference": {
+                "entityId": "bbe0abfd-ee88-4034-b47b-cc2dfb300b63",
+                "componentName": "ABC1969A",
+                "propertyName": "velocidademotor"
             },
-            "RetryAttempts": 0
+            "values": [
+                {
+                    "timestamp": 1758330000.0,
+                    "value": {
+                        "doubleValue": Decimal("79")
+                    }
+                },
+                {
+                    "timestamp": 1758328800.0,
+                    "value": {
+                        "doubleValue": Decimal("72")
+                    }
+                },
+                {
+                    "timestamp": 1758331200.0,
+                    "value": {
+                        "doubleValue": Decimal("86")
+                    }
+                },
+                {
+                    "timestamp": 1758333600.0,
+                    "value": {
+                        "doubleValue": Decimal("103")
+                    }
+                },
+                {
+                    "timestamp": 1758327600.0,
+                    "value": {
+                        "doubleValue": Decimal("66")
+                    }
+                },
+                {
+                    "timestamp": 1758332400.0,
+                    "value": {
+                        "doubleValue": Decimal("94")
+                    }
+                }
+            ]
         }
-    }
+    ],
+    "nextToken": None
 }

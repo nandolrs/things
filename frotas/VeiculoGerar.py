@@ -6,8 +6,16 @@ import CFS3
 
 import CFVeiculos
 
+import time
+from  datetime import datetime, timezone
 
 def Testar():
+
+    time='2025-09-21T02:20:00.000Z'
+    timestamp = datetime.fromisoformat(time).timestamp() 
+    # timestamp = timestamp.timestamp()
+    print(timestamp)
+
 
     cfVeiculos = CFVeiculos.CVeiculos()
     # veiculos = cfVeiculos.JsonGerar()
