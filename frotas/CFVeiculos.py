@@ -127,28 +127,83 @@ class CVeiculos:
 
         return propriedades
             
-    def VeiculosGerar(self,i):  
+    # def VeiculosGerar(self,i):  
 
-        getcontext().prec = 6          
+    #     getcontext().prec = 6          
 
-        id_ = i
-        placa_ = 'ABC' + str(i) + 'A'
-        modelo_ = 'MODELO-' + str(i)
-        velocidademotor_ = Decimal(str(12000 + (10*i) + 0.1234))
-        unidade_ = 'RPM'
-        time_ = time.time()
-        time_ = datetime.now().isoformat()
+    #     id_ = i
+    #     placa_ = 'ABC' + str(i) + 'A'
+    #     modelo_ = 'MODELO-' + str(i)
+    #     velocidademotor_ = Decimal(str(12000 + (10*i) + 0.1234))
+    #     unidade_ = 'RPM'
+    #     time_ = time.time()
+    #     time_ = datetime.now().isoformat()
 
-        veiculo = {
-            'id':id_
-            ,'placa':placa_
-            ,'modelo':modelo_
-            ,'velocidademotor':velocidademotor_
-            ,'unidade':unidade_
-            ,'time':time_
-        }
+    #     veiculo = {
+    #         'id':id_
+    #         ,'placa':placa_
+    #         ,'modelo':modelo_
+    #         ,'velocidademotor':velocidademotor_
+    #         ,'unidade':unidade_
+    #         ,'time':time_
+    #     }
 
-        return veiculo
+    #     return veiculo
+
+    def VeiculosGerar(self,placas,anos, meses, dias, horas, minutos, velocidadeInicial, velocidadeIncrementoPercentual):  
+
+        getcontext().prec = 6    
+
+        # time_ = time.time()
+        agora = datetime.now()#.isoformat()
+
+        anoAtual = agora.year
+        mesAtual = agora.month
+        diaAtual = agora.day
+        horaAtual = 0# agora.hour
+        minutoAtual = 0# agora.minute
+
+        unidade_ = 'RPM'            
+
+        veiculos = []
+
+        id_ = -1
+        placa__ = 1968
+
+
+        for placa in range(1969,1969+placas):
+            placa__ = placa__ + 1
+            placa_ = 'ABC' +  str(10000+placa__)[1:5] + 'A'
+            modelo_ = 'MODELO-' + str(placa__)            
+            for ano in range(anoAtual, anoAtual+anos):
+                for mes in range(mesAtual, mesAtual+meses):
+                    for dia in range(diaAtual, diaAtual+dias):
+                        velocidademotor_ = velocidadeInicial                        
+                        for hora in range(horaAtual, horaAtual+horas):
+                            for minuto in range(minutoAtual, 60,int(60/minutos)):
+
+                                time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto)
+                                time_ = time_.isoformat(timespec='milliseconds') + 'Z'                
+
+
+                                id_ = id_ +1
+                                veiculo = {
+                                    'id':id_
+                                    ,'placa':placa_
+                                    ,'modelo':modelo_
+                                    ,'velocidademotor':velocidademotor_
+                                    ,'unidade':unidade_
+                                    ,'time':time_
+                                }
+
+                                velocidademotor_ = int(velocidademotor_ *  velocidadeIncrementoPercentual)
+
+
+                                veiculos.append(veiculo)
+
+
+
+        return veiculos
 
     def JsonGerar(self):
 
@@ -194,14 +249,10 @@ class CVeiculos:
 
     def JsonDynamoGerar(self):
 
+        veiculos = self.VeiculosGerar(placas=3, anos=1 ,meses=1,dias=2,horas=12,minutos=3,velocidadeInicial=60,velocidadeIncrementoPercentual=1.10)
+
         cDynamodb = CFDynamodb.CDynamodb()
-
-        qtdeLinhas = 10
-
-        veiculos = []
-
-        for i in range(qtdeLinhas):
-            veiculo = self.VeiculosGerar(i+1969)
+        for veiculo in veiculos:
 
             cDynamodb.Incluir(nomeTabela='Frotas', entidade=veiculo)
 
