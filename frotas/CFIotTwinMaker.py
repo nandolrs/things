@@ -89,12 +89,6 @@ class CComponent:
 
                 ] =  componente_
 
-                # retorno = {nome:{
-                #     'componentTypeId' : componentTypeId
-                #     ,'properties' : properties
-                #     }
-                # }
-
             return retorno
         except Exception as e:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")

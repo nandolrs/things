@@ -27,7 +27,11 @@ aws iottwinmaker list-entities --region us-east-1 --workspace-id VehicleFleetWor
 
 aws iottwinmaker get-property-value --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "6693377b-d527-4973-b045-95a12a64d4d7"      --component-name "MotorDC-componente-v1r1"     --selected-properties "telemetryAssetId"      > saida-get-property-value.txt
 
-aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "bbe0abfd-ee88-4034-b47b-cc2dfb300b63"      --component-name "ABC1969A"     --selected-properties  "time"     --start-time "2025-09-20T00:00:00Z"     --end-time "2025-09-20T02:00:00Z"
+### MotorDC-entidade-v1r1
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "bbe0abfd-ee88-4034-b47b-cc2dfb300b63"      --component-name "ABC1969A"     --selected-properties  "time" "placa" "velocidademotor"    --start-time "2025-09-20T00:00:00.000Z"     --end-time "2025-09-20T00:59:59.999Z" > lixo1.json
+
+### MotorDC-entidade-v1r2
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "VehicleFleetWorkspace1"    --entity-id "29c5857f-95b1-4ee7-b107-e084797f4903"      --component-name "ABC1969A"     --selected-properties  "time" "placa" "velocidademotor" "temperatura"    --start-time "2025-09-22T00:00:00.000Z"     --end-time "2025-09-22T00:59:59.999Z" > lixo1.json
 
 aws iottwinmaker get-property-value-history --region us-east-1  --cli-input-json file://D:\nandolrs\projetos\things\frotas\aws-cli-get-property-value-history.json
 

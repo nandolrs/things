@@ -5,12 +5,52 @@ import CFAthena
 import CFIotTwinMaker
 import CFDynamodb
 from decimal import *
+from dataclasses import dataclass, asdict
+import random
+
+getcontext().prec = 6    
+
+
+# retorno = [
+#     {
+#     'propertyName' : 'telemetryAssetType'
+#     ,'type_' : 'STRING'
+#     ,'isExternalId_' : False # true, se isRequiredInEntity_
+#     ,'isStoredExternally_' : False
+#     ,'isTimeSeries_' : False
+#     ,'isRequiredInEntity_' : False # true, se isExternalId_
+#     ,'value_' : 'ABC1969A'
+
+
+#     }
+#     ,
+#     {
+#     'propertyName' : 'telemetryAssetId'
+#     ,'type_' : 'STRING'
+#     ,'isExternalId_' : True # true, se isRequiredInEntity_
+#     ,'isStoredExternally_' : False
+#     ,'isTimeSeries_' : False
+#     ,'isRequiredInEntity_' : True # true, se isExternalId_
+#     ,'value_' : 'ABC1969A' #  ABDC
+#     }            
+
+#     ,
+#     {
+#     'propertyName' : 'placa'
+#     ,'type_' : 'STRING'
+#     ,'isExternalId_' : False # true, se isRequiredInEntity_
+#     ,'isStoredExternally_' : True
+#     ,'isTimeSeries_' : True
+#     ,'isRequiredInEntity_' : False # true, se isExternalId_
+#     ,'value_' : 'ABDC'
+#     }            
+
+
+# ]    
 
 class CVeiculos:
 
-
-
-    def PropriedadesBuscar(self):
+    def PropriedadesBuscar(self): # aws athena
 
         cAthena = CFAthena.CAThena()
 
@@ -71,44 +111,69 @@ class CVeiculos:
 
             retorno.append(propriedade_)            
             
-        # retorno = [
-        #     {
-        #     'propertyName' : 'telemetryAssetType'
-        #     ,'type_' : 'STRING'
-        #     ,'isExternalId_' : False # true, se isRequiredInEntity_
-        #     ,'isStoredExternally_' : False
-        #     ,'isTimeSeries_' : False
-        #     ,'isRequiredInEntity_' : False # true, se isExternalId_
-        #     ,'value_' : 'ABC1969A'
-
-
-        #     }
-        #     ,
-        #     {
-        #     'propertyName' : 'telemetryAssetId'
-        #     ,'type_' : 'STRING'
-        #     ,'isExternalId_' : True # true, se isRequiredInEntity_
-        #     ,'isStoredExternally_' : False
-        #     ,'isTimeSeries_' : False
-        #     ,'isRequiredInEntity_' : True # true, se isExternalId_
-        #     ,'value_' : 'ABC1969A' #  ABDC
-        #     }            
-
-        #     ,
-        #     {
-        #     'propertyName' : 'placa'
-        #     ,'type_' : 'STRING'
-        #     ,'isExternalId_' : False # true, se isRequiredInEntity_
-        #     ,'isStoredExternally_' : True
-        #     ,'isTimeSeries_' : True
-        #     ,'isRequiredInEntity_' : False # true, se isExternalId_
-        #     ,'value_' : 'ABDC'
-        #     }            
-
-
-        # ]    
-
         return retorno
+    
+    def PropriedadesBuscarPorDicionario(self, dicionario): # python dic
+
+
+        retorno = []
+
+        fields_ = dicionario.__annotations__
+
+        # for field in fields_:
+        #     nome = field
+        #     tipo = fields_[field]
+        #     print ('nome=',nome,';tipo=',tipo)
+
+        for propriedade in fields_:  
+
+            # de-para tipos de dados do aws twin 
+            # 'RELATIONSHIP'|'STRING'|'LONG'|'BOOLEAN'|'INTEGER'|'DOUBLE'|'LIST'|'MAP'
+
+            tipo_ =  str(fields_[propriedade]).replace("<class '",'').replace("'>",'')
+            tipo__ = 'STRING' # 'STRING'
+            match tipo_:
+                case 'bool': 
+                    tipo__ = "BOOLEAN"
+                case 'int' :# "tinyint"
+                    tipo__ = "LONG"
+                case 'int': #type(int) #  "smallint"
+                    tipo__ = "LONG"
+                case 'int' : #type(int) # "int"
+                    tipo__ = "LONG"
+                case 'long' : #type(long): # "bigint"
+                    tipo__ = "LONG"
+                case 'float' : # type(float): # "double"
+                    tipo__ = "DOUBLE"
+                case 'float' : #type(float): # "float"
+                    tipo__ = "DOUBLE"
+                case 'decimal.Decimal' : #type(Decimal): # "decimal "
+                    tipo__ = "DOUBLE"
+                case 'char' : #type(char): # "char "
+                    tipo__ = "STRING"
+                # case "varchar ":
+                # case "string ":
+                # case "binary"
+                # case "date"
+                # case "timestamp"
+                case 'array': # array  : # "array"
+                    tipo__ = "LIST"
+                # case "map" 
+                # case "struct" 
+
+            propriedade_ =  {
+                'propertyName' : propriedade 
+                ,'type_' : tipo__ 
+                ,'isExternalId_' : False # true, se isRequiredInEntity_
+                ,'isStoredExternally_' : False
+                ,'isTimeSeries_' : False
+                ,'isRequiredInEntity_' : False # true, se isExternalId_
+                ,'value_' : 'ABC1969A'
+            }      
+
+            retorno.append(propriedade_)            
+            
+        return retorno    
 
     def PropriedadesExternalSetar(self, propriedades, nomes):
 
@@ -127,32 +192,8 @@ class CVeiculos:
 
         return propriedades
             
-    # def VeiculosGerar(self,i):  
-
-    #     getcontext().prec = 6          
-
-    #     id_ = i
-    #     placa_ = 'ABC' + str(i) + 'A'
-    #     modelo_ = 'MODELO-' + str(i)
-    #     velocidademotor_ = Decimal(str(12000 + (10*i) + 0.1234))
-    #     unidade_ = 'RPM'
-    #     time_ = time.time()
-    #     time_ = datetime.now().isoformat()
-
-    #     veiculo = {
-    #         'id':id_
-    #         ,'placa':placa_
-    #         ,'modelo':modelo_
-    #         ,'velocidademotor':velocidademotor_
-    #         ,'unidade':unidade_
-    #         ,'time':time_
-    #     }
-
-    #     return veiculo
-
     def VeiculosGerar(self,placas,anos, meses, dias, horas, minutos, velocidadeInicial, velocidadeIncrementoPercentual):  
 
-        getcontext().prec = 6    
 
         # time_ = time.time()
         agora = datetime.now()#.isoformat()
@@ -162,6 +203,7 @@ class CVeiculos:
         diaAtual = agora.day
         horaAtual = 0# agora.hour
         minutoAtual = 0# agora.minute
+        segundoAtual = 1# agora.second
 
         unidade_ = 'RPM'            
 
@@ -182,10 +224,13 @@ class CVeiculos:
                         for hora in range(horaAtual, horaAtual+horas):
                             for minuto in range(minutoAtual, 60,int(60/minutos)):
 
-                                time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto)
+                                time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto, second=segundoAtual)
+                                # time_ = datetime.now(timezone.utc) #   "2022-08-25T00:00:00Z"
                                 time_ = time_.isoformat(timespec='milliseconds') + 'Z'                
                                 # time_ = int(time_.timestamp())
 
+                                random_ = Decimal(str(random.random()))
+                                temperatura_ = Decimal(random_  * velocidademotor_)
 
                                 id_ = id_ +1
                                 veiculo = {
@@ -195,12 +240,23 @@ class CVeiculos:
                                     ,'velocidademotor':velocidademotor_
                                     ,'unidade':unidade_
                                     ,'time':time_
+                                    ,'temperatura' : temperatura_
                                 }
 
-                                velocidademotor_ = int(velocidademotor_ *  velocidadeIncrementoPercentual)
+                                veiculo_ = CVeiculo()
+                                veiculo_.id = id_
+                                veiculo_.placa = placa_
+                                veiculo_.modelo = modelo_
+                                veiculo_.velocidademotor = velocidademotor_
+                                veiculo_.unidade = unidade_
+                                veiculo_.time = time_
+                                veiculo_.temperatura = temperatura_
 
+                                velocidademotor_ = Decimal(str(velocidademotor_ )) *  Decimal(str(velocidadeIncrementoPercentual))
 
-                                veiculos.append(veiculo)
+                                # veiculos.append(veiculo)
+                                veiculo__ = asdict(veiculo_)
+                                veiculos.append(veiculo__)
 
 
 
@@ -255,7 +311,7 @@ class CVeiculos:
         cDynamodb = CFDynamodb.CDynamodb()
         for veiculo in veiculos:
 
-            cDynamodb.Incluir(nomeTabela='Frotas', entidade=veiculo)
+            cDynamodb.Incluir(nomeTabela='Frotas', entidade=veiculo) # veiculo
 
     def PesquisarPorPlacaFake(self, placa):
         retorno = {
@@ -617,35 +673,33 @@ class CVeiculos:
 
                     for linha in linhas: 
 
-                        if True : 
+                        print('==linha["time"]===')                   
+                        print(linha['time'])
 
-                            print('==linha["time"]===')                   
-                            print(linha['time'])
+                        valor = linha[propertyName]
+                        timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
+                        # timestamp = linha['time'] 
 
-                            valor = linha[propertyName]
-                            timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
-                            # timestamp = linha['time'] 
+                        print('==linha[timestamp]===')                   
+                        print(timestamp)
 
-                            print('==linha[timestamp]===')                   
-                            print(timestamp)
+                        #  busca e ajusta o tipo
 
-                            #  busca e ajusta o tipo
-
-                            type_ = properties[propertyName]['definition']['dataType']['type'] 
-                            type = self.BuscarTipo(type_)
-                            #
-                            value = {
-                                'timestamp' : timestamp
-                                ,'value' : {
-                                     type : valor # 'stringValue' : valor
-                                }
+                        type_ = properties[propertyName]['definition']['dataType']['type'] 
+                        type = self.BuscarTipo(type_)
+                        #
+                        value = {
+                            'timestamp' : timestamp
+                            ,'value' : {
+                                    type : valor # 'stringValue' : valor
                             }
+                        }
 
-                            print('===value===')
-                            print(value)
+                        print('===value===')
+                        print(value)
 
-                            values.append(value)
-                                
+                        values.append(value)
+                            
                     propertyValue = {
                             'entityPropertyReference' :{
                                 'entityId': entityId
@@ -665,3 +719,21 @@ class CVeiculos:
             }      
 
             return retorno    
+    
+@dataclass
+class CVeiculo:
+    id: int
+    placa:str
+    modelo:str
+    velocidademotor:Decimal
+    unidade:str
+    time:datetime
+    temperatura: Decimal
+
+    def __init__(self):
+        # getcontext().prec = 6    
+        None
+
+
+        
+
