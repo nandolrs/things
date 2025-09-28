@@ -160,6 +160,34 @@ class CVeiculosTestar:
 
         return propertyDefinitions,  functions
 
+    def CFComponentTypeGetPropertyValueGerarPorDicionario(self, dicionario):
+
+        # busca propriedades do dicionario
+
+        cVeiculos = CFVeiculos.CVeiculos()
+
+        propriedades_ = cVeiculos.PropriedadesBuscarPorDicionario(dicionario)    
+
+        propriedades =  cVeiculos.PropriedadesExternalSetar(
+             propriedades=propriedades_
+            ,nomes=['id','placa','modelo','velocidademotor','unidade','time','temperatura']
+        )
+
+        #
+
+        cComponentType = CFIotTwinMaker.CComponentType()
+
+        propertyDefinitions, functions = cComponentType.Gerar(
+            componentTypeId = COMPONENT_TYPE_ID
+            
+            ,lambdaArn      = AWS_LAMBDA
+            ,propriedades   = propriedades
+        )
+
+        print(json.dumps(propertyDefinitions))
+
+        return propertyDefinitions,  functions
+
     def CFComponentTypeExcluir(self):
 
         cComponentType = CFIotTwinMaker.CComponentType()
@@ -360,6 +388,11 @@ elif caso == 4:
 
     dicionario  = CFVeiculos.CVeiculo()
     cVeiculosTestar.CFComponentTypeGerarPorDicionario(dicionario)
+
+elif caso == 44:
+
+    dicionario  = CFVeiculos.CVeiculo()
+    cVeiculosTestar.CFComponentTypeGetPropertyValueGerarPorDicionario(dicionario)
 
 elif caso == 5:
 
