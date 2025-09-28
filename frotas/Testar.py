@@ -160,38 +160,6 @@ class CVeiculosTestar:
 
         return propertyDefinitions,  functions
 
-    def CFComponentTypeIncluir():
-
-        # busca propriedades do veiculo
-
-        cVeiculos = CFVeiculos.CVeiculos()
-
-        propriedades_ = cVeiculos.PropriedadesBuscar()    
-
-        propriedades =  cVeiculos.PropriedadesExternalSetar(
-            propriedades=propriedades_
-            , nomes=['id','placa','modelo','velocidademotor','unidade','time']
-        )
-
-        #
-
-        cComponentType = CFIotTwinMaker.CComponentType()
-
-        propertyDefinitions, functions = cComponentType.Gerar(
-            componentTypeId = COMPONENT_TYPE_ID
-            ,lambdaArn      = AWS_LAMBDA
-            ,propriedades   = propriedades
-        )
-
-        retornoComponentType = cComponentType.Incluir(
-            workspaceId            = 'VehicleFleetWorkspace1'
-            ,componentTypeId        = COMPONENT_TYPE_ID
-            ,functions              = functions
-            ,propertyDefinitions    = propertyDefinitions
-        )
-
-        print(retornoComponentType)   
-
     def CFComponentTypeExcluir(self):
 
         cComponentType = CFIotTwinMaker.CComponentType()
@@ -203,7 +171,7 @@ class CVeiculosTestar:
 
         print(retorno)  
 
-    def CFEntityIncluir():
+    def CFEntityIncluir(self):
 
         cVeiculos = CFVeiculos.CVeiculos()
 
@@ -336,7 +304,7 @@ class CVeiculosTestar:
                                         )
         print(retorno)     
 
-    def CFEntityExcluir():
+    def CFEntityExcluir(self):
 
         cEntity = CFIotTwinMaker.CEntity()
 
@@ -367,15 +335,14 @@ class CVeiculosTestar:
 
 ### testar
 
-WORK_SPACE_ID = 'VehicleFleetWorkspace1'
-ENTITY_NAME = 'MotorDC-entidade-v1r2'
-COMPONENT_TYPE_ID = 'com.cmj.timeseries-connector-v1r2'
+WORK_SPACE_ID = 'CmjWorkspace'
+ENTITY_NAME = 'MotorDC-entidade'
+COMPONENT_TYPE_ID = 'com.cmj.frota.connector'  #  'com.cmj.athena.connector' ,  'com.cmj.timeseries-connector'
 AWS_LAMBDA = 'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'              
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 1
-
+caso = 12 # 9, 12
 
 if caso == 1:
 
@@ -396,45 +363,45 @@ elif caso == 4:
 
 elif caso == 5:
 
-    cVeiculosTestar.CFEntityExcluir()    
-    
-elif caso == 6:
-
     cVeiculosTestar.CFComponentGerar()        
 
-elif caso == 7:
+elif caso == 6:
 
     cVeiculosTestar.CFVeiculosPesquisarPorPlaca() 
 
-elif caso == 8:
+elif caso == 7:
 
     cVeiculosTestar.CFComponentResponseGetPropertyValueHistory() 
 
-elif caso == 9:
+elif caso == 8:
 
     cVeiculosTestar.CFComponentTypeIncluir() 
 
-elif caso == 10:
+elif caso == 9:
 
     dicionario  = CFVeiculos.CVeiculo()
 
     cVeiculosTestar.CFComponentTypeIncluirPorDicionario(dicionario)    
-    
-elif caso == 11:
+
+elif caso == 10:
 
     cVeiculosTestar.CFComponentTypeExcluir() 
 
-elif caso == 12:
-
-    cVeiculosTestar.CFEntityConsultar() 
-
-elif caso == 13:
+elif caso == 11:
 
     cVeiculosTestar.CFEntityIncluir() 
 
+elif caso == 12:
+
+    cVeiculosTestar.CFEntityIncluirPorDicionario()     
+
+elif caso == 13:
+
+    cVeiculosTestar.CFEntityConsultar() 
+
 elif caso == 14:
 
-    cVeiculosTestar.CFEntityIncluirPorDicionario() 
+    cVeiculosTestar.CFEntityExcluir()        
 
 
 
