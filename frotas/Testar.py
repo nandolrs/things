@@ -342,7 +342,7 @@ AWS_LAMBDA = 'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 12 # 9, 12
+caso = 15 # 9, 12
 
 if caso == 1:
 
@@ -401,7 +401,12 @@ elif caso == 13:
 
 elif caso == 14:
 
-    cVeiculosTestar.CFEntityExcluir()        
+    cVeiculosTestar.CFEntityExcluir()      
+
+elif caso == 15:
+
+    entidade = CFAthena.CAThena()
+    print('entidade=',entidade)           
 
 
 

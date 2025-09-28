@@ -1,12 +1,19 @@
 import time
 from  datetime import datetime, timezone
 import json
-import CFAthena
-import CFIotTwinMaker
-import CFDynamodb
+
 from decimal import *
 from dataclasses import dataclass, asdict
 import random
+
+import CFS3
+import CFAthena
+import CFIotTwinMaker
+import CFDynamodb
+
+# import CFVeiculos
+# import json
+# from decimal import Decimal
 
 getcontext().prec = 6    
 
@@ -49,6 +56,135 @@ getcontext().prec = 6
 # ]    
 
 class CVeiculos:
+
+    def decimal_serializer(self,obj):
+        if isinstance(obj, Decimal):
+            # Convert Decimal to string to preserve precision
+            return str(obj)
+        raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
+    def Dic2Json2Dic(self,event):
+        
+        s1from = 'False'
+        s1to = '"False"'
+
+        s2from = 'True'
+        s2to = '"True"'    
+
+        s3from = "'"
+        s3to = '"'
+
+        eventJson = event
+        eventJson = eventJson.replace(s1from,s1to)
+        eventJson = eventJson.replace(s2from,s2to)
+        eventJson = eventJson.replace(s3from,s3to)
+
+        eventDic = json.loads(eventJson)    
+
+        return eventDic    
+
+    def lambda_handler_value_history(self,event, context):
+        try:
+
+            print('context.function_name=',context.function_name)
+            print('lambda_handler_value_history')
+
+            cfS3 = CFS3.CS3()
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
+
+            try:
+                eventDic = self.Dic2Json2Dic(str(event)) 
+                # print('passou 1')
+            except Exception as e:
+                # print('passou 2')
+                eventDic = event
+
+            # eventDic = Dic2Json2Dic(str(event)) 
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=str(eventDic))
+
+            # pesquisa veiculo por placa
+
+            # cVeiculos = self.CVeiculos()
+            # retorno_ = cVeiculos.PesquisarPorRequestLambdaAthena(eventDic) 
+            retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
+
+            retorno_ = self.RetornarGetPropertyValueHistory(
+                retornoPesquisa       = retorno_
+                , selectedProperties    = eventDic['selectedProperties']
+                , properties            = eventDic['properties']
+                , entityId              = eventDic['entityId']
+                , componentName         = eventDic['componentName']           
+            )
+
+            # retorno =  json.dumps(retorno_, indent=2) 
+            retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
+            retorno = retorno.encode('utf-8')        
+
+            #
+
+            print('===retorno===')
+            print(retorno)
+            
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
+
+            return retorno
+        except Exception as e:
+            print('== erro ==')
+            print (e)
+        #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
+            retorno = {'retorno': 'falha'}    
+
+    def lambda_handler_value(self,event, context):
+        try:
+            print('context.function_name=',context.function_name)
+            print('lambda_handler_value')
+
+            cfS3 = CFS3.CS3()
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
+
+            try:
+                eventDic = self.Dic2Json2Dic(str(event)) 
+                # print('passou 1')
+            except Exception as e:
+                # print('passou 2')
+                eventDic = event
+
+            # eventDic = Dic2Json2Dic(str(event)) 
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=str(eventDic))
+
+            # pesquisa veiculo por placa
+
+            # cVeiculos = self.CVeiculos()
+            # retorno_ = cVeiculos.PesquisarPorRequestLambdaAthena(eventDic) 
+            retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
+
+            retorno_ = self.RetornarGetPropertyValue(
+                retornoPesquisa       = retorno_
+                , selectedProperties    = eventDic['selectedProperties']
+                , properties            = eventDic['properties']
+                , entityId              = eventDic['entityId']
+                , componentName         = eventDic['componentName']           
+            )
+
+            # retorno =  json.dumps(retorno_, indent=2) 
+            retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
+            retorno = retorno.encode('utf-8')        
+
+            #
+
+            print('===retorno===')
+            print(retorno)
+            
+            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
+
+            return retorno
+        except Exception as e:
+            print('== erro ==')
+            print (e)
+        #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
+            retorno = {'retorno': 'falha'}    
 
     def PropriedadesBuscar(self): # aws athena
 
@@ -650,76 +786,240 @@ class CVeiculos:
 
             retornoPesquisa = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
 
+            return retornoPesquisa
+
             # montar response
 
-            status = retornoPesquisa['ResponseMetadata']['HTTPStatusCode']
+            # status = retornoPesquisa['ResponseMetadata']['HTTPStatusCode']
 
-            linhas =  retornoPesquisa['Items']
+            # linhas =  retornoPesquisa['Items']
 
-            propertyValues = []
+            # propertyValues = []
 
-            if len(linhas) >= 1:
+            # if len(linhas) >= 1:
 
-                timestamp = time.time()
-                # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
-                # time = time_.isoformat(timespec='milliseconds') + 'Z'                
+            #     timestamp = time.time()
+            #     # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
+            #     # time = time_.isoformat(timespec='milliseconds') + 'Z'                
 
-                for selectedProperty in selectedProperties:  
+            #     for selectedProperty in selectedProperties:  
 
-                    propertyName = selectedProperty  
+            #         propertyName = selectedProperty  
 
-                    #busca os valores
-                    values = []
+            #         #busca os valores
+            #         values = []
 
-                    for linha in linhas: 
+            #         for linha in linhas: 
 
-                        print('==linha["time"]===')                   
-                        print(linha['time'])
+            #             print('==linha["time"]===')                   
+            #             print(linha['time'])
 
-                        valor = linha[propertyName]
-                        timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
-                        # timestamp = linha['time'] 
+            #             valor = linha[propertyName]
+            #             timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
+            #             # timestamp = linha['time'] 
 
-                        print('==linha[timestamp]===')                   
-                        print(timestamp)
+            #             print('==linha[timestamp]===')                   
+            #             print(timestamp)
 
-                        #  busca e ajusta o tipo
+            #             #  busca e ajusta o tipo
 
-                        type_ = properties[propertyName]['definition']['dataType']['type'] 
-                        type = self.BuscarTipo(type_)
-                        #
-                        value = {
-                            'timestamp' : timestamp
-                            ,'value' : {
-                                    type : valor # 'stringValue' : valor
-                            }
-                        }
+            #             type_ = properties[propertyName]['definition']['dataType']['type'] 
+            #             type = self.BuscarTipo(type_)
+            #             #
+            #             value = {
+            #                 'timestamp' : timestamp
+            #                 ,'value' : {
+            #                         type : valor # 'stringValue' : valor
+            #                 }
+            #             }
 
-                        print('===value===')
-                        print(value)
+            #             print('===value===')
+            #             print(value)
 
-                        values.append(value)
+            #             values.append(value)
                             
-                    propertyValue = {
-                            'entityPropertyReference' :{
-                                'entityId': entityId
-                                ,'componentName': componentName
-                                ,'propertyName': propertyName
-                            }
-                            ,
-                            'values': values
-                        }      
-                    propertyValues.append(propertyValue)                            
+            #         propertyValue = {
+            #                 'entityPropertyReference' :{
+            #                     'entityId': entityId
+            #                     ,'componentName': componentName
+            #                     ,'propertyName': propertyName
+            #                 }
+            #                 ,
+            #                 'values': values
+            #             }      
+            #         propertyValues.append(propertyValue)                            
 
-            # monta retorno        
+            # # monta retorno        
 
-            retorno = {
-                'propertyValues' :propertyValues
-                ,'nextToken': None
-            }      
+            # retorno = {
+            #     'propertyValues' :propertyValues
+            #     ,'nextToken': None
+            # }      
 
-            return retorno    
+            # return retorno    
+
+    def RetornarGetPropertyValueHistory(self, retornoPesquisa, selectedProperties, properties, entityId, componentName):
+
+        # montar response
+
+        status = retornoPesquisa['ResponseMetadata']['HTTPStatusCode']
+
+        linhas =  retornoPesquisa['Items']
+
+        propertyValues = []
+
+        if len(linhas) >= 1:
+
+            timestamp = time.time()
+            # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
+            # time = time_.isoformat(timespec='milliseconds') + 'Z'                
+
+            for selectedProperty in selectedProperties:  
+
+                propertyName = selectedProperty  
+
+                #busca os valores
+                values = []
+
+                for linha in linhas: 
+
+                    print('==linha["time"]===')                   
+                    print(linha['time'])
+
+                    valor = linha[propertyName]
+                    timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
+                    # timestamp = linha['time'] 
+
+                    print('==linha[timestamp]===')                   
+                    print(timestamp)
+
+                    #  busca e ajusta o tipo
+
+                    type_ = properties[propertyName]['definition']['dataType']['type'] 
+                    type = self.BuscarTipo(type_)
+                    #
+                    value = {
+                        'timestamp' : timestamp
+                        ,'value' : {
+                                type : valor # 'stringValue' : valor
+                        }
+                    }
+
+                    print('===value===')
+                    print(value)
+
+                    values.append(value)
+                        
+                propertyValue = {
+                        'entityPropertyReference' :{
+                            'entityId': entityId
+                            ,'componentName': componentName
+                            ,'propertyName': propertyName
+                        }
+                        ,
+                        'values': values
+                    }      
+                propertyValues.append(propertyValue)                            
+
+        # monta retorno        
+
+        retorno = {
+            'propertyValues' :propertyValues
+            ,'nextToken': None
+        }      
+
+        return retorno    
+
+    def RetornarGetPropertyValue(self, retornoPesquisa, selectedProperties, properties, entityId, componentName):
+        # montar response
+
+        status = retornoPesquisa['ResponseMetadata']['HTTPStatusCode']
+
+        linhas =  retornoPesquisa['Items']
+
+        propertyValues = []
+
+        # monta retorno        
+
+        retorno = {
+            'propertyValues' :propertyValues
+            ,'nextToken': None
+        }      
+
+        return retorno
     
+        #        
+
+        print('len(linhas) =',len(linhas) )
+
+        if len(linhas) >= 1:
+
+            timestamp = time.time()
+            # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
+            # time = time_.isoformat(timespec='milliseconds') + 'Z'                
+
+            for selectedProperty in selectedProperties:  
+
+                propertyName = selectedProperty  
+
+                #busca os valores
+                values = []
+
+                for linha in linhas: 
+
+                    print('==linha["time"]===')                   
+                    print(linha['time'])
+
+                    valor = linha[propertyName]
+                    timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
+                    # timestamp = linha['time'] 
+
+                    print('==linha[timestamp]===')                   
+                    print(timestamp)
+
+                    #  busca e ajusta o tipo
+
+                    type_ = properties[propertyName]['definition']['dataType']['type'] 
+                    type = self.BuscarTipo(type_)
+                    #
+                    # value = {
+                    #     'timestamp' : timestamp
+                    #     ,'value' : {
+                    #             type : valor # 'stringValue' : valor
+                    #     }
+                    # }
+
+                    value = {
+                                type : valor # 'stringValue' : valor
+                    }                    
+
+                    print('===value===')
+                    print(value)
+
+                    values.append(value)
+
+                    break
+                        
+                propertyValue = {
+                        'propertyReference' :{
+                            'entityId': entityId
+                            ,'componentName': componentName
+                            ,'propertyName': propertyName
+                        }
+                        ,
+                        'propertyValue': values
+                    }      
+                propertyValues.append(propertyValue)                            
+
+        # monta retorno        
+
+        retorno = {
+            'propertyValues' :propertyValues
+            ,'nextToken': None
+        }      
+
+        return retorno    
+
 @dataclass
 class CVeiculo:
     id: int

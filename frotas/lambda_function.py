@@ -5,39 +5,30 @@ from decimal import Decimal
 
 def lambda_handler(event, context):
     try:
-
-        cfS3 = CFS3.CS3()
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
-
-        try:
-            eventDic = Dic2Json2Dic(str(event)) 
-            # print('passou 1')
-        except Exception as e:
-            # print('passou 2')
-            eventDic = event
-
-        # eventDic = Dic2Json2Dic(str(event)) 
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=str(eventDic))
-
-        # pesquisa veiculo por placa
-
-        cVeiculos = CFVeiculos.CVeiculos()
-        # retorno_ = cVeiculos.PesquisarPorRequestLambdaAthena(eventDic) 
-        retorno_ = cVeiculos.PesquisarPorRequestLambdaDynamodb(eventDic) 
-
-        # retorno =  json.dumps(retorno_, indent=2) 
-        retorno =  json.dumps(retorno_, default=decimal_serializer) 
-        retorno = retorno.encode('utf-8')        
-
-        #
-
-        print('===retorno===')
-        print(retorno)
         
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
+        functionName =  context.function_name
+        startTime = event['startTime']
+
+        metodos = ['GetPropertyValueHistory','GetPropertyValue',]
+        metodo = metodos[0]
+
+        if startTime == None:
+            metodo = metodos[1]
+
+        print('metodo=', metodo)
+
+        match metodo:
+            case 'GetPropertyValueHistory':
+                entidade = CFVeiculos.CVeiculos()
+                retorno = entidade.lambda_handler_value_history(event, context)
+
+        match metodo:
+            case 'GetPropertyValue':
+                entidade = CFVeiculos.CVeiculos()
+                retorno = entidade.lambda_handler_value(event, context)                
 
         return retorno
+    
     except Exception as e:
         print('== erro ==')
         print (e)
