@@ -190,6 +190,83 @@ class CComponentType:
 
         return retorno
 
+    def GerarProperty(self, componentTypeId, lambdaArn,  propriedades, gerarApenasExternal=False):
+
+        propertyDefinitions = {}
+
+        for propriedade in propriedades:
+
+            if gerarApenasExternal and not propriedade['isExternalId_']:
+                continue
+            
+            propertyDefinition =    {
+                'dataType' : {
+                    'type': propriedade['type_']
+                }
+                ,'isExternalId':propriedade['isExternalId_']
+                ,'isStoredExternally': propriedade['isStoredExternally_']
+                ,'isTimeSeries': propriedade['isTimeSeries_']
+                ,'isRequiredInEntity': propriedade['isRequiredInEntity_']
+
+            }
+            
+            propertyDefinitions[
+                propriedade['propertyName'] 
+
+            ] =  propertyDefinition
+
+        retorno = {
+            'componentTypeId':componentTypeId
+            ,'functions':{
+                'dataReader':{
+                    'implementedBy':{
+                        'lambda':{
+                            'arn' : lambdaArn
+                        }
+
+                    }
+
+                }
+
+            }
+            ,'propertyDefinitions':propertyDefinitions
+
+            
+        }
+
+        # functions =  {
+        #         'dataReader':{
+        #             'implementedBy':{
+        #                 'lambda':{
+        #                     'arn' : lambdaArn
+        #                 }
+
+        #             }
+
+        #         }
+
+        #     }
+
+        functions =  {
+                'attributePropertyValueReaderByEntity':{
+                    'scope':'ENTITY'
+                   ,'implementedBy':{
+                        # 'isNative':False
+                        'lambda':{
+                            'arn' : lambdaArn
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+        retorno = propertyDefinitions, functions
+
+        return retorno
+
     def DePara(self, de):
         if de == 'STRING' :
             return 'stringValue'
