@@ -190,7 +190,7 @@ class CComponentType:
 
         return retorno
 
-    def GerarProperty(self, componentTypeId, lambdaArn,  propriedades, gerarApenasExternal=False):
+    def GerarGetPropertVvalue(self, componentTypeId, lambdaArn,  propriedades, gerarApenasExternal=False):
 
         propertyDefinitions = {}
 

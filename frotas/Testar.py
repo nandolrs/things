@@ -103,6 +103,22 @@ class CVeiculosTestar:
 
         print(retornoComponentType)
 
+
+    def CFComponentTypeGetPropertyValueIncluirPorDicionario(self, dicionario):
+
+        propertyDefinitions, functions = self.CFComponentTypeGetPropertyValueGerarPorDicionario(dicionario)
+                                              
+        cComponentType = CFIotTwinMaker.CComponentType()
+
+        retornoComponentType = cComponentType.Incluir(
+            workspaceId             = WORK_SPACE_ID
+            ,componentTypeId        = COMPONENT_TYPE_ID
+            ,functions              = functions
+            ,propertyDefinitions    = propertyDefinitions
+        )
+
+        print(retornoComponentType)
+
     def CFComponentGerar():
 
         cComponent = CFIotTwinMaker.CComponent()
@@ -177,7 +193,7 @@ class CVeiculosTestar:
 
         cComponentType = CFIotTwinMaker.CComponentType()
 
-        propertyDefinitions, functions = cComponentType.Gerar(
+        propertyDefinitions, functions = cComponentType.GerarGetPropertVvalue(
             componentTypeId = COMPONENT_TYPE_ID
             
             ,lambdaArn      = AWS_LAMBDA
@@ -364,13 +380,13 @@ class CVeiculosTestar:
 ### testar
 
 WORK_SPACE_ID = 'CmjWorkspace'
-ENTITY_NAME = 'MotorDC-entidade'
-COMPONENT_TYPE_ID = 'com.cmj.frota.connector'  #  'com.cmj.athena.connector' ,  'com.cmj.timeseries-connector'
+ENTITY_NAME = 'MotorDC-entidade-get-value' # 'MotorDC-entidade'    'MotorDC-entidade-get-value'
+COMPONENT_TYPE_ID = 'com.cmj.frota-get-value.connector'  #  'com.cmj.frota.connector' 'com.cmj.athena.connector' 
 AWS_LAMBDA = 'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'              
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 15 # 9, 12
+caso = 11 # 9, 12
 
 if caso == 1:
 
@@ -389,7 +405,7 @@ elif caso == 4:
     dicionario  = CFVeiculos.CVeiculo()
     cVeiculosTestar.CFComponentTypeGerarPorDicionario(dicionario)
 
-elif caso == 44:
+elif caso == 40:
 
     dicionario  = CFVeiculos.CVeiculo()
     cVeiculosTestar.CFComponentTypeGetPropertyValueGerarPorDicionario(dicionario)
@@ -415,6 +431,14 @@ elif caso == 9:
     dicionario  = CFVeiculos.CVeiculo()
 
     cVeiculosTestar.CFComponentTypeIncluirPorDicionario(dicionario)    
+
+
+elif caso == 90:
+
+    dicionario  = CFVeiculos.CVeiculo()
+
+    cVeiculosTestar.CFComponentTypeGetPropertyValueIncluirPorDicionario(dicionario)    
+
 
 elif caso == 10:
 

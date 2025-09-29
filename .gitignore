@@ -1,3 +1,4 @@
 apiRest/env-apirest
 frotas/__pycache__
 frotas/lambda_function.zip
+frotas/.venv
