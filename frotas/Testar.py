@@ -15,7 +15,7 @@ class CVeiculosTestar:
         cVeiculos = CFVeiculos.CVeiculos()
         retorno  = cVeiculos.PropriedadesBuscarPorDicionario(dicionario=cVeiculo)
 
-        retorno =  cVeiculos.PropriedadesExternalSetar(
+        retorno =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=retorno
             ,nomes=['id','placa','modelo','velocidademotor','unidade','time']
         )
@@ -29,7 +29,12 @@ class CVeiculosTestar:
 
         retorno  = cVeiculos.PropriedadesBuscar()    
 
-        retorno =  cVeiculos.PropriedadesExternalSetar(propriedades=retorno, nomes=['placa'])
+        retorno =  cVeiculos.PropriedadesTimeSeriesSetar( #  PropriedadesExternalSetar !!!
+            propriedades=retorno
+            # , nomes=['placa']
+            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+        )
+
 
         print('=== enternal')
         print(json.dumps(retorno))
@@ -63,9 +68,9 @@ class CVeiculosTestar:
 
         propriedades_ = cVeiculos.PropriedadesBuscar()    
 
-        propriedades =  cVeiculos.PropriedadesExternalSetar(
+        propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
             propriedades=propriedades_
-            , nomes=['id','placa','modelo','velocidademotor','unidade','time']
+            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
         #
@@ -156,9 +161,9 @@ class CVeiculosTestar:
 
         propriedades_ = cVeiculos.PropriedadesBuscarPorDicionario(dicionario)    
 
-        propriedades =  cVeiculos.PropriedadesExternalSetar(
+        propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=propriedades_
-            ,nomes=['id','placa','modelo','velocidademotor','unidade','time','temperatura']
+            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
         #
@@ -172,7 +177,10 @@ class CVeiculosTestar:
             ,propriedades   = propriedades
         )
 
-        print(json.dumps(propertyDefinitions))
+        print('propertyDefinitions=',json.dumps(propertyDefinitions))
+
+        print('functions=',json.dumps(functions))
+
 
         return propertyDefinitions,  functions
 
@@ -184,23 +192,26 @@ class CVeiculosTestar:
 
         propriedades_ = cVeiculos.PropriedadesBuscarPorDicionario(dicionario)    
 
-        propriedades =  cVeiculos.PropriedadesExternalSetar(
+        propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=propriedades_
-            ,nomes=['id','placa','modelo','velocidademotor','unidade','time','temperatura']
+            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
         #
 
         cComponentType = CFIotTwinMaker.CComponentType()
 
-        propertyDefinitions, functions = cComponentType.GerarGetPropertVvalue(
+        propertyDefinitions, functions = cComponentType.GerarGetPropertValue(
             componentTypeId = COMPONENT_TYPE_ID
             
             ,lambdaArn      = AWS_LAMBDA
             ,propriedades   = propriedades
         )
 
-        print(json.dumps(propertyDefinitions))
+        print('propertyDefinitions=',json.dumps(propertyDefinitions))
+
+        print('functions=',json.dumps(functions))
+
 
         return propertyDefinitions,  functions
 
@@ -221,7 +232,11 @@ class CVeiculosTestar:
 
         propriedades = cVeiculos.PropriedadesBuscar()
 
-        propriedades =  cVeiculos.PropriedadesExternalSetar(propriedades=propriedades, nomes=['placa'])
+        propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
+            propriedades=propriedades
+            # , nomes=['placa']
+            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+        )
 
         # propriedades do componente
 
@@ -364,6 +379,8 @@ class CVeiculosTestar:
             ,entityId=id
         )
 
+        print(json.dumps(entidades))
+
     def CFAthenaConsultarMetadadosTabela():
 
         cAthena = CFAthena.CAThena()
@@ -379,14 +396,48 @@ class CVeiculosTestar:
 
 ### testar
 
-WORK_SPACE_ID = 'CmjWorkspace'
-ENTITY_NAME = 'MotorDC-entidade-get-value' # 'MotorDC-entidade'    'MotorDC-entidade-get-value'
-COMPONENT_TYPE_ID = 'com.cmj.frota-get-value.connector'  #  'com.cmj.frota.connector' 'com.cmj.athena.connector' 
-AWS_LAMBDA = 'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'              
+# 'MotorDC-entidade'    'MotorDC-entidade-get-value'
+# 'com.cmj.frota.connector'   'com.cmj.frota-get-value.connector' 
+
+PARAMETROS =[ 
+
+    {
+        'WORK_SPACE_ID'     :'CmjWorkspace'
+        ,'ENTITY_NAME'      :'MotorDC-entidade'
+        ,'COMPONENT_TYPE_ID':'com.cmj.frota.connector'
+        ,'AWS_LAMBDA'       :'arn:aws:lambda:us-east-1:105254198021:function:cmj-get-property-value-history'
+    }
+    ,    
+    {
+        'WORK_SPACE_ID'     :'CmjWorkspace'
+        ,'ENTITY_NAME'      :'MotorDC-entidade-v1r1'
+        ,'COMPONENT_TYPE_ID':'com.cmj.frota.connector-v1r1'
+        ,'AWS_LAMBDA'       :'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'
+    }    
+    ,
+    {
+        'WORK_SPACE_ID'     :'CmjWorkspace'
+        ,'ENTITY_NAME'      :'MotorDC-entidade-get-value'
+        ,'COMPONENT_TYPE_ID':'com.cmj.frota-get-value.connector'
+        ,'AWS_LAMBDA'       :'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'
+    }
+
+
+]
+
+# WORK_SPACE_ID = 'CmjWorkspace'
+# ENTITY_NAME = 'MotorDC-entidade-get-value' # 'MotorDC-entidade'    'MotorDC-entidade-get-value'
+# COMPONENT_TYPE_ID = 'com.cmj.frota-get-value.connector'  #  'com.cmj.frota.connector'   'com.cmj.frota-get-value.connector' 
+# AWS_LAMBDA = 'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'              
+
+WORK_SPACE_ID       = PARAMETROS[0]['WORK_SPACE_ID']
+ENTITY_NAME         = PARAMETROS[0]['ENTITY_NAME']
+COMPONENT_TYPE_ID   = PARAMETROS[0]['COMPONENT_TYPE_ID']
+AWS_LAMBDA          = PARAMETROS[0]['AWS_LAMBDA']            
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 11 # 9, 12
+caso = 12 # inclui= [1,  9, 12 ]; exclui= [10]
 
 if caso == 1:
 
@@ -433,11 +484,11 @@ elif caso == 9:
     cVeiculosTestar.CFComponentTypeIncluirPorDicionario(dicionario)    
 
 
-elif caso == 90:
+# elif caso == 90:
 
-    dicionario  = CFVeiculos.CVeiculo()
+#     dicionario  = CFVeiculos.CVeiculo()
 
-    cVeiculosTestar.CFComponentTypeGetPropertyValueIncluirPorDicionario(dicionario)    
+#     cVeiculosTestar.CFComponentTypeGetPropertyValueIncluirPorDicionario(dicionario)    
 
 
 elif caso == 10:

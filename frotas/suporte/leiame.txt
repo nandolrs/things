@@ -23,35 +23,11 @@ aws iottwinmaker get-property-value-history \
 
 aws iottwinmaker list-entities --region us-east-1 --workspace-id VehicleFleetWorkspace1 > saida.txt
 
-# entidade = "MotorDC-entidade"
+# entidade = "MotorDC-entidade-v1r1" ========================
 
-aws iottwinmaker get-property-value --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "9f06752a-0c7d-43f1-a5ad-f69300c2495f"      --component-name "ABC1969A"     --selected-properties "time" "placa" "velocidademotor" "temperatura"      > saida-get-property-value.txt
+aws iottwinmaker get-property-value --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "1fcd67a1-ebe7-4962-8acb-c50bb009c24a"      --component-name "ABC1969A"     --selected-properties  "velocidademotoratual"    > saida-get-property-value.txt
 
 ### MotorDC-entidade
 
-aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "9f06752a-0c7d-43f1-a5ad-f69300c2495f"      --component-name "ABC1969A"     --selected-properties  "time" "placa" "velocidademotor" "temperatura"    --start-time "2025-09-23T00:00:00.000Z"     --end-time "2025-09-23T00:59:59.999Z" > get-property-value-history.json
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "1fcd67a1-ebe7-4962-8acb-c50bb009c24a"      --component-name "ABC1969A"     --selected-properties  "time" "placa" "velocidademotor" "temperatura"    --start-time "2025-09-29T00:00:00.000Z"     --end-time "2025-09-29T00:59:59.999Z" > saida-get-property-value-history.json
 
-aws iottwinmaker get-property-value-history --region us-east-1  --cli-input-json file://D:\nandolrs\projetos\things\frotas\aws-cli-get-property-value-history.json
-
-aws iottwinmaker get-property-value-history --region us-east-1  --cli-input-json '{
-    "workspaceId": "VehicleFleetWorkspace1",
-    "entityId": "a2bbbef4-6180-4e8f-ada4-9fb235ed73aa",
-    "componentName": "MotorDC-componente-v1r1",
-    "selectedProperties": [
-        "id","placa"
-    ]
-    ,
-    "propertyFilters": [
-        {
-            "propertyName": "placa",
-            "operator": "EQ",
-            "value": {
-                "stringValue": "ABC1969A"
-            }
-        }
-    ]
-    ,
-    "startDateTime": "2023-01-01T00:00:00Z",
-    "endDateTime": "2023-01-02T00:00:00Z"
-}
-'

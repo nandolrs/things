@@ -94,7 +94,6 @@ class CComponent:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             raise   
 
-
 class CComponentResponse:
     def __init__(self):
         self.cliente = boto3.client('iottwinmaker',region_name='us-east-1')
@@ -153,24 +152,22 @@ class CComponentType:
 
             ] =  propertyDefinition
 
-        retorno = {
-            'componentTypeId':componentTypeId
-            ,'functions':{
-                'dataReader':{
-                    'implementedBy':{
-                        'lambda':{
-                            'arn' : lambdaArn
-                        }
+        # retorno = {
+        #     'componentTypeId':componentTypeId
+        #     ,'functions':{
+        #         'dataReader':{
+        #             'implementedBy':{
+        #                 'lambda':{
+        #                     'arn' : lambdaArn
+        #                 }
 
-                    }
+        #             }
 
-                }
+        #         }
 
-            }
-            ,'propertyDefinitions':propertyDefinitions
-
-            
-        }
+        #     }
+        #     ,'propertyDefinitions':propertyDefinitions            
+        # }
 
         functions =  {
                 'dataReader':{
@@ -185,12 +182,27 @@ class CComponentType:
 
             }
         
+        #
+        
+        cConnector = CConnector()
+        functions1 =  cConnector.ObterChaveLambdaFunction(tipo=CConnector.TIPO.DATA_READER, lambdaArn=lambdaArn)     
+        functions2 =  cConnector.ObterChaveLambdaFunction(tipo=CConnector.TIPO.ATTRIBUTE_PROPERTY_VALUE_READER_BY_ENTITY, lambdaArn=lambdaArn)     
 
+        functions_   = {}
+        funcoes = [{'nome':'attributePropertyValueReaderByEntity', 'valor':functions1}
+                   ,{'nome':'dataReader','valor':functions2}
+        ]
+        for funcao in funcoes:
+            functions_[funcao['nome']] = funcao['valor']
+
+
+        functions = functions_
+        #
         retorno = propertyDefinitions, functions
 
         return retorno
 
-    def GerarGetPropertVvalue(self, componentTypeId, lambdaArn,  propriedades, gerarApenasExternal=False):
+    def GerarGetPropertValue(self, componentTypeId, lambdaArn,  propriedades, gerarApenasExternal=False):
 
         propertyDefinitions = {}
 
@@ -215,24 +227,22 @@ class CComponentType:
 
             ] =  propertyDefinition
 
-        retorno = {
-            'componentTypeId':componentTypeId
-            ,'functions':{
-                'dataReader':{
-                    'implementedBy':{
-                        'lambda':{
-                            'arn' : lambdaArn
-                        }
+        # retorno = {
+        #     'componentTypeId':componentTypeId
+        #     ,'functions':{
+        #         'dataReader':{
+        #             'implementedBy':{
+        #                 'lambda':{
+        #                     'arn' : lambdaArn
+        #                 }
 
-                    }
+        #             }
 
-                }
+        #         }
 
-            }
-            ,'propertyDefinitions':propertyDefinitions
-
-            
-        }
+        #     }
+        #     ,'propertyDefinitions':propertyDefinitions            
+        # }
 
         # functions =  {
         #         'dataReader':{
@@ -248,20 +258,22 @@ class CComponentType:
         #     }
 
         functions =  {
-                'attributePropertyValueReaderByEntity':{
-                    'scope':'ENTITY'
-                   ,'implementedBy':{
-                        # 'isNative':False
-                        'lambda':{
-                            'arn' : lambdaArn
-                        }
-
+            'attributePropertyValueReaderByEntity':{
+                'scope':'ENTITY'
+                ,'implementedBy':{
+                    'isNative':False
+                    ,'lambda':{
+                        'arn' : lambdaArn
                     }
 
                 }
 
             }
 
+        }
+
+        cConnector = CConnector()
+        functions =  cConnector.ObterChaveLambdaFunction(tipo=CConnector.TIPO.ATTRIBUTE_PROPERTY_VALUE_READER_BY_ENTITY, lambdaArn=lambdaArn)     
 
         retorno = propertyDefinitions, functions
 
@@ -345,3 +357,69 @@ class CComponentType:
         except Exception as e:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             raise          
+
+class CConnector:
+
+    class TIPO:
+        DATA_READER = 'DATA_READER'
+        ATTRIBUTE_PROPERTY_VALUE_READER_BY_ENTITY = 'ATTRIBUTE_PROPERTY_VALUE_READER_BY_ENTITY'
+
+    
+    def __init__(self):
+        None
+
+    def ObterChaveLambdaFunction(self, tipo: TIPO, lambdaArn):
+        if tipo == self.TIPO.ATTRIBUTE_PROPERTY_VALUE_READER_BY_ENTITY :
+
+            functions =  {
+                'attributePropertyValueReaderByEntity':{
+                    'scope':'ENTITY'
+                    ,'implementedBy':{
+                        'isNative':False
+                        ,'lambda':{
+                            'arn' : lambdaArn
+                        }
+
+                    }
+
+                }
+
+            }
+
+            functions =                  {
+                    'scope':'ENTITY'
+                    ,'implementedBy':{
+                        'isNative':False
+                        ,'lambda':{
+                            'arn' : lambdaArn
+                        }
+
+                    }
+
+                }
+
+                     
+
+            return functions
+            
+        elif tipo == self.TIPO.DATA_READER :
+
+            functions =  {
+                'dataReader':{
+                    'implementedBy':{
+                        'lambda':{
+                            'arn' : lambdaArn
+                        }
+                    }
+                }
+            }
+
+            functions =  {
+                'implementedBy':{
+                    'lambda':{
+                        'arn' : lambdaArn
+                    }
+                }
+            }
+                       
+            return functions

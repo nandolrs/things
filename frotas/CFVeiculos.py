@@ -56,6 +56,9 @@ getcontext().prec = 6
 # ]    
 
 class CVeiculos:
+    def __init__(self, startTime=None, endTime=None):
+        self.startTime = startTime
+        self.endTime =  endTime
 
     def decimal_serializer(self,obj):
         if isinstance(obj, Decimal):
@@ -83,30 +86,13 @@ class CVeiculos:
 
         return eventDic    
 
-    def lambda_handler_value_history(self,event, context):
+    def lambda_handler_value_history(self, eventDic , context): #event
         try:
 
-            print('context.function_name=',context.function_name)
             print('lambda_handler_value_history')
-
-            cfS3 = CFS3.CS3()
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
-
-            try:
-                eventDic = self.Dic2Json2Dic(str(event)) 
-                # print('passou 1')
-            except Exception as e:
-                # print('passou 2')
-                eventDic = event
-
-            # eventDic = Dic2Json2Dic(str(event)) 
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=str(eventDic))
 
             # pesquisa veiculo por placa
 
-            # cVeiculos = self.CVeiculos()
-            # retorno_ = cVeiculos.PesquisarPorRequestLambdaAthena(eventDic) 
             retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
 
             retorno_ = self.RetornarGetPropertyValueHistory(
@@ -117,17 +103,9 @@ class CVeiculos:
                 , componentName         = eventDic['componentName']           
             )
 
-            # retorno =  json.dumps(retorno_, indent=2) 
             retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
             retorno = retorno.encode('utf-8')        
-
-            #
-
-            print('===retorno===')
-            print(retorno)
             
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
-
             return retorno
         except Exception as e:
             print('== erro ==')
@@ -135,30 +113,15 @@ class CVeiculos:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             retorno = {'retorno': 'falha'}    
 
-    def lambda_handler_value(self,event, context):
+    def lambda_handler_value(self,eventDic, context):
         try:
-            print('context.function_name=',context.function_name)
             print('lambda_handler_value')
-
-            cfS3 = CFS3.CS3()
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
-
-            try:
-                eventDic = self.Dic2Json2Dic(str(event)) 
-                # print('passou 1')
-            except Exception as e:
-                # print('passou 2')
-                eventDic = event
-
-            # eventDic = Dic2Json2Dic(str(event)) 
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=str(eventDic))
 
             # pesquisa veiculo por placa
 
-            # cVeiculos = self.CVeiculos()
-            # retorno_ = cVeiculos.PesquisarPorRequestLambdaAthena(eventDic) 
             retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
+
+            print('retorno_=', retorno_)
 
             retorno_ = self.RetornarGetPropertyValue(
                 retornoPesquisa       = retorno_
@@ -168,17 +131,11 @@ class CVeiculos:
                 , componentName         = eventDic['componentName']           
             )
 
-            # retorno =  json.dumps(retorno_, indent=2) 
             retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
             retorno = retorno.encode('utf-8')        
 
             #
-
-            print('===retorno===')
-            print(retorno)
             
-            cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/athena-retorno.json', contentBody=retorno)
-
             return retorno
         except Exception as e:
             print('== erro ==')
@@ -313,20 +270,32 @@ class CVeiculos:
 
     def PropriedadesExternalSetar(self, propriedades, nomes):
 
+        # propriedades[i]['isExternalId_'] = True
+        # propriedades[i]['isRequiredInEntity_'] = True
+
+        for nome in nomes:
+            i = -1
+            for propriedade in propriedades:
+                i = i+1
+                if i == 0:
+                    if propriedade['propertyName'] == nome:
+                        propriedades[i]['isStoredExternally_'] = True
+    
+    def PropriedadesTimeSeriesSetar(self, propriedades, nomes):
+
         for nome in nomes:
             i = -1
             for propriedade in propriedades:
                 i = i+1
                 if propriedade['propertyName'] == nome:
                     propriedades[i]['isTimeSeries_'] = True
-                    propriedades[i]['isStoredExternally_'] = True
-                    # propriedades[i]['isExternalId_'] = True
-                    # propriedades[i]['isRequiredInEntity_'] = True
-
-                    
+                    # propriedades[i]['isExternalId_'] = False
+                propriedades[i]['isStoredExternally_'] = True
 
 
-        return propriedades
+
+
+        return propriedades    
             
     def VeiculosGerar(self,placas,anos, meses, dias, horas, minutos, velocidadeInicial, velocidadeIncrementoPercentual):  
 
@@ -374,6 +343,7 @@ class CVeiculos:
                                     ,'placa':placa_
                                     ,'modelo':modelo_
                                     ,'velocidademotor':velocidademotor_
+                                    ,'velocidademotoratual':velocidademotor_
                                     ,'unidade':unidade_
                                     ,'time':time_
                                     ,'temperatura' : temperatura_
@@ -384,6 +354,7 @@ class CVeiculos:
                                 veiculo_.placa = placa_
                                 veiculo_.modelo = modelo_
                                 veiculo_.velocidademotor = velocidademotor_
+                                veiculo_.velocidademotoratual = velocidademotor_
                                 veiculo_.unidade = unidade_
                                 veiculo_.time = time_
                                 veiculo_.temperatura = temperatura_
@@ -781,8 +752,11 @@ class CVeiculos:
 
             # pesquisar por placa
 
-            startTime =  request['startTime']
-            endTime =  request['endTime']
+            # startTime =  request['startTime']
+            # endTime =  request['endTime']
+
+            startTime = self.startTime 
+            endTime =  self.endTime
 
             retornoPesquisa = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
 
@@ -866,6 +840,8 @@ class CVeiculos:
 
         linhas =  retornoPesquisa['Items']
 
+        # montar retorno
+
         propertyValues = []
 
         if len(linhas) >= 1:
@@ -883,15 +859,11 @@ class CVeiculos:
 
                 for linha in linhas: 
 
-                    print('==linha["time"]===')                   
-                    print(linha['time'])
 
                     valor = linha[propertyName]
                     timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
                     # timestamp = linha['time'] 
 
-                    print('==linha[timestamp]===')                   
-                    print(timestamp)
 
                     #  busca e ajusta o tipo
 
@@ -904,9 +876,6 @@ class CVeiculos:
                                 type : valor # 'stringValue' : valor
                         }
                     }
-
-                    print('===value===')
-                    print(value)
 
                     values.append(value)
                         
@@ -937,20 +906,9 @@ class CVeiculos:
 
         linhas =  retornoPesquisa['Items']
 
-        propertyValues = []
+        # montar retorno
 
-        # monta retorno        
-
-        retorno = {
-            'propertyValues' :propertyValues
-            ,'nextToken': None
-        }      
-
-        return retorno
-    
-        #        
-
-        print('len(linhas) =',len(linhas) )
+        propertyValues = {}
 
         if len(linhas) >= 1:
 
@@ -967,15 +925,13 @@ class CVeiculos:
 
                 for linha in linhas: 
 
-                    print('==linha["time"]===')                   
-                    print(linha['time'])
+
 
                     valor = linha[propertyName]
                     timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
                     # timestamp = linha['time'] 
 
-                    print('==linha[timestamp]===')                   
-                    print(timestamp)
+
 
                     #  busca e ajusta o tipo
 
@@ -993,28 +949,30 @@ class CVeiculos:
                                 type : valor # 'stringValue' : valor
                     }                    
 
-                    print('===value===')
-                    print(value)
-
-                    values.append(value)
+                    # values.append(value)
 
                     break
                         
                 propertyValue = {
-                        'propertyReference' :{
-                            'entityId': entityId
-                            ,'componentName': componentName
-                            ,'propertyName': propertyName
-                        }
-                        ,
-                        'propertyValue': values
-                    }      
-                propertyValues.append(propertyValue)                            
+                    propertyName : 
+                        { 
+                                'propertyReference' :{
+                                    'entityId': entityId
+                                    ,'componentName': componentName
+                                    ,'propertyName': propertyName
+                                }
+                                ,
+                                'propertyValue': value# values
+                        }                          
+                }
+                
+
+                # propertyValues.append(propertyValue)                            
 
         # monta retorno        
 
         retorno = {
-            'propertyValues' :propertyValues
+            'propertyValues' :propertyValue
             ,'nextToken': None
         }      
 
@@ -1026,6 +984,7 @@ class CVeiculo:
     placa:str
     modelo:str
     velocidademotor:Decimal
+    velocidademotoratual:Decimal
     unidade:str
     time:datetime
     temperatura: Decimal

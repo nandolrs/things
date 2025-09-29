@@ -5,28 +5,45 @@ from decimal import Decimal
 
 def lambda_handler(event, context):
     try:
+
+        cfS3 = CFS3.CS3()
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
         
-        functionName =  context.function_name
-        startTime = event['startTime']
+        function_name = context.function_name
+        print('function_name=', function_name)
 
-        metodos = ['GetPropertyValueHistory','GetPropertyValue',]
-        metodo = metodos[0]
+        #
 
-        if startTime == None:
-            metodo = metodos[1]
+        try:
+            eventDic = entidade.Dic2Json2Dic(str(event)) 
+            # print('passou 1')
+        except Exception as e:
+            # print('passou 2')
+            eventDic = event
 
-        print('metodo=', metodo)
+        # 
 
-        match metodo:
-            case 'GetPropertyValueHistory':
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=str(eventDic))
+
+        match function_name:
+            case 'cmj-get-property-value-history':
+
+                startTime =  eventDic['startTime'] # utilizado na pesquisa
+                endTime =  eventDic['endTime']     # utilizado na pesquisa      
+
+                entidade = CFVeiculos.CVeiculos(startTime=startTime, endTime=endTime)
+
+                retorno = entidade.lambda_handler_value_history(eventDic, context)
+
+            case 'cmj-get-property-value':
+
                 entidade = CFVeiculos.CVeiculos()
-                retorno = entidade.lambda_handler_value_history(event, context)
 
-        match metodo:
-            case 'GetPropertyValue':
-                entidade = CFVeiculos.CVeiculos()
-                retorno = entidade.lambda_handler_value(event, context)                
+                retorno = entidade.lambda_handler_value(eventDic, context)                
 
+        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=retorno)
+        
         return retorno
     
     except Exception as e:
@@ -74,8 +91,6 @@ def Testar():
 
     # filedata = filedata.encode('utf-8')     
 
-    print('===')
-    print(filedata)   
 
     # eventDic = Dic2Json2Dic(filedata)
     eventDic = json.dumps(filedata)

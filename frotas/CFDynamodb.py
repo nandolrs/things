@@ -149,9 +149,13 @@ class CDynamodb:
 
     def PesquisarScan(self,tabela,condicao) :   
 
+        if condicao['startTime'] != None :
+            filterExpression_ =  Attr(condicao['chave']).eq(condicao['valor']) & Attr('time').between(condicao['startTime'],condicao['endTime'])
+        else:
+            filterExpression_ =  Attr(condicao['chave']).eq(condicao['valor']) 
+
         retorno = tabela.scan(
-            FilterExpression=Attr(condicao['chave']).eq(condicao['valor']) 
-            & Attr('time').between(condicao['startTime'],condicao['endTime'])
+            FilterExpression= filterExpression_
         )
 
         return retorno
