@@ -104,18 +104,7 @@ class CComponentResponse:
             componentName = request['componentName']
 
             return componentName
-
-            # properties =  request['properties']
-
-            # telemetryAssetId = properties['telemetryAssetId']
-
-            # value = telemetryAssetId['value']
-
-            # stringValue = value['stringValue']
-
-            # retorno = stringValue
-
-            # return retorno
+        
         except Exception as e:
             print('== erro ==')
             print (e)            
@@ -151,23 +140,6 @@ class CComponentType:
                 propriedade['propertyName'] 
 
             ] =  propertyDefinition
-
-        # retorno = {
-        #     'componentTypeId':componentTypeId
-        #     ,'functions':{
-        #         'dataReader':{
-        #             'implementedBy':{
-        #                 'lambda':{
-        #                     'arn' : lambdaArn
-        #                 }
-
-        #             }
-
-        #         }
-
-        #     }
-        #     ,'propertyDefinitions':propertyDefinitions            
-        # }
 
         functions =  {
                 'dataReader':{
@@ -227,36 +199,6 @@ class CComponentType:
 
             ] =  propertyDefinition
 
-        # retorno = {
-        #     'componentTypeId':componentTypeId
-        #     ,'functions':{
-        #         'dataReader':{
-        #             'implementedBy':{
-        #                 'lambda':{
-        #                     'arn' : lambdaArn
-        #                 }
-
-        #             }
-
-        #         }
-
-        #     }
-        #     ,'propertyDefinitions':propertyDefinitions            
-        # }
-
-        # functions =  {
-        #         'dataReader':{
-        #             'implementedBy':{
-        #                 'lambda':{
-        #                     'arn' : lambdaArn
-        #                 }
-
-        #             }
-
-        #         }
-
-        #     }
-
         functions =  {
             'attributePropertyValueReaderByEntity':{
                 'scope':'ENTITY'
@@ -301,29 +243,12 @@ class CComponentType:
                 'value':{
                     depara_ : valor_
                 }
-                # ,
-
-                # 'definition':{
-                #     'dataType' : {
-                #         'type': propriedade['type_']
-                #     }
-                #     ,'isExternalId':propriedade['isExternalId_']
-                #     ,'isStoredExternally': propriedade['isStoredExternally_']
-                #     ,'isTimeSeries': propriedade['isTimeSeries_']
-                #     ,'isRequiredInEntity': propriedade['isRequiredInEntity_']                    
-
-                # }
-
             }
             
             propertyDefinitions[
                 propriedade['propertyName'] 
 
             ] =  propertyDefinition
-
-        # retorno = {
-        #     'properties':propertyDefinitions            
-        # }
 
         retorno = propertyDefinitions
 
@@ -334,7 +259,6 @@ class CComponentType:
             retorno = self.cliente.create_component_type(
                  workspaceId        =workspaceId
                 ,componentTypeId    = componentTypeId
-                # , extendsFrom       = extendsFrom
                 ,functions          = functions
                 ,propertyDefinitions=propertyDefinitions
             )

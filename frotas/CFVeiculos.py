@@ -11,49 +11,9 @@ import CFAthena
 import CFIotTwinMaker
 import CFDynamodb
 
-# import CFVeiculos
-# import json
-# from decimal import Decimal
-
 getcontext().prec = 6    
 
 
-# retorno = [
-#     {
-#     'propertyName' : 'telemetryAssetType'
-#     ,'type_' : 'STRING'
-#     ,'isExternalId_' : False # true, se isRequiredInEntity_
-#     ,'isStoredExternally_' : False
-#     ,'isTimeSeries_' : False
-#     ,'isRequiredInEntity_' : False # true, se isExternalId_
-#     ,'value_' : 'ABC1969A'
-
-
-#     }
-#     ,
-#     {
-#     'propertyName' : 'telemetryAssetId'
-#     ,'type_' : 'STRING'
-#     ,'isExternalId_' : True # true, se isRequiredInEntity_
-#     ,'isStoredExternally_' : False
-#     ,'isTimeSeries_' : False
-#     ,'isRequiredInEntity_' : True # true, se isExternalId_
-#     ,'value_' : 'ABC1969A' #  ABDC
-#     }            
-
-#     ,
-#     {
-#     'propertyName' : 'placa'
-#     ,'type_' : 'STRING'
-#     ,'isExternalId_' : False # true, se isRequiredInEntity_
-#     ,'isStoredExternally_' : True
-#     ,'isTimeSeries_' : True
-#     ,'isRequiredInEntity_' : False # true, se isExternalId_
-#     ,'value_' : 'ABDC'
-#     }            
-
-
-# ]    
 
 class CVeiculos:
     def __init__(self, startTime=None, endTime=None):
@@ -208,15 +168,9 @@ class CVeiculos:
     
     def PropriedadesBuscarPorDicionario(self, dicionario): # python dic
 
-
         retorno = []
 
         fields_ = dicionario.__annotations__
-
-        # for field in fields_:
-        #     nome = field
-        #     tipo = fields_[field]
-        #     print ('nome=',nome,';tipo=',tipo)
 
         for propriedade in fields_:  
 
@@ -270,9 +224,6 @@ class CVeiculos:
 
     def PropriedadesExternalSetar(self, propriedades, nomes):
 
-        # propriedades[i]['isExternalId_'] = True
-        # propriedades[i]['isRequiredInEntity_'] = True
-
         for nome in nomes:
             i = -1
             for propriedade in propriedades:
@@ -289,18 +240,12 @@ class CVeiculos:
                 i = i+1
                 if propriedade['propertyName'] == nome:
                     propriedades[i]['isTimeSeries_'] = True
-                    # propriedades[i]['isExternalId_'] = False
                 propriedades[i]['isStoredExternally_'] = True
-
-
-
 
         return propriedades    
             
     def VeiculosGerar(self,placas,anos, meses, dias, horas, minutos, velocidadeInicial, velocidadeIncrementoPercentual):  
 
-
-        # time_ = time.time()
         agora = datetime.now()#.isoformat()
 
         anoAtual = agora.year
@@ -330,9 +275,7 @@ class CVeiculos:
                             for minuto in range(minutoAtual, 60,int(60/minutos)):
 
                                 time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto, second=segundoAtual)
-                                # time_ = datetime.now(timezone.utc) #   "2022-08-25T00:00:00Z"
                                 time_ = time_.isoformat(timespec='milliseconds') + 'Z'                
-                                # time_ = int(time_.timestamp())
 
                                 random_ = Decimal(str(random.random()))
                                 temperatura_ = Decimal(random_  * velocidademotor_)
@@ -361,11 +304,8 @@ class CVeiculos:
 
                                 velocidademotor_ = Decimal(str(velocidademotor_ )) *  Decimal(str(velocidadeIncrementoPercentual))
 
-                                # veiculos.append(veiculo)
                                 veiculo__ = asdict(veiculo_)
                                 veiculos.append(veiculo__)
-
-
 
         return veiculos
 
@@ -381,10 +321,7 @@ class CVeiculos:
 
         retorno =  json.dumps(veiculos)
 
-        return retorno
-
-        # with open('veiculos.json', 'w') as file:
-        #     json.dump(veiculos, file, indent=4)        
+        return retorno     
 
     def FlatGerar(self):
 
@@ -400,16 +337,11 @@ class CVeiculos:
 
             veiculos.append(veiculo_)
 
-        # retorno =  json.dumps(veiculos)
-
         retorno = "id,placa,modelo,velocidademotor,unidade,time\r\n"
         for veiculo in veiculos:
             retorno = retorno + veiculo + '\r\n'
 
-        return retorno
-
-        # with open('veiculos.json', 'w') as file:
-        #     json.dump(veiculos, file, indent=4)               
+        return retorno           
 
     def JsonDynamoGerar(self):
 
@@ -419,152 +351,6 @@ class CVeiculos:
         for veiculo in veiculos:
 
             cDynamodb.Incluir(nomeTabela='Frotas', entidade=veiculo) # veiculo
-
-    def PesquisarPorPlacaFake(self, placa):
-        retorno = {
-            "statusCode": 200,
-            "body": {
-                "UpdateCount": 0,
-                "ResultSet": {
-                    "Rows": [
-                        {
-                            "Data": [
-                                {
-                                    "VarCharValue": "id"
-                                },
-                                {
-                                    "VarCharValue": "placa"
-                                },
-                                {
-                                    "VarCharValue": "modelo"
-                                },
-                                {
-                                    "VarCharValue": "velocidademotor"
-                                },
-                                {
-                                    "VarCharValue": "unidade"
-                                },
-                                {
-                                    "VarCharValue": "time"
-                                }
-                            ]
-                        },
-                        {
-                            "Data": [
-                                {
-                                    "VarCharValue": "1969"
-                                },
-                                {
-                                    "VarCharValue": "ABC1969A"
-                                },
-                                {
-                                    "VarCharValue": "MODELO-1969"
-                                },
-                                {
-                                    "VarCharValue": "31690.1234"
-                                },
-                                {
-                                    "VarCharValue": "RPM"
-                                },
-                                {
-                                    "VarCharValue": "2025-09-17 13:18:34.091"
-                                }
-                            ]
-                        }
-                    ],
-                    "ResultSetMetadata": {
-                        "ColumnInfo": [
-                            {
-                                "CatalogName": "hive",
-                                "SchemaName": "",
-                                "TableName": "",
-                                "Name": "id",
-                                "Label": "id",
-                                "Type": "bigint",
-                                "Precision": 19,
-                                "Scale": 0,
-                                "Nullable": "UNKNOWN",
-                                "CaseSensitive": "false"
-                            },
-                            {
-                                "CatalogName": "hive",
-                                "SchemaName": "",
-                                "TableName": "",
-                                "Name": "placa",
-                                "Label": "placa",
-                                "Type": "varchar",
-                                "Precision": 2147483647,
-                                "Scale": 0,
-                                "Nullable": "UNKNOWN",
-                                "CaseSensitive": "true"
-                            },
-                            {
-                                "CatalogName": "hive",
-                                "SchemaName": "",
-                                "TableName": "",
-                                "Name": "modelo",
-                                "Label": "modelo",
-                                "Type": "varchar",
-                                "Precision": 2147483647,
-                                "Scale": 0,
-                                "Nullable": "UNKNOWN",
-                                "CaseSensitive": "true"
-                            },
-                            {
-                                "CatalogName": "hive",
-                                "SchemaName": "",
-                                "TableName": "",
-                                "Name": "velocidademotor",
-                                "Label": "velocidademotor",
-                                "Type": "double",
-                                "Precision": 17,
-                                "Scale": 0,
-                                "Nullable": "UNKNOWN",
-                                "CaseSensitive": "false"
-                            },
-                            {
-                                "CatalogName": "hive",
-                                "SchemaName": "",
-                                "TableName": "",
-                                "Name": "unidade",
-                                "Label": "unidade",
-                                "Type": "varchar",
-                                "Precision": 2147483647,
-                                "Scale": 0,
-                                "Nullable": "UNKNOWN",
-                                "CaseSensitive": "true"
-                            },
-                            {
-                                "CatalogName": "hive",
-                                "SchemaName": "",
-                                "TableName": "",
-                                "Name": "time",
-                                "Label": "time",
-                                "Type": "timestamp",
-                                "Precision": 3,
-                                "Scale": 0,
-                                "Nullable": "UNKNOWN",
-                                "CaseSensitive": "false"
-                            }
-                        ]
-                    }
-                },
-                "ResponseMetadata": {
-                    "RequestId": "652d232d-4dce-4967-bb6a-a03ff354ee61",
-                    "HTTPStatusCode": 200,
-                    "HTTPHeaders": {
-                        "date": "Fri, 19 Sep 2025 12:34:38 GMT",
-                        "content-type": "application/x-amz-json-1.1",
-                        "content-length": "2740",
-                        "connection": "keep-alive",
-                        "x-amzn-requestid": "652d232d-4dce-4967-bb6a-a03ff354ee61"
-                    },
-                    "RetryAttempts": 0
-                }
-            }
-        }
-
-        return retorno
         
     def PesquisarPorPlaca(self, placa):
 
@@ -630,15 +416,12 @@ class CVeiculos:
            propertyValues = []
            retorno = {
                 "propertyValues" :propertyValues
-                # ,'nextToken': None
             }
            
            return retorno
     
     def PesquisarPorRequestLambdaAthena(self,request):
-            
-            # return self.PesquisarPorRequestLambdaFake(request)
-          
+                      
             # dados da requisicao
 
             componentName = request['componentName']
@@ -655,8 +438,6 @@ class CVeiculos:
             request_ = request
 
             cComponentResponse = CFIotTwinMaker.CComponentResponse()
-
-            # placa = cComponentResponse.RequestExtrairNome(request = request_)   
 
             # pesquisar por placa
 
@@ -681,6 +462,7 @@ class CVeiculos:
                     propertyName = selectedProperty  
 
                     #busca os valores
+
                     values = []
 
                     i = -1
@@ -696,12 +478,13 @@ class CVeiculos:
 
                             type_ = properties[propertyName]['definition']['dataType']['type'] 
                             type = self.BuscarTipo(type_)
+
                             #
+
                             value = {
                                 'timestamp' : timestamp
-                                # 'time' : time                                
                                 ,'value' : {
-                                     type : valor # 'stringValue' : valor
+                                     type : valor 
                                 }
                             }
 
@@ -737,8 +520,6 @@ class CVeiculos:
             entityId = request['entityId']
                         
             selectedProperties = request['selectedProperties']
-            # if selectedProperties['time'] == None:
-            #     selectedProperties.append('time')
 
             properties =  request['properties']
 
@@ -748,12 +529,7 @@ class CVeiculos:
 
             cComponentResponse = CFIotTwinMaker.CComponentResponse()
 
-            # placa = cComponentResponse.RequestExtrairNome(request = request_)   
-
             # pesquisar por placa
-
-            # startTime =  request['startTime']
-            # endTime =  request['endTime']
 
             startTime = self.startTime 
             endTime =  self.endTime
@@ -761,76 +537,6 @@ class CVeiculos:
             retornoPesquisa = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
 
             return retornoPesquisa
-
-            # montar response
-
-            # status = retornoPesquisa['ResponseMetadata']['HTTPStatusCode']
-
-            # linhas =  retornoPesquisa['Items']
-
-            # propertyValues = []
-
-            # if len(linhas) >= 1:
-
-            #     timestamp = time.time()
-            #     # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
-            #     # time = time_.isoformat(timespec='milliseconds') + 'Z'                
-
-            #     for selectedProperty in selectedProperties:  
-
-            #         propertyName = selectedProperty  
-
-            #         #busca os valores
-            #         values = []
-
-            #         for linha in linhas: 
-
-            #             print('==linha["time"]===')                   
-            #             print(linha['time'])
-
-            #             valor = linha[propertyName]
-            #             timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
-            #             # timestamp = linha['time'] 
-
-            #             print('==linha[timestamp]===')                   
-            #             print(timestamp)
-
-            #             #  busca e ajusta o tipo
-
-            #             type_ = properties[propertyName]['definition']['dataType']['type'] 
-            #             type = self.BuscarTipo(type_)
-            #             #
-            #             value = {
-            #                 'timestamp' : timestamp
-            #                 ,'value' : {
-            #                         type : valor # 'stringValue' : valor
-            #                 }
-            #             }
-
-            #             print('===value===')
-            #             print(value)
-
-            #             values.append(value)
-                            
-            #         propertyValue = {
-            #                 'entityPropertyReference' :{
-            #                     'entityId': entityId
-            #                     ,'componentName': componentName
-            #                     ,'propertyName': propertyName
-            #                 }
-            #                 ,
-            #                 'values': values
-            #             }      
-            #         propertyValues.append(propertyValue)                            
-
-            # # monta retorno        
-
-            # retorno = {
-            #     'propertyValues' :propertyValues
-            #     ,'nextToken': None
-            # }      
-
-            # return retorno    
 
     def RetornarGetPropertyValueHistory(self, retornoPesquisa, selectedProperties, properties, entityId, componentName):
 
@@ -847,8 +553,6 @@ class CVeiculos:
         if len(linhas) >= 1:
 
             timestamp = time.time()
-            # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
-            # time = time_.isoformat(timespec='milliseconds') + 'Z'                
 
             for selectedProperty in selectedProperties:  
 
@@ -859,21 +563,20 @@ class CVeiculos:
 
                 for linha in linhas: 
 
-
                     valor = linha[propertyName]
                     timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
-                    # timestamp = linha['time'] 
-
 
                     #  busca e ajusta o tipo
 
                     type_ = properties[propertyName]['definition']['dataType']['type'] 
                     type = self.BuscarTipo(type_)
+
                     #
+
                     value = {
                         'timestamp' : timestamp
                         ,'value' : {
-                                type : valor # 'stringValue' : valor
+                                type : valor 
                         }
                     }
 
@@ -900,6 +603,7 @@ class CVeiculos:
         return retorno    
 
     def RetornarGetPropertyValue(self, retornoPesquisa, selectedProperties, properties, entityId, componentName):
+        
         # montar response
 
         status = retornoPesquisa['ResponseMetadata']['HTTPStatusCode']
@@ -913,43 +617,28 @@ class CVeiculos:
         if len(linhas) >= 1:
 
             timestamp = time.time()
-            # timestamp = timestamp.isoformat(timespec='milliseconds')# + 'Z'#  1646426606 #   time.time()
-            # time = time_.isoformat(timespec='milliseconds') + 'Z'                
 
             for selectedProperty in selectedProperties:  
 
                 propertyName = selectedProperty  
 
                 #busca os valores
+
                 values = []
 
                 for linha in linhas: 
 
-
-
                     valor = linha[propertyName]
                     timestamp = int(datetime.fromisoformat(linha['time']).timestamp())
-                    # timestamp = linha['time'] 
-
-
 
                     #  busca e ajusta o tipo
 
                     type_ = properties[propertyName]['definition']['dataType']['type'] 
                     type = self.BuscarTipo(type_)
-                    #
-                    # value = {
-                    #     'timestamp' : timestamp
-                    #     ,'value' : {
-                    #             type : valor # 'stringValue' : valor
-                    #     }
-                    # }
 
                     value = {
                                 type : valor # 'stringValue' : valor
                     }                    
-
-                    # values.append(value)
 
                     break
                         
@@ -966,9 +655,6 @@ class CVeiculos:
                         }                          
                 }
                 
-
-                # propertyValues.append(propertyValue)                            
-
         # monta retorno        
 
         retorno = {

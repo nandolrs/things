@@ -25,7 +25,7 @@ aws iottwinmaker list-entities --region us-east-1 --workspace-id VehicleFleetWor
 
 # entidade = "MotorDC-entidade-v1r1" ========================
 
-aws iottwinmaker get-property-value --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "1fcd67a1-ebe7-4962-8acb-c50bb009c24a"      --component-name "ABC1969A"     --selected-properties  "velocidademotoratual"    > saida-get-property-value.txt
+aws iottwinmaker get-property-value --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "1fcd67a1-ebe7-4962-8acb-c50bb009c24a"      --component-name "ABC1969A"     --selected-properties  "velocidademotoratual"    > saida-get-property-value.json
 
 ### MotorDC-entidade
 
