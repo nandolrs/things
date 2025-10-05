@@ -17,7 +17,7 @@ class CVeiculosTestar:
 
         retorno =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=retorno
-            ,nomes=['id','placa','modelo','velocidademotor','unidade','time']
+            ,nomes=NOMES #['id','placa','modelo','velocidademotor','unidade','time']
         )
 
 
@@ -31,8 +31,7 @@ class CVeiculosTestar:
 
         retorno =  cVeiculos.PropriedadesTimeSeriesSetar( #  PropriedadesExternalSetar !!!
             propriedades=retorno
-            # , nomes=['placa']
-            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
 
@@ -60,6 +59,14 @@ class CVeiculosTestar:
         # veiculos = cfVeiculos.FlatGerar()
         veiculos = cfVeiculos.JsonDynamoGerar()
 
+    def CFVeciculosDataHoraIsoBuscar(self):
+
+        cVeiculos = CFVeiculos.CVeiculos()
+
+        agora = datetime.now()
+        time_ =     cVeiculos.DataHoraIsoBuscar(ano=agora.year, mes=agora.month, dia=agora.day, hora=agora.hour, minuto=agora.minute, secsegundo=agora.second)
+        return time_
+
     def CFComponentTypeIncluir(self):
 
         # busca propriedades do veiculo
@@ -70,7 +77,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
             propriedades=propriedades_
-            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
         #
@@ -163,7 +170,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=propriedades_
-            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes= NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
         #
@@ -194,7 +201,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=propriedades_
-            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
         #
@@ -234,8 +241,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
             propriedades=propriedades
-            # , nomes=['placa']
-            , nomes=['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
         )
 
         # propriedades do componente
@@ -433,11 +439,12 @@ PARAMETROS =[
 WORK_SPACE_ID       = PARAMETROS[0]['WORK_SPACE_ID']
 ENTITY_NAME         = PARAMETROS[0]['ENTITY_NAME']
 COMPONENT_TYPE_ID   = PARAMETROS[0]['COMPONENT_TYPE_ID']
-AWS_LAMBDA          = PARAMETROS[0]['AWS_LAMBDA']            
+AWS_LAMBDA          = PARAMETROS[0]['AWS_LAMBDA']        
+NOMES               = ['id','modelo','placa','temperatura','time','unidade','velocidademotor','alarm_status']    
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 12 # inclui= [1,  9, 12 ]; exclui= [10]
+caso = 1 # inclui= [1,  9, 12 ]; exclui= [10,14]
 
 if caso == 1:
 
@@ -513,8 +520,8 @@ elif caso == 14:
 
 elif caso == 15:
 
-    entidade = CFAthena.CAThena()
-    print('entidade=',entidade)           
+    cVeiculosTestar.CFVeciculosDataHoraIsoBuscar() 
+
 
 
 

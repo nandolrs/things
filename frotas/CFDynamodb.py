@@ -18,10 +18,11 @@ from  decimal import Decimal
 class CDynamodb:
 
     def __init__(self):
-        self.cliente = boto3.client('dynamodb',region_name='us-east-1')
-        self.recurso = boto3.resource('dynamodb',region_name='us-east-1')
+        # self.cliente = boto3.client('dynamodb',region_name='us-east-1')
+        # self.recurso = boto3.resource('dynamodb',region_name='us-east-1')
 
-
+        self.cliente = boto3.client('dynamodb') # ,region_name='sa-east-1'
+        self.recurso = boto3.resource('dynamodb') # ,region_name='sa-east-1'
 
 #
     # class Clima(BaseModel) :
@@ -81,11 +82,28 @@ class CDynamodb:
 
     def Incluir(self,nomeTabela, entidade) :
 
+        if entidade['id'] == 0:
+            entidade['id'] =self.ConsultarID(nomeTabela)
+
         table = self.DynamoTabela(nomeTabela)
 
         table.put_item(Item=entidade)
 
         return entidade
+
+    # def Incluir(self,nomeTabela, entidade) :
+
+    #     entidade.id =self.ConsultarID(nomeTabela)
+
+    #     table = DynamoTabela(nomeTabela)
+
+    #     entidadeDicionario = entidade
+
+    #     #entidadeDicionario : dict = json.loads(json.dumps(entidade), parse_float=parse_float)
+
+    #     table.put_item(Item=entidadeDicionario)
+
+    #     return entidade
 
     def Alterar(self,nomeTabela, entidade, api) :
 

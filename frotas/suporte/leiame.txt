@@ -25,9 +25,13 @@ aws iottwinmaker list-entities --region us-east-1 --workspace-id VehicleFleetWor
 
 # entidade = "MotorDC-entidade-v1r1" ========================
 
-aws iottwinmaker get-property-value --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "1fcd67a1-ebe7-4962-8acb-c50bb009c24a"      --component-name "ABC1969A"     --selected-properties  "velocidademotoratual"    > saida-get-property-value.json
+aws iottwinmaker get-property-value --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "40e95acb-7938-4275-93d1-a2c344e210f1"      --component-name "ABC1969A"     --selected-properties  "velocidademotoratual"    > saida-get-property-value.json
 
 ### MotorDC-entidade
 
-aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "1fcd67a1-ebe7-4962-8acb-c50bb009c24a"      --component-name "ABC1969A"     --selected-properties  "time" "placa" "velocidademotor" "temperatura"    --start-time "2025-09-29T00:00:00.000Z"     --end-time "2025-09-29T00:59:59.999Z" > saida-get-property-value-history.json
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "40e95acb-7938-4275-93d1-a2c344e210f1"      --component-name "ABC1969A"     --selected-properties  "time" "placa" "velocidademotor" "temperatura" "alarm_status"    --start-time "2025-10-01T00:00:00.000Z"     --end-time "2025-10-01T00:59:59.999Z" > saida-get-property-value-history.json
 
+### IAM
+
+de = IotReceptor-role-ty7gre99
+para = cmjwLambdaRole

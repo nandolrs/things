@@ -13,12 +13,11 @@ import CFDynamodb
 
 getcontext().prec = 6    
 
-
-
 class CVeiculos:
     def __init__(self, startTime=None, endTime=None):
         self.startTime = startTime
         self.endTime =  endTime
+        self.nomeTabela = 'Frotas'
 
     def decimal_serializer(self,obj):
         if isinstance(obj, Decimal):
@@ -102,6 +101,56 @@ class CVeiculos:
             print (e)
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             retorno = {'retorno': 'falha'}    
+
+    def parse_decimal(self,valor):
+        return str(Decimal(valor))
+    
+    def lambda_handler_iotcore(self,eventDic, context):
+        try:
+            print('lambda_handler_iotcore')
+
+            agora = datetime.now()
+            time_ =     self.DataHoraIsoBuscar(ano=agora.year, mes=agora.month, dia=agora.day, hora=agora.hour, minuto=agora.minute, segundo=agora.second)
+
+            veiculo_ = CVeiculo()
+            veiculo_.id = 0
+            veiculo_.placa = eventDic['thingname']  # 'ABC1969A'
+            veiculo_.modelo = 'MODELO ABC'
+            veiculo_.velocidademotor = self.parse_decimal(eventDic['velocidademotor']) 
+            veiculo_.velocidademotoratual = self.parse_decimal(eventDic['velocidademotor']) 
+            veiculo_.unidade = 'RPM'
+            veiculo_.time = time_
+            veiculo_.temperatura = self.parse_decimal(eventDic['temperatura'])
+            veiculo_.alarm_status = 'NORMAL'            
+
+            veiculo__ = asdict(veiculo_)
+
+            retorno_ =  veiculo__     
+
+            # incluir
+
+            retorno_ = self.Incluir(retorno_)
+
+            #
+
+            # retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
+            retorno =  json.dumps(retorno_) 
+            retorno = retorno.encode('utf-8')        
+
+            #
+            
+            return retorno
+        except Exception as e:
+            print('== erro ==')
+            print (e)
+        #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
+            retorno = {'retorno': 'falha'}    
+
+    def Incluir(self,entidade):
+            cDynamodb = CFDynamodb.CDynamodb()
+            retorno = cDynamodb.Incluir(nomeTabela=self.nomeTabela, entidade=entidade) # veiculo
+
+            return retorno
 
     def PropriedadesBuscar(self): # aws athena
 
@@ -243,7 +292,15 @@ class CVeiculos:
                 propriedades[i]['isStoredExternally_'] = True
 
         return propriedades    
-            
+
+
+    def DataHoraIsoBuscar(self, ano, mes, dia, hora, minuto, segundo):
+        
+        time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto, second=segundo)
+        time_ = time_.isoformat(timespec='milliseconds') + 'Z'    
+        return time_            
+
+
     def VeiculosGerar(self,placas,anos, meses, dias, horas, minutos, velocidadeInicial, velocidadeIncrementoPercentual):  
 
         agora = datetime.now()#.isoformat()
@@ -274,11 +331,14 @@ class CVeiculos:
                         for hora in range(horaAtual, horaAtual+horas):
                             for minuto in range(minutoAtual, 60,int(60/minutos)):
 
-                                time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto, second=segundoAtual)
-                                time_ = time_.isoformat(timespec='milliseconds') + 'Z'                
+                                # time_ = datetime(year=ano, month=mes,day=dia, hour=hora, minute=minuto, second=segundoAtual)
+                                # time_ = time_.isoformat(timespec='milliseconds') + 'Z'                
+                                time_ = self.DataHoraIsoBuscar(ano=ano, mes=mes,dia=dia, hora=hora, minuto=minuto, segundo=segundoAtual)
 
                                 random_ = Decimal(str(random.random()))
                                 temperatura_ = Decimal(random_  * velocidademotor_)
+
+                                alarm_status_ = 'NORMAL'
 
                                 id_ = id_ +1
                                 veiculo = {
@@ -290,6 +350,8 @@ class CVeiculos:
                                     ,'unidade':unidade_
                                     ,'time':time_
                                     ,'temperatura' : temperatura_
+                                    ,'alarm_status' : alarm_status_
+
                                 }
 
                                 veiculo_ = CVeiculo()
@@ -301,6 +363,7 @@ class CVeiculos:
                                 veiculo_.unidade = unidade_
                                 veiculo_.time = time_
                                 veiculo_.temperatura = temperatura_
+                                veiculo_.alarm_status = alarm_status_
 
                                 velocidademotor_ = Decimal(str(velocidademotor_ )) *  Decimal(str(velocidadeIncrementoPercentual))
 
@@ -350,8 +413,9 @@ class CVeiculos:
         cDynamodb = CFDynamodb.CDynamodb()
         for veiculo in veiculos:
 
-            cDynamodb.Incluir(nomeTabela='Frotas', entidade=veiculo) # veiculo
-        
+            # cDynamodb.Incluir(nomeTabela='Frotas', entidade=veiculo) # veiculo
+            self.Incluir(veiculo)
+
     def PesquisarPorPlaca(self, placa):
 
         cAthena = CFAthena.CAThena()
@@ -587,6 +651,9 @@ class CVeiculos:
                             'entityId': entityId
                             ,'componentName': componentName
                             ,'propertyName': propertyName
+                            ,'externalIdProperty':{
+                                'alarm_key':entityId
+                            }
                         }
                         ,
                         'values': values
@@ -674,6 +741,7 @@ class CVeiculo:
     unidade:str
     time:datetime
     temperatura: Decimal
+    alarm_status: str
 
     def __init__(self):
         # getcontext().prec = 6    
