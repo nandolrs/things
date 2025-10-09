@@ -115,6 +115,8 @@ class CVeiculos:
             veiculo_ = CVeiculo()
             veiculo_.id = 0
             veiculo_.placa = eventDic['thingname']  # 'ABC1969A'
+            veiculo_.mac = eventDic['mac']  # 'ABC1969A'
+            veiculo_.thingname = eventDic['thingname']  # 'ABC1969A'
             veiculo_.modelo = 'MODELO ABC'
             veiculo_.velocidademotor = self.parse_decimal(eventDic['velocidademotor']) 
             veiculo_.velocidademotoratual = self.parse_decimal(eventDic['velocidademotor']) 
@@ -742,6 +744,8 @@ class CVeiculo:
     time:datetime
     temperatura: Decimal
     alarm_status: str
+    mac : str
+    thingname:str
 
     def __init__(self):
         # getcontext().prec = 6    

@@ -1,38 +1,38 @@
-
 /**************************
-    www.usinainfo.com.br 
+       Usinainfo
+  www.usinainfo.com.br 
  **************************/
- 
-const int echoPin =4; //D1; //D5 ;// D5; 20;05; 1
-const int trigPin =5;//D2; //D6 ;//D6 ;19;04; 2
- 
+
+const int trigPin = 4;// D2;// 22;
+const int echoPin = 5;// D1; //21;
+
 //define sound speed in cm/uS
-#define SOUND_SPEED 0.0343D
-#define CM_TO_INCH 0.393701D
- 
+#define SOUND_SPEED 0.034
+#define CM_TO_INCH 0.393701
+
 long duration;
 float distanceCm;
 float distanceInch;
- 
+
 void setup() {
-  Serial.begin(9600); 
+  Serial.begin(115200); 
   pinMode(trigPin, OUTPUT); 
   pinMode(echoPin, INPUT); 
 }
- 
+
 void loop() {
   
   digitalWrite(trigPin, LOW);
-  delayMicroseconds(5);
+  delayMicroseconds(2);
   
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10); // 10
+  delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
   
- 
+
   duration = pulseIn(echoPin, HIGH);
   
-  distanceCm = duration;// * SOUND_SPEED/2;
+ distanceCm = duration * SOUND_SPEED/2;
   
   Serial.print("Distancia (cm): ");
   Serial.println(distanceCm);
