@@ -72,6 +72,51 @@ class CVeiculos:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             retorno = {'retorno': 'falha'}    
 
+#
+    def lambda_handler_value_history_porApi(self, eventDic , context): #event
+        try:
+
+            print('lambda_handler_value_history_porApi')
+
+            # pesquisa veiculo por placa
+
+            # retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
+
+            placa = eventDic['queryStringParameters']['placa']
+            startTime = eventDic['queryStringParameters']['startTime']
+            endTime = eventDic['queryStringParameters']['endTime']
+
+            print('placa=', placa)
+            print('startTime=', startTime)
+            print('endTime=', endTime)
+
+            retorno_  = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
+
+            retorno_ = {
+                "isBase64Encoded": False,
+                "statusCode": 200,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*" 
+                },
+                "body":  "" #retorno_ # "{\"message\": \"Hello from API Gateway!\"}" 
+            }
+            retorno = retorno_
+        
+            # retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
+            # retorno = retorno.encode('utf-8')        
+            
+            return retorno
+        
+
+
+        except Exception as e:
+            print('== erro ==')
+            print (e)
+        #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
+            retorno = {'retorno': 'falha'}    
+
+#
     def lambda_handler_value(self,eventDic, context):
         try:
             print('lambda_handler_value')

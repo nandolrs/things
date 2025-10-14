@@ -49,7 +49,16 @@ def lambda_handler(event, context):
                 retorno = entidade.lambda_handler_iotcore(eventDic, context)  
 
                 print('=========================retorno====================')                             
-                print(retorno)                             
+                print(retorno)        
+
+            case 'IotConsumidor': # IotFornecedor
+
+                entidade = CFVeiculos.CVeiculos()
+
+                retorno = entidade.lambda_handler_value_history_porApi(eventDic, context)  
+
+                print('=========================retorno====================')                             
+                print(retorno)                                          
 
         cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=retorno)
         
