@@ -1,10 +1,10 @@
 import time
-from  datetime import datetime, timezone
 import json
-
+import random
+import base64
+from  datetime import datetime, timezone
 from decimal import *
 from dataclasses import dataclass, asdict
-import random
 
 import CFS3
 import CFAthena
@@ -90,25 +90,26 @@ class CVeiculos:
             print('startTime=', startTime)
             print('endTime=', endTime)
 
-            retorno_  = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
+            retorno_  = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)       
+            retorno_ = json.dumps(retorno_, default=self.decimal_serializer)
 
-            retorno_ = {
-                "isBase64Encoded": False,
+            retorno__ = {
+                "isBase64Encoded": True,
                 "statusCode": 200,
                 "headers": {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*" 
                 },
-                "body":  "" #retorno_ # "{\"message\": \"Hello from API Gateway!\"}" 
+                "body": retorno_
             }
-            retorno = retorno_
-        
-            # retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
-            # retorno = retorno.encode('utf-8')        
+
+            # retorno = retorno__
+            
+            retorno =  json.dumps(retorno__, default=self.decimal_serializer) 
+            retorno = retorno.encode('utf-8')        
             
             return retorno
         
-
 
         except Exception as e:
             print('== erro ==')
