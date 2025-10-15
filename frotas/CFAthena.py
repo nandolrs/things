@@ -23,14 +23,16 @@ class CAThena:
 
             response = self.cliente.list_data_catalogs()
             for catalogo in response['DataCatalogsSummary']:
-                print(catalogo['CatalogName'])
+                None
+                # print(catalogo['CatalogName'])
 
 
             # database
 
             response = self.cliente.list_databases(CatalogName=CatalogName)
             for database in response['DatabaseList']:
-                print(database['Name'])
+                None
+                # print(database['Name'])
 
             # tables metadata
 

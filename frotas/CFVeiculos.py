@@ -48,9 +48,7 @@ class CVeiculos:
     def lambda_handler_value_history(self, eventDic , context): #event
         try:
 
-            print('lambda_handler_value_history')
-
-            # pesquisa veiculo por placa
+            # pesquisa e monta retorno no formato Grafana
 
             retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
 
@@ -72,28 +70,19 @@ class CVeiculos:
         #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
             retorno = {'retorno': 'falha'}    
 
-#
     def lambda_handler_value_history_porApi(self, eventDic , context): #event
         try:
 
-            print('lambda_handler_value_history_porApi')
-
             # pesquisa veiculo por placa
-
-            # retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
 
             placa = eventDic['queryStringParameters']['placa']
             startTime = eventDic['queryStringParameters']['startTime']
             endTime = eventDic['queryStringParameters']['endTime']
 
-            print('placa=', placa)
-            print('startTime=', startTime)
-            print('endTime=', endTime)
-
             retorno_  = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)       
             retorno_ = json.dumps(retorno_, default=self.decimal_serializer)
 
-            retorno__ = {
+            retorno_ = {
                 "isBase64Encoded": True,
                 "statusCode": 200,
                 "headers": {
@@ -102,10 +91,8 @@ class CVeiculos:
                 },
                 "body": retorno_
             }
-
-            # retorno = retorno__
             
-            retorno =  json.dumps(retorno__, default=self.decimal_serializer) 
+            retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
             retorno = retorno.encode('utf-8')        
             
             return retorno
@@ -120,13 +107,10 @@ class CVeiculos:
 #
     def lambda_handler_value(self,eventDic, context):
         try:
-            print('lambda_handler_value')
 
-            # pesquisa veiculo por placa
+            # pesquisa e monta retorno no formato grafana
 
             retorno_ = self.PesquisarPorRequestLambdaDynamodb(eventDic)
-
-            print('retorno_=', retorno_)
 
             retorno_ = self.RetornarGetPropertyValue(
                 retornoPesquisa       = retorno_
@@ -153,7 +137,6 @@ class CVeiculos:
     
     def lambda_handler_iotcore(self,eventDic, context):
         try:
-            print('lambda_handler_iotcore')
 
             agora = datetime.now()
             time_ =     self.DataHoraIsoBuscar(ano=agora.year, mes=agora.month, dia=agora.day, hora=agora.hour, minuto=agora.minute, segundo=agora.second)
