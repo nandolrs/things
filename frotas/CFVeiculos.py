@@ -2,6 +2,8 @@ import time
 import json
 import random
 import base64
+import requests
+import os
 from  datetime import datetime, timezone
 from decimal import *
 from dataclasses import dataclass, asdict
@@ -473,7 +475,32 @@ class CVeiculos:
             }
         )
 
-        return retorno         
+        return retorno       
+
+    def PesquisarPorPlacaApi(self, placa, startTime, endTime):
+
+        url_ = "?placa="+placa+"&startTime="+startTime+"&endTime="+endTime
+        print('url_', url_)
+
+        url = os.environ['url']
+        print('url', url)
+
+        url =  url + url_
+        print('url=', url)
+
+        #
+
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            print(response.text)
+            retorno = response.json()
+            print(retorno)
+        else:
+            retorno = {}
+            print(f"Request failed with status code: {response.status_code}")
+
+        return retorno           
 
     def BuscarValor(self, nomePropridadade, linhas):
 
@@ -629,7 +656,8 @@ class CVeiculos:
             startTime = self.startTime 
             endTime =  self.endTime
 
-            retornoPesquisa = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
+            # retornoPesquisa = self.PesquisarPorPlacaDynamo(placa, startTime, endTime)  
+            retornoPesquisa = self.PesquisarPorPlacaApi(placa, startTime, endTime)  
 
             return retornoPesquisa
 

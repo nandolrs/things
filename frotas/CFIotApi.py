@@ -15,15 +15,6 @@ from typing import Union
 #import json
 from  decimal import Decimal
 
-# class Clima(BaseModel) :
-#     id: int
-#     nome: Union[str, None] = None
-#     temperatura: Union[Decimal, None] = None
-#     pressao: Union[Decimal, None] = None
-#     umidade: Union[Decimal, None] = None    
-#     situacao: Union[str, None] = None
-#     IP: Union[str, None] = None
-
 app = FastAPI()
 app.openapi_version = "3.0.2"
 
@@ -40,6 +31,7 @@ def read_root():
 # https://169egekr7b.execute-api.sa-east-1.amazonaws.com/dev
 # https://169egekr7b.execute-api.sa-east-1.amazonaws.com/dev/api/pesquisar/esp8266-v1r1/2025-10-05T19:48:00.000Z/2025-10-05T19:48:59.000Z
 # https://169egekr7b.execute-api.sa-east-1.amazonaws.com/dev/api/pesquisar?placa=esp8266-v1r1&startTime=2025-10-05T19:48:00.000Z&endTime=2025-10-05T19:48:59.000Z
+
 
 
 @app.get("/api/pesquisar/{placa}/{startTime}/{endTime}")

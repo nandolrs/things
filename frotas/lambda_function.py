@@ -7,8 +7,8 @@ def lambda_handler(event, context):
     try:
 
         cfS3 = CFS3.CS3()
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
+        # cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-ENTRADA.json', contentBody=str(event))
+        # cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/context-v1r1-ENTRADA.json', contentBody=str(context))
         
         function_name = context.function_name
 
@@ -48,13 +48,13 @@ def lambda_handler(event, context):
 
                 retorno = entidade.lambda_handler_iotcore(event, context)  
 
-            case 'IotConsumidor': # IotFornecedor
+            case 'IotFornecedor': 
 
                 entidade = CFVeiculos.CVeiculos()
 
                 retorno = entidade.lambda_handler_value_history_porApi(event, context)  
 
-        cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=retorno)
+        # cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=retorno)
         
         return retorno
     

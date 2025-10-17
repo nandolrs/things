@@ -1,4 +1,27 @@
---
+-------------------------------
+-- gera requirements.txt
+-------------------------------
+
+pip install pipreqs
+
+pipreqs .
+
+pipreqs . --encoding=utf8 
+
+OU
+
+pip freeze > requirements.txt
+
+-------------------------------
+-- layers lambda
+-------------------------------
+
+pip install -r requirements.txt -t python/
+
+-------------------------------
+-- gera requirements.txt
+-------------------------------
+
 
 aws iottwinmaker get-property-value-history \
     --workspace-id "MyWorkspace" \
@@ -30,6 +53,12 @@ aws iottwinmaker get-property-value --region us-east-1    --workspace-id "CmjWor
 ### MotorDC-entidade
 
 aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "40e95acb-7938-4275-93d1-a2c344e210f1"      --component-name "ABC1969A"     --selected-properties  "time" "placa" "velocidademotor" "temperatura" "alarm_status"    --start-time "2025-10-01T00:00:00.000Z"     --end-time "2025-10-01T00:59:59.999Z" > saida-get-property-value-history.json
+
+aws iottwinmaker get-property-value-history --region us-east-1    --workspace-id "CmjWorkspace"    --entity-id "ab311d93-56f0-417a-aa2d-de92d40ea2d7"      --component-name "esp8266-v1r1"     --selected-properties  "time" "placa" "velocidademotor" "temperatura" "alarm_status"    --start-time "2025-10-05T19:00:00.000Z"     --end-time "2025-10-05T19:59:59.999Z" > saida-get-property-value-history.json
+
+placa=esp8266-v1r1
+startTime=2025-10-05T19:48:00.000Z
+endTime=2025-10-05T19:48:59.000Z
 
 ### IAM
 

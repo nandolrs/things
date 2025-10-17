@@ -1,65 +1,16 @@
 {
-  "id": {
-    "dataType": {
-      "type": "LONG"
-    },
-    "isExternalId": false,
-    "isStoredExternally": true,
-    "isTimeSeries": true,
-    "isRequiredInEntity": false
-  },
-  "placa": {
-    "dataType": {
-      "type": "STRING"
-    },
-    "isExternalId": false,
-    "isStoredExternally": true,
-    "isTimeSeries": true,
-    "isRequiredInEntity": false
-  },
-  "modelo": {
-    "dataType": {
-      "type": "STRING"
-    },
-    "isExternalId": false,
-    "isStoredExternally": true,
-    "isTimeSeries": true,
-    "isRequiredInEntity": false
-  },
-  "velocidademotor": {
-    "dataType": {
-      "type": "DOUBLE"
-    },
-    "isExternalId": false,
-    "isStoredExternally": true,
-    "isTimeSeries": true,
-    "isRequiredInEntity": false
-  },
-  "unidade": {
-    "dataType": {
-      "type": "STRING"
-    },
-    "isExternalId": false,
-    "isStoredExternally": true,
-    "isTimeSeries": true,
-    "isRequiredInEntity": false
-  },
-  "time": {
-    "dataType": {
-      "type": "STRING"
-    },
-    "isExternalId": false,
-    "isStoredExternally": true,
-    "isTimeSeries": true,
-    "isRequiredInEntity": false
-  },
-  "temperatura": {
-    "dataType": {
-      "type": "DOUBLE"
-    },
-    "isExternalId": false,
-    "isStoredExternally": true,
-    "isTimeSeries": true,
-    "isRequiredInEntity": false
-  }
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "execute-api:Invoke",
+      "Resource": "*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "189.6.247.30/32"
+        }
+      }
+    }
+  ]
 }

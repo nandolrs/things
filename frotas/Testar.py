@@ -38,13 +38,29 @@ class CVeiculosTestar:
         print('=== enternal')
         print(json.dumps(retorno))
 
-    def CFVeiculosPesquisarPorPlaca():
+    def CFVeiculosPesquisarPorPlaca(self):
 
             placa='ABC1969A'
 
             cVeiculos = CFVeiculos.CVeiculos()
 
             retorno = cVeiculos.PesquisarPorPlaca(placa)
+
+            print('===tipo===')
+            print (type(retorno))
+
+            print('===')
+            print(json.dumps(retorno))    
+
+
+    def CFVeiculosPesquisarPorPlacaApi(self):
+            placa="esp8266-v1r1"
+            startTime="2025-10-05T19:48:00.000Z"
+            endTime="2025-10-05T19:48:59.000Z"
+
+            cVeiculos = CFVeiculos.CVeiculos()
+
+            retorno = cVeiculos.PesquisarPorPlacaApi( placa, startTime, endTime)
 
             print('===tipo===')
             print (type(retorno))
@@ -339,6 +355,13 @@ class CVeiculosTestar:
                 'nome':'ABC1971A'
                 ,'componentTypeId':COMPONENT_TYPE_ID
             }
+            ,
+            {
+                'nome':'esp8266-v1r1'
+                ,'componentTypeId':COMPONENT_TYPE_ID
+            }            
+
+            
 
         ]
 
@@ -444,7 +467,7 @@ NOMES               = ['id','modelo','placa','temperatura','time','unidade','vel
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 1 # inclui= [1,  9, 12 ]; exclui= [10,14]
+caso = 12 # inclui= [1,  9, 12 ]; exclui= [10,14]
 
 if caso == 1:
 
@@ -475,6 +498,10 @@ elif caso == 5:
 elif caso == 6:
 
     cVeiculosTestar.CFVeiculosPesquisarPorPlaca() 
+
+elif caso == 61:
+
+    cVeiculosTestar.CFVeiculosPesquisarPorPlacaApi()     
 
 elif caso == 7:
 
