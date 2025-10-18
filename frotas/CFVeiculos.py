@@ -479,29 +479,28 @@ class CVeiculos:
 
     def PesquisarPorPlacaApi(self, placa, startTime, endTime):
 
+        #gera toker
+
         cAutenticador = CFAutenticador.CAutenticador()
 
         token = cAutenticador.TokenGerar()
 
         tokenHeaders = cAutenticador.TokenHeadersObter(token)
 
+        # monta requisição
+
         url_ = "?placa="+placa+"&startTime="+startTime+"&endTime="+endTime
-        print('url_', url_)
 
         url = os.environ['url']
-        print('url', url)
 
         url =  url + url_
-        print('url=', url)
 
         #
 
-        response = requests.get(url, tokenHeaders)
+        response = requests.get(url, tokenHeaders) # 
 
         if response.status_code == 200:
-            print(response.text)
             retorno = response.json()
-            print(retorno)
         else:
             retorno = {}
             print(f"Request failed with status code: {response.status_code}")

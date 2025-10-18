@@ -16,10 +16,12 @@ def lambda_handler(event, context):
         match function_name:
             case 'cmj-get-property-value-history':
 
-                try:
-                    eventDic = entidade.Dic2Json2Dic(str(event)) 
-                except Exception as e:
-                    eventDic = event
+                # try:
+                #     eventDic = entidade.Dic2Json2Dic(str(event)) 
+                # except Exception as e:
+                #     eventDic = event
+
+                eventDic = event
 
                 #
 
@@ -32,13 +34,13 @@ def lambda_handler(event, context):
 
             case 'cmj-get-property-value':
 
-                try:
-                    eventDic = entidade.Dic2Json2Dic(str(event)) 
-                except Exception as e:
-                    eventDic = event
+                # try:
+                #     eventDic = entidade.Dic2Json2Dic(str(event)) 
+                # except Exception as e:
+                #     eventDic = event
 
-                #
-
+                eventDic = event
+                
                 entidade = CFVeiculos.CVeiculos()
 
                 retorno = entidade.lambda_handler_value(eventDic, context)     
@@ -70,6 +72,16 @@ def lambda_handler(event, context):
         print (e)
     #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
         retorno = {'retorno': 'falha'}
+
+def EventoTratar(event):
+    try:
+        entidade = CFVeiculos.CVeiculos()
+
+        eventDic = entidade.Dic2Json2Dic(str(event)) 
+    except Exception as e:
+        eventDic = event    
+
+    return eventDic
 
 def decimal_serializer(obj):
     if isinstance(obj, Decimal):
