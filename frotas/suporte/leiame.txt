@@ -19,6 +19,14 @@ pip freeze > requirements.txt
 pip install -r requirements.txt -t python/
 
 -------------------------------
+-- jwt
+-------------------------------
+
+pip install jwt
+
+pip install PyJWT
+
+-------------------------------
 -- gera requirements.txt
 -------------------------------
 

@@ -29,8 +29,6 @@ def read_root():
 # http://localhost:8000/openapi.json
 # https://169egekr7b.execute-api.sa-east-1.amazonaws.com/dev/api/pesquisar?placa=esp8266-v1r1&startTime=2025-10-05T19:48:00.000Z&endTime=2025-10-05T19:48:59.000Z
 
-
-
 @app.get("/api/pesquisar/{placa}/{startTime}/{endTime}")
 def pesquisar(placa:str, startTime:str, endTime:str):
 

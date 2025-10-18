@@ -1,6 +1,7 @@
 import CFVeiculos
 import CFIotTwinMaker
 import CFAthena
+import CFAutenticador
 
 import time
 from  datetime import datetime, timezone
@@ -423,6 +424,16 @@ class CVeiculosTestar:
         print('===')
         print(retorno)
 
+    def CFTokenGerar(self):
+
+        cAutenticador = CFAutenticador.CAutenticador()
+
+        retorno = cAutenticador.TokenGerar()
+
+        print('authorizationToken=', retorno)   
+
+
+
 ### testar
 
 # 'MotorDC-entidade'    'MotorDC-entidade-get-value'
@@ -467,7 +478,7 @@ NOMES               = ['id','modelo','placa','temperatura','time','unidade','vel
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 12 # inclui= [1,  9, 12 ]; exclui= [10,14]
+caso = 16 # inclui= [1,  9, 12 ]; exclui= [10,14]
 
 if caso == 1:
 
@@ -517,7 +528,6 @@ elif caso == 9:
 
     cVeiculosTestar.CFComponentTypeIncluirPorDicionario(dicionario)    
 
-
 # elif caso == 90:
 
 #     dicionario  = CFVeiculos.CVeiculo()
@@ -549,7 +559,6 @@ elif caso == 15:
 
     cVeiculosTestar.CFVeciculosDataHoraIsoBuscar() 
 
+elif caso == 16:
 
-
-
-
+    cVeiculosTestar.CFTokenGerar() 

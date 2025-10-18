@@ -1,5 +1,6 @@
 import CFS3
 import CFVeiculos
+import CFAutenticador
 import json
 from decimal import Decimal
 
@@ -53,6 +54,12 @@ def lambda_handler(event, context):
                 entidade = CFVeiculos.CVeiculos()
 
                 retorno = entidade.lambda_handler_value_history_porApi(event, context)  
+
+            case 'IotAutenticador': 
+
+                entidade = CFAutenticador.CAutenticador()
+
+                retorno = entidade.Autenticar(event, context)  
 
         # cfS3.Incluir( bucketName='cmj-motores', key='dados/rascunho/event-v1r1-SAIDA.json', contentBody=retorno)
         

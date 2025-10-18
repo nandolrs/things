@@ -12,7 +12,7 @@ import CFS3
 import CFAthena
 import CFIotTwinMaker
 import CFDynamodb
-
+import CFAutenticador
 getcontext().prec = 6    
 
 class CVeiculos:
@@ -479,6 +479,12 @@ class CVeiculos:
 
     def PesquisarPorPlacaApi(self, placa, startTime, endTime):
 
+        cAutenticador = CFAutenticador.CAutenticador()
+
+        token = cAutenticador.TokenGerar()
+
+        tokenHeaders = cAutenticador.TokenHeadersObter(token)
+
         url_ = "?placa="+placa+"&startTime="+startTime+"&endTime="+endTime
         print('url_', url_)
 
@@ -490,7 +496,7 @@ class CVeiculos:
 
         #
 
-        response = requests.get(url)
+        response = requests.get(url, tokenHeaders)
 
         if response.status_code == 200:
             print(response.text)
