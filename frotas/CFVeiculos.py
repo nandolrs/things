@@ -13,6 +13,8 @@ import CFAthena
 import CFIotTwinMaker
 import CFDynamodb
 import CFAutenticador
+import CFComponentes
+
 getcontext().prec = 6    
 
 class CVeiculos:
@@ -137,8 +139,53 @@ class CVeiculos:
     def parse_decimal(self,valor):
         return str(Decimal(valor))
     
+    def ComponenteIncluir(self, eventDic):
+        try:
+
+            agora = datetime.now()
+            time_ =     self.DataHoraIsoBuscar(ano=agora.year, mes=agora.month, dia=agora.day, hora=agora.hour, minuto=agora.minute, segundo=agora.second)
+
+            componente_ = CFComponentes.CComponente()
+            componente_.id = 0
+            componente_.time = time_
+            componente_.mac = eventDic['mac']
+
+            componente__ = asdict(componente_)
+
+            retorno_ =  componente__     
+
+            # incluir
+
+            componentes = CFComponentes.CComponentes()
+
+            retorno_ = componentes.Incluir(retorno_)
+
+            #
+
+            retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
+            # retorno =  json.dumps(retorno_) 
+            retorno = retorno.encode('utf-8')        
+
+            #            
+
+            return retorno
+        
+        except Exception as e:
+            print('== erro ==')
+            print (e)
+        #   logger.error(f"Failed to upload receipt to S3: {str(e)}")
+            retorno = {'retorno': 'falha'}   
+    
     def lambda_handler_iotcore(self,eventDic, context):
         try:
+
+            # inclui o componente/equipamento/ferramenta 
+
+            componente_ =  {'mac': eventDic['mac']
+                            ,'id':0}
+            self.ComponenteIncluir(componente_)
+
+            # inclui a telemetria
 
             agora = datetime.now()
             time_ =     self.DataHoraIsoBuscar(ano=agora.year, mes=agora.month, dia=agora.day, hora=agora.hour, minuto=agora.minute, segundo=agora.second)
@@ -166,8 +213,8 @@ class CVeiculos:
 
             #
 
-            # retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
-            retorno =  json.dumps(retorno_) 
+            retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
+            # retorno =  json.dumps(retorno_) 
             retorno = retorno.encode('utf-8')        
 
             #

@@ -2,6 +2,7 @@ import CFVeiculos
 import CFIotTwinMaker
 import CFAthena
 import CFAutenticador
+import CFComponentes
 
 import time
 from  datetime import datetime, timezone
@@ -432,6 +433,23 @@ class CVeiculosTestar:
 
         print('authorizationToken=', retorno)   
 
+    def CFComponenteIncluir(self):
+
+        # componente_ = CFComponentes.CComponente()
+        # componente_.id=0
+        # componente_.mac='mac teste1'
+
+        componente_ = {}
+        componente_['id']=0
+        componente_['mac']='mac teste1'   
+    
+
+
+        componentes_ = CFComponentes.CComponentes()
+        componentes_.Incluir(componente_)
+
+
+
 
 
 ### testar
@@ -478,7 +496,7 @@ NOMES               = ['id','modelo','placa','temperatura','time','unidade','vel
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 16 # inclui= [1,  9, 12 ]; exclui= [10,14]
+caso = 17 # inclui= [1,  9, 12 ]; exclui= [10,14]
 
 if caso == 1:
 
@@ -562,3 +580,7 @@ elif caso == 15:
 elif caso == 16:
 
     cVeiculosTestar.CFTokenGerar() 
+
+elif caso == 17:
+
+    cVeiculosTestar.CFComponenteIncluir()     
