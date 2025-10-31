@@ -192,15 +192,22 @@ class CVeiculos:
 
             veiculo_ = CVeiculo()
             veiculo_.id = 0
-            veiculo_.placa = eventDic['thingname']  # 'ABC1969A'
-            veiculo_.mac = eventDic['mac']  # 'ABC1969A'
-            veiculo_.thingname = eventDic['thingname']  # 'ABC1969A'
+            veiculo_.placa = eventDic['thingname'] 
+            veiculo_.mac = eventDic['mac'] 
+            veiculo_.thingname = eventDic['thingname'] 
             veiculo_.modelo = 'MODELO ABC'
             veiculo_.velocidademotor = self.parse_decimal(eventDic['velocidademotor']) 
             veiculo_.velocidademotoratual = self.parse_decimal(eventDic['velocidademotor']) 
             veiculo_.unidade = 'RPM'
             veiculo_.time = time_
             veiculo_.temperatura = self.parse_decimal(eventDic['temperatura'])
+
+            veiculo_.leitura = eventDic['leitura'] 
+            veiculo_.angulo = eventDic['angulo'] 
+            veiculo_.anguloLiteral = eventDic['anguloLiteral'] 
+
+
+
             veiculo_.alarm_status = 'NORMAL'            
 
             veiculo__ = asdict(veiculo_)
@@ -214,7 +221,6 @@ class CVeiculos:
             #
 
             retorno =  json.dumps(retorno_, default=self.decimal_serializer) 
-            # retorno =  json.dumps(retorno_) 
             retorno = retorno.encode('utf-8')        
 
             #
@@ -855,6 +861,10 @@ class CVeiculo:
     alarm_status: str
     mac : str
     thingname:str
+    leitura: int
+    angulo: int
+    anguloLiteral:str
+
 
     def __init__(self):
         # getcontext().prec = 6    
