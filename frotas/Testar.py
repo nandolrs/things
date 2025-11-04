@@ -451,7 +451,7 @@ class CVeiculosTestar:
 
         componente_ = {}
         componente_['id']=0
-        componente_['mac']='mac teste1'   
+        componente_['mac']='48:55:19:C1:A7:A4'   
     
 
 
@@ -521,7 +521,7 @@ NOMES               = ['id','modelo','placa','temperatura','time','unidade','vel
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 12 # inclui= [1,  9, 12 ]; exclui= [10,14]
+caso = 17 # inclui= [1,  9, 12 ]; exclui= [10,14]
 
 if caso == 1:
 

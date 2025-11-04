@@ -56,6 +56,8 @@ class CComponentes:
             }
         )
 
+        return retorno
+
     def PesquisarDynamo(self):
 
         cDynamodb = CFDynamodb.CDynamodb()
