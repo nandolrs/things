@@ -27,7 +27,7 @@ String JsonGerar(String mac,float velocidademotor ,float temperatura, int leitur
     jsonClima["temperatura"] = temperatura;
     jsonClima["thingname"] = String(thingName);
 
-    jsonClima["leitura"] = angulo;
+    jsonClima["leitura"] = leitura;
     jsonClima["angulo"] = angulo;
     jsonClima["anguloLiteral"] = anguloLiteral;
 

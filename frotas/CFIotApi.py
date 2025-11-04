@@ -22,12 +22,8 @@ app.openapi_version = "3.0.2"
 def read_root():
     return {"mensagem": "to aqui, pronto e saudável"}
 
-# localhost:8000/api
-# localhost:8000/api/pesquisar/esp8266-v1r1/2025-10-05T19:48:24.000Z/2025-10-05T19:48:24.000Z
-# http://localhost:8000/docs
-# http://localhost:8000/redoc
-# http://localhost:8000/openapi.json
-# https://169egekr7b.execute-api.sa-east-1.amazonaws.com/dev/api/pesquisar?placa=esp8266-v1r1&startTime=2025-10-05T19:48:00.000Z&endTime=2025-10-05T19:48:59.000Z
+# localhost:8000/api/pesquisar?placa=48_55_19_C1_A7_A4&startTime=2025-11-03T21:32:46.000Z&endTime=2025-11-04T21:32:46.000Z
+# https://169egekr7b.execute-api.sa-east-1.amazonaws.com/dev/api/pesquisar?placa=48_55_19_C1_A7_A4&startTime=2025-11-03T21:32:46.000Z&endTime=2025-11-04T21:32:46.000Z
 
 @app.get("/api/pesquisar/{placa}/{startTime}/{endTime}")
 def pesquisar(placa:str, startTime:str, endTime:str):

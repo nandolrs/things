@@ -177,6 +177,33 @@ class CDynamodb:
         )
 
         return retorno
+    
+    def Listar(self,nomeTabela) :      
+
+        table = self.DynamoTabela(nomeTabela)
+
+        retorno = self.ListarScan(
+             tabela      =  table
+            
+        )
+
+        return retorno   
+        
+    def ListarScan(self,tabela) :   
+
+        # if condicao['startTime'] != None :
+        #     filterExpression_ =  Attr(condicao['chave']).eq(condicao['valor']) & Attr('time').between(condicao['startTime'],condicao['endTime'])
+        # else:
+        #     filterExpression_ =  Attr(condicao['chave']).eq(condicao['valor']) 
+
+        condicao = {'chave':'id', 'valor':-1}
+        filterExpression_ =  Attr(condicao['chave']).gt(condicao['valor']) 
+
+        retorno = tabela.scan(
+            FilterExpression= filterExpression_
+        )
+
+        return retorno    
 
     def PesquisarQuery(self,tabela,condicao) :
 

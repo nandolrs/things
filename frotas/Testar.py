@@ -334,13 +334,13 @@ class CVeiculosTestar:
         properties = cComponentType.GerarProperties(
              componentTypeId        = COMPONENT_TYPE_ID
             ,lambdaArn              = AWS_LAMBDA
-            ,propriedades           = propriedades
-            ,gerarApenasExternal    = True
+            ,propriedades           = [] # propriedades
+            # ,gerarApenasExternal    = True
         )      
 
         # componentes
 
-        cComponent = CFIotTwinMaker.CComponent()
+
 
         componentes = [
             {
@@ -362,10 +362,20 @@ class CVeiculosTestar:
                 'nome':'esp8266-v1r1'
                 ,'componentTypeId':COMPONENT_TYPE_ID
             }            
-
-            
-
         ]
+
+        cComponentes = CFComponentes.CComponentes()
+
+        componentes_ = cComponentes.PesquisarDynamo()
+
+        componentes = []
+
+        for componente_ in componentes_['Items']:
+            componentes.append({'nome':componente_['mac'].replace(':','_'),'componentTypeId':COMPONENT_TYPE_ID})
+
+
+
+        cComponent = CFIotTwinMaker.CComponent()
 
         components = cComponent.Gerar(
             componentes = componentes
@@ -448,6 +458,13 @@ class CVeiculosTestar:
         componentes_ = CFComponentes.CComponentes()
         componentes_.Incluir(componente_)
 
+    def CFPesquisarDynamo(self):
+
+        componentes_ = CFComponentes.CComponentes()
+        retorno = componentes_.PesquisarDynamo()      
+
+        print (retorno)  
+
 
 
 
@@ -465,6 +482,13 @@ PARAMETROS =[
         ,'COMPONENT_TYPE_ID':'com.cmj.frota.connector'
         ,'AWS_LAMBDA'       :'arn:aws:lambda:us-east-1:105254198021:function:cmj-get-property-value-history'
     }
+    ,
+    {
+        'WORK_SPACE_ID'     :'CmjWorkspace'
+        ,'ENTITY_NAME'      :'MotorDC-entidade-v1r1'
+        ,'COMPONENT_TYPE_ID':'com.cmj.frota.connector-v1r1'
+        ,'AWS_LAMBDA'       :'arn:aws:lambda:us-east-1:105254198021:function:cmj-get-property-value-history'
+    }    
     ,    
     {
         'WORK_SPACE_ID'     :'CmjWorkspace'
@@ -481,6 +505,7 @@ PARAMETROS =[
     }
 
 
+
 ]
 
 # WORK_SPACE_ID = 'CmjWorkspace'
@@ -488,15 +513,15 @@ PARAMETROS =[
 # COMPONENT_TYPE_ID = 'com.cmj.frota-get-value.connector'  #  'com.cmj.frota.connector'   'com.cmj.frota-get-value.connector' 
 # AWS_LAMBDA = 'arn:aws:lambda:us-east-1:105254198021:function:VeiculosTimeSeries'              
 
-WORK_SPACE_ID       = PARAMETROS[0]['WORK_SPACE_ID']
-ENTITY_NAME         = PARAMETROS[0]['ENTITY_NAME']
-COMPONENT_TYPE_ID   = PARAMETROS[0]['COMPONENT_TYPE_ID']
-AWS_LAMBDA          = PARAMETROS[0]['AWS_LAMBDA']        
-NOMES               = ['id','modelo','placa','temperatura','time','unidade','velocidademotor','alarm_status']    
+WORK_SPACE_ID       = PARAMETROS[1]['WORK_SPACE_ID']
+ENTITY_NAME         = PARAMETROS[1]['ENTITY_NAME']
+COMPONENT_TYPE_ID   = PARAMETROS[1]['COMPONENT_TYPE_ID']
+AWS_LAMBDA          = PARAMETROS[1]['AWS_LAMBDA']        
+NOMES               = ['id','modelo','placa','temperatura','time','unidade','velocidademotor','alarm_status','thingname']    
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 17 # inclui= [1,  9, 12 ]; exclui= [10,14]
+caso = 12 # inclui= [1,  9, 12 ]; exclui= [10,14]
 
 if caso == 1:
 
@@ -584,3 +609,8 @@ elif caso == 16:
 elif caso == 17:
 
     cVeiculosTestar.CFComponenteIncluir()     
+
+elif caso == 18:
+
+    cVeiculosTestar.CFPesquisarDynamo()  
+    

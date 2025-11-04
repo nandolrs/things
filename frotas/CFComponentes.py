@@ -32,7 +32,6 @@ class CComponentes:
         mac = entidade['mac']
         entidade['time'] = self.cUtil.DataHoraBuscar()
 
-
         retorno = self.PesquisarPorMacDynamo(mac)
 
         if retorno['Count'] == 0: # não existe, deve incluir
@@ -56,6 +55,14 @@ class CComponentes:
                 ,'startTime':None   
             }
         )
+
+    def PesquisarDynamo(self):
+
+        cDynamodb = CFDynamodb.CDynamodb()
+
+        retorno = cDynamodb.Listar(
+             nomeTabela="Componentes"
+        )        
 
         return retorno         
 

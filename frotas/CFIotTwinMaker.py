@@ -8,15 +8,11 @@ class CEntity:
 
     def Incluir(self, workspaceId, entityName,components):
         try:
-
-
             retorno = self.cliente.create_entity(
                     workspaceId=workspaceId
                     ,entityName = entityName
                     ,components=components
-            )
-                                    
-
+            )                                    
             return retorno
 
         except Exception as e:
@@ -80,7 +76,7 @@ class CComponent:
             for componente in componentes:
                 componente_ = {
                         'componentTypeId' : componente['componentTypeId']
-                        ,'properties' : properties
+                        # ,'properties' : properties # ???
 
                 }
 
@@ -224,8 +220,22 @@ class CComponentType:
     def DePara(self, de):
         if de == 'STRING' :
             return 'stringValue'
+        elif de == 'LONG' :
+            return 'longValue'
+        elif de == 'DOUBLE' :
+            return 'doubleValue'        
         else:
             return 'none'
+        
+    def DeParaValor(self, de):
+        if de == 'STRING' :
+            return 'A'
+        elif de == 'LONG' :
+            return '1'
+        elif de == 'DOUBLE' :
+            return '1'        
+        else:
+            return 'none'        
         
     def GerarProperties(self, componentTypeId, lambdaArn,  propriedades, gerarApenasExternal=False):
 
@@ -237,7 +247,8 @@ class CComponentType:
                 continue
 
             depara_ = self.DePara(propriedade['type_'])
-            valor_ = propriedade['value_']
+            # valor_ = propriedade['value_']
+            valor_ = self.DeParaValor(propriedade['type_'])
 
             propertyDefinition =   {
                 'value':{

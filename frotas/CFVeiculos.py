@@ -181,7 +181,9 @@ class CVeiculos:
 
             # inclui o componente/equipamento/ferramenta 
 
-            componente_ =  {'mac': eventDic['mac']
+            mac_ = eventDic['mac'].replace(':','_')
+
+            componente_ =  {'mac': mac_
                             ,'id':0}
             self.ComponenteIncluir(componente_)
 
@@ -192,7 +194,7 @@ class CVeiculos:
 
             veiculo_ = CVeiculo()
             veiculo_.id = 0
-            veiculo_.placa = eventDic['thingname'] 
+            veiculo_.placa = mac_
             veiculo_.mac = eventDic['mac'] 
             veiculo_.thingname = eventDic['thingname'] 
             veiculo_.modelo = 'MODELO ABC'
@@ -294,7 +296,7 @@ class CVeiculos:
                 ,'isStoredExternally_' : False
                 ,'isTimeSeries_' : False
                 ,'isRequiredInEntity_' : False # true, se isExternalId_
-                ,'value_' : 'ABC1969A'
+                # ,'value_' : 'ABC1969A'
             }      
 
             retorno.append(propriedade_)            
@@ -350,7 +352,7 @@ class CVeiculos:
                 ,'isStoredExternally_' : False
                 ,'isTimeSeries_' : False
                 ,'isRequiredInEntity_' : False # true, se isExternalId_
-                ,'value_' : 'ABC1969A'
+                # ,'value_' : 'ABC1969A'
             }      
 
             retorno.append(propriedade_)            

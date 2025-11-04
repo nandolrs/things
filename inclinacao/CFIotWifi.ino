@@ -35,11 +35,21 @@ String CFIotWifi::CFIotWifiConectar()
 }
 
 void CFIotWifi::CFIotWifiRelogioAtualizar() {
+  
   const char* ntpServer1 = "pool.ntp.org";
   const char* ntpServer2 = "time.nist.gov";
+  
+  // const char* ntpServer1 = "pool.ntp.br";
+  // const char* ntpServer2 = "pool.ntp.br";
+
+  // const char* ntpServer1 = "a.st1.ntp.br";
+  // const char* ntpServer2 = "b.st1.ntp.br";
+  
   const long  gmtOffset_sec = 3600;
   const int   daylightOffset_sec = 3600;  
-  configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  // configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+    configTime(3 * 3600, 0, ntpServer1, ntpServer1);
+
   // configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 
   Serial.print("Waiting for NTP time sync: ");
@@ -47,6 +57,12 @@ void CFIotWifi::CFIotWifiRelogioAtualizar() {
   while (now < 8 * 3600 * 2) {
     delay(500);
     Serial.print(".");
+    Serial.print("ntpServer1,ntpServer2=");
+    Serial.print(ntpServer1);
+    Serial.print(",");
+    Serial.println(ntpServer2);
+
+    
     now = time(nullptr);
   }
   Serial.println("");

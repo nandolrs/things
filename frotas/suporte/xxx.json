@@ -1,16 +1,55 @@
 {
-  "Version": "2012-10-17",
-  "Statement": [
+  "Items": [
     {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "execute-api:Invoke",
-      "Resource": "*",
-      "Condition": {
-        "IpAddress": {
-          "aws:SourceIp": "189.6.247.30/32"
-        }
-      }
+      "id": Decimal("7"),
+      "mac": "48:E7:29:6D:6B:EE",
+      "time": "2025-10-24T13:10:15.000Z"
+    },
+    {
+      "id": Decimal("8"),
+      "mac": "48:E7:29:6D:78:54",
+      "time": "2025-10-24T13:12:09.000Z"
+    },
+    {
+      "id": Decimal("10"),
+      "mac": "48:55:19:C1:A7:A4",
+      "time": "2025-10-31T03:43:11.000Z"
+    },
+    {
+      "id": Decimal("12"),
+      "mac": "8C:AA:B5:79:45:65",
+      "time": "2025-10-31T03:49:01.000Z"
+    },
+    {
+      "id": Decimal("9"),
+      "mac": "4C:75:25:37:15:24",
+      "time": "2025-10-28T17:25:49.000Z"
+    },
+    {
+      "id": Decimal("6"),
+      "mac": "48:E7:29:6D:3D:91",
+      "time": "2025-10-24T12:59:11.000Z"
+    },
+    {
+      "id": Decimal("11"),
+      "mac": "EC:FA:BC:77:48:F0",
+      "time": "2025-10-31T03:45:00.000Z"
     }
-  ]
+  ],
+  "Count": 7,
+  "ScannedCount": 7,
+  "ResponseMetadata": {
+    "RequestId": "NKBO3MF21APVDEFO9792DIF0LFVV4KQNSO5AEMVJF66Q9ASUAAJG",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "server": "Server",
+      "date": "Fri, 31 Oct 2025 10:50:32 GMT",
+      "content-type": "application/x-amz-json-1.0",
+      "content-length": "664",
+      "connection": "keep-alive",
+      "x-amzn-requestid": "NKBO3MF21APVDEFO9792DIF0LFVV4KQNSO5AEMVJF66Q9ASUAAJG",
+      "x-amz-crc32": "49781282"
+    },
+    "RetryAttempts": 0
+  }
 }

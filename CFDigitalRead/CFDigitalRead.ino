@@ -1,31 +1,52 @@
-const int interruptorPino = D1; // nodemcu esp32 D1;
+const int interruptorPino = A0; // nodemcu esp32 D1;
   
 long duracao;
+long leitura;
+
  
 void setup() {
   Serial.begin(9600); 
   pinMode(interruptorPino, INPUT); 
 }
  
-void loop1() {
-  duracao = pulseIn(interruptorPino, LOW, 60*1000); // HIGH
-  if (duracao > 0)
-  {
-    Serial.print("Duracao (ms): ");
-    Serial.println(duracao);
-  }
+// void loop() {
+//   // Serial.print(".");
+
+//   duracao = pulseIn(interruptorPino, LOW); // HIGH  LOW  , 60*1000
+//   if (duracao > 0)
+//   {
+//     Serial.print("Duracao (ms): ");
+//     Serial.println(duracao);
+//   }
   
-  delay(1000);
-}
+// }
+
+// void loop() {
+//   duracao = digitalRead(interruptorPino); 
+
+//   Serial.print("Duracao (ms): ");
+//   Serial.println(duracao);
+  
+//   delay(10);
+// }
 
 void loop() {
-  duracao = digitalRead(interruptorPino); 
+  leitura = analogRead(interruptorPino); 
 
-  Serial.print("Duracao (ms): ");
-  Serial.println(duracao);
-  
-  delay(1000);
+  Serial.print("Leitura: ");
+  Serial.println(leitura);
+  delay(500);
+
 }
+
+// void loop1() {
+//   duracao = digitalRead(interruptorPino); 
+
+//   Serial.print("Duracao (ms): ");
+//   Serial.println(duracao);
+  
+//   delay(1000);
+// }
 
 
 
