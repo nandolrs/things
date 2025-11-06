@@ -19,7 +19,7 @@ class CVeiculosTestar:
 
         retorno =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=retorno
-            ,nomes=NOMES #['id','placa','modelo','velocidademotor','unidade','time']
+            ,nomes=NOMES 
         )
 
 
@@ -33,7 +33,7 @@ class CVeiculosTestar:
 
         retorno =  cVeiculos.PropriedadesTimeSeriesSetar( #  PropriedadesExternalSetar !!!
             propriedades=retorno
-            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES 
         )
 
 
@@ -95,7 +95,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
             propriedades=propriedades_
-            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES 
         )
 
         #
@@ -188,7 +188,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=propriedades_
-            , nomes= NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes= NOMES 
         )
 
         #
@@ -219,7 +219,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
              propriedades=propriedades_
-            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES 
         )
 
         #
@@ -259,7 +259,7 @@ class CVeiculosTestar:
 
         propriedades =  cVeiculos.PropriedadesTimeSeriesSetar(
             propriedades=propriedades
-            , nomes=NOMES #['id','modelo','placa','temperatura','time','unidade','velocidademotor']
+            , nomes=NOMES 
         )
 
         # propriedades do componente
@@ -465,6 +465,13 @@ class CVeiculosTestar:
 
         print (retorno)  
 
+    def CFTruncate(self):
+
+        veiculo = CFVeiculos.CVeiculos()
+        retorno = veiculo.Truncate()      
+
+        print (retorno)          
+
 
 
 
@@ -489,7 +496,7 @@ PARAMETROS =[
         ,'COMPONENT_TYPE_ID':'com.cmj.frota.connector-v1r1'
         ,'AWS_LAMBDA'       :'arn:aws:lambda:us-east-1:105254198021:function:cmj-get-property-value-history'
     }    
-    ,    
+    ,
     {
         'WORK_SPACE_ID'     :'CmjWorkspace'
         ,'ENTITY_NAME'      :'MotorDC-entidade-v1r1'
@@ -518,10 +525,11 @@ ENTITY_NAME         = PARAMETROS[1]['ENTITY_NAME']
 COMPONENT_TYPE_ID   = PARAMETROS[1]['COMPONENT_TYPE_ID']
 AWS_LAMBDA          = PARAMETROS[1]['AWS_LAMBDA']        
 NOMES               = ['id','modelo','placa','temperatura','time','unidade','velocidademotor','alarm_status','thingname']    
+NOMES               = ['velocidademotor','velocidademotoratual','time','temperatura','alarm_status','leitura','angulo', 'anguloLiteral']  
 
 cVeiculosTestar = CVeiculosTestar()
 
-caso = 17 # inclui= [1,  9, 12 ]; exclui= [10,14]
+caso = 18 # inclui= [1,  9, 12 ]; exclui= [10,14]
 
 if caso == 1:
 
@@ -612,5 +620,5 @@ elif caso == 17:
 
 elif caso == 18:
 
-    cVeiculosTestar.CFPesquisarDynamo()  
+    cVeiculosTestar.CFTruncate()  
     

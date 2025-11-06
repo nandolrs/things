@@ -243,3 +243,40 @@ class CDynamodb:
         return retorno['Items']
 
 
+    def Truncate(self,nomeTabela) :      
+
+        table = self.DynamoTabela(nomeTabela)
+
+        esquema = table.key_schema
+
+        retorno = self.ListarScan(
+             tabela      =  table
+        )
+
+        chave = {}
+
+        for item in retorno['Items']:
+
+            chaveArray ={} # []
+            for e in esquema:
+                atributo = e['AttributeName']
+                atributoValor =item[e['AttributeName']] 
+
+                chaveArray[atributo] = atributoValor                
+
+            retornoItem = self.Excluir(nomeTabela, chaveArray)
+
+        return retorno   
+    
+    def Excluir(self,nomeTabela, chave) :
+
+        table = self.DynamoTabela(nomeTabela)
+
+        # entidade = {'id': ID}
+
+        # entidadeDicionario = entidade
+
+        retorno = table.delete_item(Key=chave)    
+
+        # return retorno['Item']
+        return retorno['ResponseMetadata']

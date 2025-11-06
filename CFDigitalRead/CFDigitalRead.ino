@@ -9,44 +9,14 @@ void setup() {
   pinMode(interruptorPino, INPUT); 
 }
  
-// void loop() {
-//   // Serial.print(".");
-
-//   duracao = pulseIn(interruptorPino, LOW); // HIGH  LOW  , 60*1000
-//   if (duracao > 0)
-//   {
-//     Serial.print("Duracao (ms): ");
-//     Serial.println(duracao);
-//   }
-  
-// }
-
-// void loop() {
-//   duracao = digitalRead(interruptorPino); 
-
-//   Serial.print("Duracao (ms): ");
-//   Serial.println(duracao);
-  
-//   delay(10);
-// }
 
 void loop() {
-  leitura = analogRead(interruptorPino); 
+  leitura = digitalRead(interruptorPino); 
 
-  Serial.print("Leitura: ");
+  Serial.print("Leitura digital: ");
   Serial.println(leitura);
   delay(500);
 
 }
-
-// void loop1() {
-//   duracao = digitalRead(interruptorPino); 
-
-//   Serial.print("Duracao (ms): ");
-//   Serial.println(duracao);
-  
-//   delay(1000);
-// }
-
 
 

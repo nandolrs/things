@@ -239,6 +239,12 @@ class CVeiculos:
             retorno = cDynamodb.Incluir(nomeTabela=self.nomeTabela, entidade=entidade) # veiculo
 
             return retorno
+    
+    def Truncate(self):
+            cDynamodb = CFDynamodb.CDynamodb()
+            retorno = cDynamodb.Truncate(nomeTabela=self.nomeTabela) # veiculo
+
+            return retorno    
 
     def PropriedadesBuscar(self): # aws athena
 
@@ -521,7 +527,7 @@ class CVeiculos:
         cDynamodb = CFDynamodb.CDynamodb()
 
         retorno = cDynamodb.Pesquisar(
-             nomeTabela="Frotas"
+             nomeTabela= self.nomeTabela #"Frotas"
             ,condicao={
                  'chave': 'placa'
                 ,'valor' : placa 
