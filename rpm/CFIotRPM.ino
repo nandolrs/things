@@ -30,8 +30,6 @@ void CFIotRPM::CalcularRPM(long leitura)
   {
     _tempo = millis();
     _tempoDecorrido = _tempo - _tempoAnterior;
-    // Serial.print("tempo=");
-    // Serial.println(_tempoDecorrido);    
     _tempoAnterior = _tempo;
 
     _acaoDadosReceber(_tempoDecorrido);
