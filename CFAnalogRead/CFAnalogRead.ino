@@ -3,6 +3,7 @@ const int interruptorPino = A0; // nodemcu esp32 D1;
 long duracao;
 long leitura;
 
+
  
 void setup() {
   Serial.begin(9600); 
@@ -15,9 +16,11 @@ void loop() {
 
   Serial.print("Leitura analogica: ");
   Serial.println(leitura);
-  delay(500);
+  delay(1000);
 
 }
+
+
 
 
 

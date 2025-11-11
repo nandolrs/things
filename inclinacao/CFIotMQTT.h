@@ -9,6 +9,9 @@
 typedef String (*FuncaoGenerica)(String macID);
 typedef char* (*FuncaoGenericaSemParametro)();
 
+typedef void (*FuncaoGenericaMQTTMessageHandler)(String topic, String payload);
+
+
 class CFIotMQTT {
   public:
     CFIotMQTT(); // Constructor
@@ -26,7 +29,8 @@ class CFIotMQTT {
     void setup();
     void loop();
 
-    void AcaoSetarObterDados(FuncaoGenerica acaoObterDados);
+    void AcaoSetarDadosEnviar(FuncaoGenerica acaoDadosEnviar);
+    void AcaoSetarDadosReceber(FuncaoGenericaMQTTMessageHandler acaoDadosReceber);
 
   private:
     char* _thingName;
@@ -35,7 +39,9 @@ class CFIotMQTT {
 
     String _macID;
     
-    FuncaoGenerica _acaoObterDados;
+    FuncaoGenerica _acaoDadosEnviar;
+    FuncaoGenericaMQTTMessageHandler _acaoDadosReceber;
+
 
     MQTTClient mqttClient;
     CFIotWifi _cfIotWifi;

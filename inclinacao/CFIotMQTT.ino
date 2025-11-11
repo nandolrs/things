@@ -22,7 +22,8 @@ void CFIotMQTT::MQTTConectar(char topic[])
     mqttClient.begin(AWS_IOT_ENDPOINT, 8883, _cfIotWifi._net); // ??? _wifi _net
 
     // Create a message handler
-    // mqttClient.onMessage(MqttMessageHandler); // <?>
+    // mqttClient.onMessage(CFIotMQTT::MQTTMessageHandler); // <?> MqttMessageHandler
+    mqttClient.onMessage(_acaoDadosReceber); // <?> MqttMessageHandler
 
     Serial.print("Connecting to AWS IOT");
     Serial.print("AWS_IOT_ENDPOINT=");
@@ -71,6 +72,8 @@ void CFIotMQTT::MQTTMessageHandler(String &topic, String &payload) {
 //  StaticJsonDocument<200> doc;
 //  deserializeJson(doc, payload);
 //  const char* message = doc["message"];
+
+
 }
 
 void CFIotMQTT::SetarThingName(char* thingName)
@@ -103,18 +106,27 @@ void CFIotMQTT::setup() {
 
 void CFIotMQTT::loop() {
 
-  String dadosJson = _acaoObterDados(_macID);
+  String dadosJson = _acaoDadosEnviar(_macID);
 
-  publishMessage(dadosJson);
+  if (dadosJson.length() > 0)
+  {
+    publishMessage(dadosJson);
+  }
+
   MQTTLoop();
   
   delay(1000);
 }
 
 
-void CFIotMQTT::AcaoSetarObterDados(FuncaoGenerica acaoObterDados)
+void CFIotMQTT::AcaoSetarDadosEnviar(FuncaoGenerica acaoDadosEnviar)
 {
-  _acaoObterDados = acaoObterDados;
+  _acaoDadosEnviar = acaoDadosEnviar;
+}
+
+void CFIotMQTT::AcaoSetarDadosReceber(FuncaoGenericaMQTTMessageHandler acaoDadosReceber)
+{
+  _acaoDadosReceber = acaoDadosReceber;
 }
 
 
