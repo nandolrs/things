@@ -18,12 +18,7 @@ class CFIotRPM {
 
 
   private:
-    // char* _thingName;
-    // char* _topicPub;
-    // char* _topicSub;
-
-    // String _macID;
-
+  
     const int _interruptorPino = A0; // nodemcu esp32 D1;
       
     long _duracao;

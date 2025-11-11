@@ -2,8 +2,6 @@
 
 #include <ArduinoJson.h>
 
-// The MQTT topics that this device should publish/subscribe
-
 CFIotRPM::CFIotRPM() // constructor
 {
 
@@ -11,7 +9,6 @@ CFIotRPM::CFIotRPM() // constructor
 
 
 void CFIotRPM::setup() {
-    // Serial.begin(9600); 
     pinMode(_interruptorPino, INPUT); 
 
     _tempoAnterior = millis();    
@@ -30,6 +27,7 @@ void CFIotRPM::CalcularRPM(long leitura)
   {
     _tempo = millis();
     _tempoDecorrido = _tempo - _tempoAnterior;
+
     _tempoAnterior = _tempo;
 
     _acaoDadosReceber(_tempoDecorrido);
