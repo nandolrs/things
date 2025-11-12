@@ -37,9 +37,9 @@ void CFIotRPM::CalcularRPM(long leitura)
 
 }
 
-void CFIotRPM::AcaoSetarDadosReceber(FuncaoGenerica acaoDadosEnviar)
+void CFIotRPM::AcaoSetarDadosReceber(FuncaoGenerica acaoDadosReceber)
 {
-  _acaoDadosReceber = acaoDadosEnviar;
+  _acaoDadosReceber = acaoDadosReceber;
 }
 
 

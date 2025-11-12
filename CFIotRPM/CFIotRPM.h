@@ -13,7 +13,7 @@ class CFIotRPM {
     void setup();
     void loop();
 
-    void AcaoSetarDadosReceber(FuncaoGenerica acaoDadosEnviar);
+    void AcaoSetarDadosReceber(FuncaoGenerica acaoDadosReceber);
     void CalcularRPM(long leitura);
 
 
