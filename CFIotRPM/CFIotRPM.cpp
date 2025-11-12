@@ -22,7 +22,6 @@ void CFIotRPM::loop() {
 
 void CFIotRPM::CalcularRPM(long leitura)
 {
-
   if (_leitura < _leituraLimite and _leituraAnterior > _leituraLimite) 
   {
     _tempo = millis();
