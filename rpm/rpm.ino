@@ -6,7 +6,7 @@ void setup() {
   Serial.begin(9600); 
   iotRPM.setup();
 
- iotRPM.AcaoSetarDadosReceber(DadosReceber);
+  iotRPM.AcaoSetarDadosReceber(DadosReceber);
 }
  
 void loop() {
