@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-typedef void (*FuncaoGenerica)(long tempoDecorrido);
+typedef void (*FuncaoGenericaCFIotRPM)(long tempoDecorrido);
 
 
 class CFIotRPM {
@@ -13,7 +13,7 @@ class CFIotRPM {
     void setup();
     void loop();
 
-    void AcaoSetarDadosReceber(FuncaoGenerica acaoDadosReceber);
+    void AcaoSetarDadosReceber(FuncaoGenericaCFIotRPM acaoDadosReceber);
     void CalcularRPM(long leitura);
 
 
@@ -32,7 +32,7 @@ class CFIotRPM {
     unsigned long _tempoAnterior;
     unsigned long _tempoDecorrido;    
     
-    FuncaoGenerica _acaoDadosReceber;
+    FuncaoGenericaCFIotRPM _acaoDadosReceber;
 };
 
 
